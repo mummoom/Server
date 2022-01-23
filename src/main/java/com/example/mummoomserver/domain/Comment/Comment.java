@@ -10,8 +10,6 @@ import javax.persistence.*;
 @Entity
 // @Table(name="") 테이블 이름 명시
 // fk 가져오기 방법 적용해보기
-
-
 public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
