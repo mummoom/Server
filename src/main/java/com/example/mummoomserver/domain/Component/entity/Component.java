@@ -4,6 +4,7 @@ import com.example.mummoomserver.domain.Ingredients.entity.Ingredient;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -43,6 +44,7 @@ public class Component { //extends
     private String effect;
 
     @Column
+    @ColumnDefault("active")
     private String status;
 
     @Builder

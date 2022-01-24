@@ -1,18 +1,61 @@
 package com.example.mummoomserver.domain.Ingredients.dto;
 
+import com.example.mummoomserver.domain.Component.entity.Component;
+import com.example.mummoomserver.domain.Ingredients.entity.Ingredient;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+
+import javax.persistence.Column;
 
 /**
  *
  *  메인페이지에서 검색 결과로 전달해줄 재료에 대한 정보 DTO
  *
  */
-@Builder
+
 @Getter @Setter
 @AllArgsConstructor
 public class IngredientSearchResultDto {
+
+
+    private String name;
+    private String category;
+    private String imgUrl;
+    private String warning;
+    private String spec;
+    private int score;
+
+    //성분관련 정보
+    private int kcal;
+    private float dan;
+    private float tan;
+    private float gi;
+    private float mu;
+    private float water;
+    private String effect;
+
+
+    public IngredientSearchResultDto(Ingredient ingredient){
+
+        this.name = ingredient.getName();
+        this.category = ingredient.getCategory();
+        this.imgUrl = ingredient.getImgUrl();
+        this.warning = ingredient.getWarning();
+        this.spec = ingredient.getSpec();
+        this.score = ingredient.getScore();
+
+        this.kcal = ingredient.getComponent().getKcal();
+        this.dan = ingredient.getComponent().getDan();
+        this.gi = ingredient.getComponent().getGi();
+        this.mu = ingredient.getComponent().getMu();
+        this.water = ingredient.getComponent().getWater();
+        this.effect = ingredient.getComponent().getEffect();
+
+    }
+
+
+
 
 }
