@@ -24,15 +24,15 @@ public class Comment {
     @Column
     private String status;
 
-    @Builder
-    public Component(int kcal, float dan, float tan, float gi, float mu, float water, String effect, String status) {
-        this.kcal = kcal;
-        this.dan = dan;
-        this.tan = tan;
-        this.gi = gi;
-        this.mu = mu;
-        this.water = water;
-        this.effect = effect;
-        this.status = status;
-    }
+//    @Builder
+//    public Component(int kcal, float dan, float tan, float gi, float mu, float water, String effect, String status) {
+//        this.kcal = kcal;
+//        this.dan = dan;
+//        this.tan = tan;
+//        this.gi = gi;
+//        this.mu = mu;
+//        this.water = water;
+//        this.effect = effect;
+//        this.status = status;
+//    }
 }
