@@ -22,7 +22,18 @@ public enum ResponseTemplateStatus {
 
      */
     EMPTY_JWT(false,"JWT를 입력해주세요.",2001),
-    INVALID_JWT(false, "유효하지 않은 JWT입니다.",2002);
+    INVALID_JWT(false, "유효하지 않은 JWT입니다.",2002),
+
+
+    /**
+     *
+     * DB 부분 오류
+     */
+    DATABASE_ERROR(false, "데이터베이스 요청 에러.",3000);
+
+
+
+
 
     private final boolean isSuccess;
     private final int code;
@@ -33,4 +44,6 @@ public enum ResponseTemplateStatus {
         this.code = code;
         this.message = message;
     }
+
+
 }

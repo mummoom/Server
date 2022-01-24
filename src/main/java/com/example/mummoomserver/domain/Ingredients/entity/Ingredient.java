@@ -5,6 +5,7 @@ import com.example.mummoomserver.domain.Component.entity.Component;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 
@@ -33,6 +34,10 @@ public class Ingredient extends BaseTimeEntity {
 
     @Column
     private int score;
+
+    @Column
+    @ColumnDefault("active")
+    private String status;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="componentIdx") // fk 이름 componentIdx 로 설정됨
