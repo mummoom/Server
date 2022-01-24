@@ -1,10 +1,13 @@
-package com.example.mummoomserver.domain.Component;
+package com.example.mummoomserver.domain.Component.entity;
 
+import com.example.mummoomserver.domain.Ingredients.entity.Ingredient;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor
@@ -14,6 +17,9 @@ public class Component { //extends
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long componentIdx;
+
+    @OneToMany(mappedBy = "component")
+    List<Ingredient> ingredients = new ArrayList<>();
 
     @Column
     private int kcal;
