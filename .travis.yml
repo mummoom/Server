@@ -26,7 +26,7 @@ notifications:
 before_deploy:
   - zip -r mummoom_deploy_test *
   - mkdir -p deploy
-  - mv spring_deploy_test.zip deploy/mummoom_deploy_test.zip
+  - mv mummoom_deploy_test.zip deploy/mummoom_deploy_test.zip
 
 deploy:
   # S3로 파일업로드
