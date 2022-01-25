@@ -6,9 +6,6 @@ branches:
   only:
     - main # git default 브런치를 등록한다. (ex. master)
 
-before_install:
-  - chmod +x gradlew
-
 # Travis CI 서버의 Home
 cache:
   directories:
@@ -16,6 +13,9 @@ cache:
     - '$HOME/.gradle'
 
 script: "./gradlew clean build"
+
+before_install:
+  - chmod +x gradlew
 
 # CI 실행 완료 시 메일로 알림
 notifications:
