@@ -44,7 +44,7 @@ public class Component { //extends
     private String effect;
 
     @Column
-    @ColumnDefault("active")
+    @ColumnDefault("'active'")
     private String status;
 
     @Builder
