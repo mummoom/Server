@@ -1,5 +1,6 @@
 package com.example.mummoomserver.domain.Component.entity;
 
+import com.example.mummoomserver.config.BaseTimeEntity;
 import com.example.mummoomserver.domain.Ingredients.entity.Ingredient;
 import lombok.Builder;
 import lombok.Getter;
@@ -14,42 +15,38 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 
-public class Component { //extends
+public class Component extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long componentIdx;
+    private Long component_idx;
 
     @OneToMany(mappedBy = "component")
     List<Ingredient> ingredients = new ArrayList<>();
 
-    @Column
-    private int kcal;
-
-    @Column
+    @Column(nullable = false)
     private float dan;
 
-    @Column
+    @Column(nullable = false)
     private float tan;
 
-    @Column
+    @Column(nullable = false)
     private float gi;
 
-    @Column
+    @Column(nullable = false)
     private float mu;
 
-    @Column
+    @Column(nullable = false)
     private float water;
 
     @Column(columnDefinition = "TEXT")
     private String effect;
 
-    @Column
+    @Column(nullable = false)
     @ColumnDefault("'active'")
     private String status;
 
     @Builder
     public Component(int kcal, float dan, float tan, float gi, float mu, float water, String effect, String status) {
-        this.kcal = kcal;
         this.dan = dan;
         this.tan = tan;
         this.gi = gi;
