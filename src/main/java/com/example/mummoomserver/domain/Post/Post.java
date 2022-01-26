@@ -1,20 +1,16 @@
 package com.example.mummoomserver.domain.Post;
 
+import com.example.mummoomserver.domain.User.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Getter
 @NoArgsConstructor
 @Entity
-
 public class Post { // extends BaseTimeEntity  basetimeentity 클래스를 Post 가 상속받는다.
 
     @Id
@@ -24,12 +20,12 @@ public class Post { // extends BaseTimeEntity  basetimeentity 클래스를 Post 
     @Column(length = 500, nullable = false)
     private String title;
 
-    @Column
-    private int likeCnt;
-
     @Column(columnDefinition = "TEXT", nullable = false)
     private String content;
-    private int userIdx;
+
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="userIdx")
+    private User userIdx;
 
     @Column
     private String imgUrl;
@@ -39,9 +35,8 @@ public class Post { // extends BaseTimeEntity  basetimeentity 클래스를 Post 
     private String status;
 
     @Builder
-    public Post(String title, int likeCnt, String content, int userIdx, String imgUrl, String status) {
+    public Post(String title, String content, User userIdx, String imgUrl, String status) {
         this.title = title;
-        this.likeCnt = likeCnt;
         this.content = content;
         this.userIdx = userIdx;
         this.imgUrl = imgUrl;
