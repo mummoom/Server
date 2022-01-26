@@ -3,6 +3,7 @@ package com.example.mummoomserver.domain.Post;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -34,6 +35,7 @@ public class Post { // extends BaseTimeEntity  basetimeentity 클래스를 Post 
     private String imgUrl;
 
     @Column
+    @ColumnDefault("'active'")
     private String status;
 
     @Builder

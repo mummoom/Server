@@ -42,7 +42,7 @@ public class Component extends BaseTimeEntity {
     private String effect;
 
     @Column(nullable = false)
-    @ColumnDefault("active")
+    @ColumnDefault("'active'")
     private String status;
 
     @Builder

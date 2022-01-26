@@ -35,7 +35,7 @@ public class Ingredient extends BaseTimeEntity {
     private int kcal;
 
     @Column(nullable = false)
-    @ColumnDefault("active")
+    @ColumnDefault("'active'")
     private String status;
 
     @ManyToOne(fetch = FetchType.LAZY)
