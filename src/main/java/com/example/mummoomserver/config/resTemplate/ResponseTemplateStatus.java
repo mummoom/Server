@@ -13,7 +13,7 @@ public enum ResponseTemplateStatus {
      * 1000: 요청 성공
      */
     SUCCESS(true,"요청 성공", 1000),
-
+    FAIL(false,"요청 실패",1004),
 
 
     /**
