@@ -15,32 +15,31 @@ import javax.persistence.*;
 public class Ingredient extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long ingredientsIdx;
+    private Long ingredient_idx;
 
-    @Column
+    @Column(nullable = false)
     private String name;
-
-    @Column
+    @Column(nullable = false)
     private String category;
-
-    @Column
+    @Column(nullable = false)
     private String imgUrl;
-
-    @Column
+    @Column(nullable = false)
     private String warning;
-
-    @Column
+    @Column(nullable = false)
     private String spec;
 
-    @Column
+    @Column(nullable = false)
     private int score;
 
-    @Column
-    @ColumnDefault("active")
+    @Column(nullable = false)
+    private int kcal;
+
+    @Column(nullable = false)
+    @ColumnDefault("'active'")
     private String status;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="componentIdx") // fk 이름 componentIdx 로 설정됨
+    @JoinColumn(name="component_idx") // fk 이름 component_idx 로 설정됨
     private Component component;
 
 

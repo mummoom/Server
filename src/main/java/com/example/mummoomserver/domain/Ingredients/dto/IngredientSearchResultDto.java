@@ -46,7 +46,7 @@ public class IngredientSearchResultDto {
         this.spec = ingredient.getSpec();
         this.score = ingredient.getScore();
 
-        this.kcal = ingredient.getComponent().getKcal();
+        this.kcal = ingredient.getKcal();
         this.dan = ingredient.getComponent().getDan();
         this.gi = ingredient.getComponent().getGi();
         this.mu = ingredient.getComponent().getMu();
