@@ -20,41 +20,7 @@ spring:
     h2:
         console:
             enabled: true
-    security:
-        oauth2:
-            client:
-                registration:
-                    google:
-                        client-id: 313791633035-ot7cna21tkl82p279iverhet77idaikr.apps.googleusercontent.com
-                        client-secret: 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
-                        authorization-grant-type: authorization_code
-                        redirect-uri: http://localhost:8080/login/oauth2/code/google
-                        scope:
-                            - profile
-                            - email
-                    kakao:
-                        client-id:
-                        client-secret:
-                        authorization-grant-type: authorization_code
-                        redirect-uri: http://localhost:8080/login/oauth2/code/kakao
-                        scope:
-                            - profile
-                            - account_email
-                provider:
-                    google:
-                        authorization-uri: https://accounts.google.com/o/oauth2/auth
-                        token-uri: https://www.googleapis.com/oauth2/v4/token
-                        user-info-uri: https://www.googleapis.com/oauth2/v2/userinfo
-                        unlink-uri: https://accounts.google.com/o/oauth2/revoke
-                    kakao:
-                        authorization-uri: https://kauth.kakao.com/oauth/authorize
-                        token-uri: https://kauth.kakao.com/oauth/token
-                        user-info-uri: https://kapi.kakao.com/v2/user/me
-                        unlink-uri: https://kapi.kakao.com/v1/user/unlink
-    jwt:
-        secretKey: #jwt-secret-key
-        signatureAlgorithm: HS256
-        tokenExpired: 604800 #(sec) 7 days
+
     server:
         servlet:
             context-path: /api
