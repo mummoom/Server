@@ -1,11 +1,11 @@
 package com.example.mummoomserver.domain.Post.controller;
 
+import com.example.mummoomserver.domain.Post.dto.PostResponseDto;
 import com.example.mummoomserver.domain.Post.dto.PostSaveRequestDto;
+import com.example.mummoomserver.domain.Post.dto.PostUpdateRequestDto;
 import com.example.mummoomserver.domain.Post.service.PostService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RestController
@@ -16,4 +16,15 @@ public class PostApiController {
     public Long save(@RequestBody PostSaveRequestDto requestDto){
         return postService.save(requestDto);
     }
+
+    @PutMapping("/post/{postIdx}")
+    public Long update(@PathVariable Long postIdx, @RequestBody PostUpdateRequestDto requestDto){
+        return postService.update(postIdx, requestDto);
+    }
+
+    @GetMapping("/post/{postIdx}")
+    public PostResponseDto findByPostIdx(@PathVariable Long postIdx){
+        return postService.findByPostIdx(postIdx);
+    }
+
 }
