@@ -1,6 +1,7 @@
 package com.example.mummoomserver.domain.Post;
 
-import com.example.mummoomserver.domain.User.User;
+
+import com.example.mummoomserver.login.users.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,8 +25,8 @@ public class Post { // extends BaseTimeEntity  basetimeentity 클래스를 Post 
     private String content;
 
     @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name="userIdx")
-    private User userIdx;
+    @JoinColumn(name="id")
+    private User id;
 
     @Column
     private String imgUrl;
@@ -35,10 +36,10 @@ public class Post { // extends BaseTimeEntity  basetimeentity 클래스를 Post 
     private String status;
 
     @Builder
-    public Post(String title, String content, User userIdx, String imgUrl, String status) {
+    public Post(String title, String content, User id, String imgUrl, String status) {
         this.title = title;
         this.content = content;
-        this.userIdx = userIdx;
+        this.id = id;
         this.imgUrl = imgUrl;
         this.status = status;
     }

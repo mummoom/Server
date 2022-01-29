@@ -1,6 +1,7 @@
 package com.example.mummoomserver.domain.Comment;
 import com.example.mummoomserver.domain.Post.Post;
-import com.example.mummoomserver.domain.User.User;
+
+import com.example.mummoomserver.login.users.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,8 +24,8 @@ public class Comment {
     private Post postIdx;
 
     @ManyToOne
-    @JoinColumn(name="userIdx")
-    private User userIdx;
+    @JoinColumn(name="id")
+    private User id;
 
     @Column(columnDefinition = "TEXT")
     private String content;
@@ -33,9 +34,9 @@ public class Comment {
     private String status;
 
     @Builder
-    public Comment(Post postIdx, User userIdx, String content, String status){
+    public Comment(Post postIdx, User id, String content, String status){
         this.postIdx = postIdx;
-        this.userIdx = userIdx;
+        this.id = id;
         this.content = content;
         this.status = status;
     }

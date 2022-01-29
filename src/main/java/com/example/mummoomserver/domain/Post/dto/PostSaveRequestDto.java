@@ -1,7 +1,8 @@
 package com.example.mummoomserver.domain.Post.dto;
 
 import com.example.mummoomserver.domain.Post.Post;
-import com.example.mummoomserver.domain.User.User;
+
+import com.example.mummoomserver.login.users.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,14 +12,14 @@ import lombok.NoArgsConstructor;
 public class PostSaveRequestDto {
     private String title;
     private String content;
-    private User userIdx;
+    private User id;
     private String imgUrl;
 
     @Builder
-    public PostSaveRequestDto(String title, String content, User userIdx, String imgUrl){
+    public PostSaveRequestDto(String title, String content, User id, String imgUrl){
         this.title = title;
         this.content = content;
-        this.userIdx = userIdx;
+        this.id = id;
         this.imgUrl = imgUrl;
     }
 
@@ -26,7 +27,7 @@ public class PostSaveRequestDto {
         return Post.builder()
                 .title(title)
                 .content(content)
-                .userIdx(userIdx)
+                .id(id)
                 .imgUrl(imgUrl)
                 .build();
     }

@@ -1,10 +1,10 @@
 spring:
     #    로컬 테스트용 h2 DB 설정..
-    #    datasource:
-    #        url: jdbc:h2:tcp://localhost/~/mummoomH2
-    #        username: sa
-    #        password:
-    #        driver-class-name: org.h2.Driver
+#    datasource:
+#        url: jdbc:h2:tcp://localhost/~/mummoomH2
+#        username: sa
+#        password:
+#        driver-class-name: org.h2.Driver
     mvc:
         pathmatch:
             matching-strategy: ant_path_matcher
@@ -20,8 +20,54 @@ spring:
     h2:
         console:
             enabled: true
+    # 여기서부터 로그인 부분
+    servlet:
+        encoding:
+            charset: UTF-8 #utf-8 encoding
+            force : true
+    security:
+        oauth2:
+            client:
+                registration:
+                    google:
+                        client-id: #client-id
+                        client-secret: #client-secret
+                        authorization-grant-type: authorization_code
+                        redirect-uri: #callback uri
+                        scope:
+                            - profile
+                            - email
+                    kakao:
+                        client-id: #client-id
+                        client-secret: #client-secret
+                        authorization-grant-type: authorization_code
+                        redirect-uri: #callback uri
+                        scope:
+                            - profile
+                            - account_email
+                provider:
+                    google:
+                        authorization-uri: https://accounts.google.com/o/oauth2/auth
+                        token-uri: https://www.googleapis.com/oauth2/v4/token
+                        user-info-uri: https://www.googleapis.com/oauth2/v2/userinfo
+                        unlink-uri: https://accounts.google.com/o/oauth2/revoke
+                    kakao:
+                        authorization-uri: https://kauth.kakao.com/oauth/authorize
+                        token-uri: https://kauth.kakao.com/oauth/token
+                        user-info-uri: https://kapi.kakao.com/v2/user/me
+                        unlink-uri: https://kapi.kakao.com/v1/user/unlink
+jwt:
+    secretKey: #jwt-secret-key
+    signatureAlgorithm: HS256
+    tokenExpired: 604800 #(sec) 7 days
+server:
+    servlet:
+        context-path: /api
+# 여기까지 로그인 끝
+
 logging.level:
     org.hibernate.SQL: debug
     org.hibernate.type: trace
 
 # http://localhost:8080/swagger-ui.html
+
