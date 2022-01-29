@@ -11,14 +11,14 @@ import lombok.NoArgsConstructor;
 public class PostSaveRequestDto {
     private String title;
     private String content;
-    private User userIdx;
+    //private int userIdx;
     private String imgUrl;
 
     @Builder
-    public PostSaveRequestDto(String title, String content, User userIdx, String imgUrl){
+    public PostSaveRequestDto(String title, String content, String imgUrl){
         this.title = title;
         this.content = content;
-        this.userIdx = userIdx;
+        //this.userIdx = userIdx;   // 나중에 주석 풀 예정
         this.imgUrl = imgUrl;
     }
 
@@ -26,7 +26,7 @@ public class PostSaveRequestDto {
         return Post.builder()
                 .title(title)
                 .content(content)
-                .userIdx(userIdx)
+                //.userIdx(userIdx)
                 .imgUrl(imgUrl)
                 .build();
     }

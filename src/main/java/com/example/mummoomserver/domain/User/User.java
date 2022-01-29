@@ -1,10 +1,13 @@
 package com.example.mummoomserver.domain.User;
 
+import com.example.mummoomserver.domain.Post.Post;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor
@@ -31,6 +34,9 @@ public class User { //extends BseTimeEntity
 
     @Column(nullable = false)
     private String status;
+
+//    @OneToMany(mappedBy = "user")
+//    private List<Post> posts = new ArrayList<>();
 
     @Builder
     public User(String imgUrl,String oauthId, String nickName, String email,String pwd, String status) {
