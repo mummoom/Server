@@ -1,5 +1,6 @@
 package com.example.mummoomserver.login.authentication;
 
+import com.example.mummoomserver.config.resTemplate.ResponseTemplate;
 import com.example.mummoomserver.login.authentication.oauth2.*;
 import com.example.mummoomserver.login.authentication.oauth2.account.OAuth2AccountDTO;
 import com.example.mummoomserver.login.authentication.oauth2.service.OAuth2Service;
@@ -11,7 +12,6 @@ import com.example.mummoomserver.login.users.UserService;
 import com.example.mummoomserver.login.validation.ValidationException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -62,8 +62,8 @@ public class AuthenticationController {
 
     /* 토큰 쿠키를 삭제하는 컨트롤러 (로그아웃) */
     @PostMapping("/logout")
-    public ResponseEntity<?> expiredToken(HttpServletRequest request, HttpServletResponse response) {
-        return ResponseEntity.ok("success");
+    public ResponseTemplate<?> expiredToken(HttpServletRequest request, HttpServletResponse response) {
+        return new ResponseTemplate("로그아웃 성공");
     }
 
     /* 사용자의 소셜 로그인 요청을 받아 각 소셜 서비스로 인증을 요청하는 컨트롤러 */

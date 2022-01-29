@@ -12,14 +12,14 @@ import java.time.LocalDateTime;
 public class OAuth2AccountDTO {
     private String provider;
     private String providerId;
-    private LocalDateTime createAt;
+    private LocalDateTime createdAt;
     private OAuth2Token oAuth2Token;
 
     @Builder
-    public OAuth2AccountDTO(String provider, String providerId, String token, String refreshToken, LocalDateTime createAt, LocalDateTime tokenExpiredAt) {
+    public OAuth2AccountDTO(String provider, String providerId, String token, String refreshToken, LocalDateTime createdAt, LocalDateTime tokenExpiredAt) {
         this.provider = provider;
         this.providerId = providerId;
-        this.createAt = createAt;
+        this.createdAt = createdAt;
         this.oAuth2Token = new OAuth2Token(token, refreshToken, tokenExpiredAt);
     }
 }

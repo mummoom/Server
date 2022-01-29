@@ -37,6 +37,7 @@ dependencies {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
     }
     testImplementation 'org.springframework.security:spring-security-test'
+    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
 
     //로그인 끝
     implementation group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.2'

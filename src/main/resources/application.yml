@@ -14,7 +14,7 @@ spring:
             ddl-auto: create
         properties:
             hibernate:
-            # show_sql: true
+            show_sql: true
             format_sql: true
             dialect: org.hibernate.dialect.MySQL5Dialect
     h2:
@@ -25,6 +25,8 @@ spring:
         encoding:
             charset: UTF-8 #utf-8 encoding
             force : true
+    main:
+        allow-bean-definition-overriding: true
     security:
         oauth2:
             client:
@@ -57,9 +59,10 @@ spring:
                         user-info-uri: https://kapi.kakao.com/v2/user/me
                         unlink-uri: https://kapi.kakao.com/v1/user/unlink
 jwt:
-    secretKey: #jwt-secret-key
+    secretKey: "sakdjfokwktgjroiygjmdflkgbgjjiflergjlzkng"
     signatureAlgorithm: HS256
     tokenExpired: 604800 #(sec) 7 days
+
 server:
     servlet:
         context-path: /api
@@ -68,6 +71,10 @@ server:
 logging.level:
     org.hibernate.SQL: debug
     org.hibernate.type: trace
+
+client:
+    origins: http://localhost:8080
+
 
 # http://localhost:8080/swagger-ui.html
 
