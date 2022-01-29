@@ -20,7 +20,7 @@ repositories {
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'org.springframework.boot:spring-boot-starter-security'
+    //implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'junit:junit:4.13.1'
     compileOnly 'org.projectlombok:lombok'
@@ -30,11 +30,11 @@ dependencies {
     implementation 'io.jsonwebtoken:jjwt-api:0.11.1'
     runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.1', 'io.jsonwebtoken:jjwt-jackson:0.11.1'
 
-    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+    //implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
     implementation group: 'org.mariadb.jdbc', name: 'mariadb-java-client', version: '2.4.1'
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'org.springframework.security:spring-security-test'
+    //testImplementation 'org.springframework.security:spring-security-test'
 
     implementation group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.2'
     implementation group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.9.2'
