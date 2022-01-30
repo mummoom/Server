@@ -3,9 +3,7 @@ package com.example.mummoomserver.login.config;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.config.annotation.*;
 
 @Configuration
 public class MvcConfigurer implements WebMvcConfigurer {
@@ -26,4 +24,6 @@ public class MvcConfigurer implements WebMvcConfigurer {
                 .maxAge(3600)
                 .allowCredentials(true);
     }
+
+
 }
