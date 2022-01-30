@@ -11,7 +11,7 @@ spring:
     jpa:
         generate-ddl : true
         hibernate:
-            ddl-auto: create
+            ddl-auto: none
         properties:
             hibernate:
             show_sql: true
@@ -20,6 +20,9 @@ spring:
     h2:
         console:
             enabled: true
+    profiles:
+        include: real-db
+
     # 여기서부터 로그인 부분
     servlet:
         encoding:

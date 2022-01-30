@@ -49,12 +49,13 @@ public class Dog extends BaseTimeEntity {
     private String status;
 
     @Builder
-    public Dog(String dogName, String dogBirth, String dogType, String dogSex, String surgery) {
+    public Dog(String dogName, String dogBirth, String dogType, String dogSex, String surgery, User user) {
         this.dogName = dogName;
         this.dogBirth = dogBirth;
         this.dogType = dogType;
         this.dogSex = dogSex;
         this.surgery = surgery;
+        this.user = user;
     }
 
     public void update(String dogName, String dogBirth, String dogType, String dogSex, String surgery) {
