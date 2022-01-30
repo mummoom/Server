@@ -1,6 +1,7 @@
 package com.example.mummoomserver.domain.Dog.entity;
 import com.example.mummoomserver.config.BaseTimeEntity;
-import com.example.mummoomserver.domain.User.User;
+import com.example.mummoomserver.login.users.User;
+
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,6 +12,7 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor
 @Entity
+
 @Table
 public class Dog extends BaseTimeEntity {
     @Id
@@ -32,14 +34,17 @@ public class Dog extends BaseTimeEntity {
     private String dogSex;
 
     @Column(name="surgery", nullable = false)
+
     @ColumnDefault("'Y'")
     private String surgery;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="userIdx")
+
+    @JoinColumn(name="id")
     private User user;
 
     @Column(name="status", nullable = false)
+
     @ColumnDefault("'active'")
     private String status;
 
@@ -60,8 +65,8 @@ public class Dog extends BaseTimeEntity {
         this.dogSex = dogSex;
         this.surgery = surgery;
     }
-
     public void delete(){
         this.status = "delete";
     }
+
 }
