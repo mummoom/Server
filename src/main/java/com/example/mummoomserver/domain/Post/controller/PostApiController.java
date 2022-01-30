@@ -5,6 +5,7 @@ import com.example.mummoomserver.domain.Post.dto.PostSaveRequestDto;
 import com.example.mummoomserver.domain.Post.dto.PostUpdateRequestDto;
 import com.example.mummoomserver.domain.Post.service.PostService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.autoconfigure.neo4j.Neo4jProperties;
 import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
@@ -26,5 +27,6 @@ public class PostApiController {
     public PostResponseDto findByPostIdx(@PathVariable Long postIdx){
         return postService.findByPostIdx(postIdx);
     }
+
 
 }
