@@ -6,6 +6,7 @@ import com.example.mummoomserver.domain.Dog.dto.DogSaveRequestDto;
 import com.example.mummoomserver.domain.Dog.dto.DogSaveResponseDto;
 import com.example.mummoomserver.domain.Dog.entity.Dog;
 import com.example.mummoomserver.domain.Dog.repository.DogRepository;
+import com.example.mummoomserver.domain.User.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
