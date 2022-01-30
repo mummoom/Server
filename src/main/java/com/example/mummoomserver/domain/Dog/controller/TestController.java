@@ -1,4 +1,4 @@
-package com.example.mummoomserver.domain;
+package com.example.mummoomserver.domain.Dog.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
