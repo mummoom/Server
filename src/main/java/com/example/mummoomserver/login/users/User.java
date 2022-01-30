@@ -1,5 +1,6 @@
 package com.example.mummoomserver.login.users;
 
+
 import com.example.mummoomserver.config.BaseTimeEntity;
 import com.example.mummoomserver.login.authentication.oauth2.account.OAuth2Account;
 import com.example.mummoomserver.login.security.AuthorityType;
@@ -21,7 +22,7 @@ import java.util.stream.Collectors;
 
 @Entity
 @Getter
-@Table(name = "user")
+@Table(name = "TBL_USER")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User extends BaseTimeEntity {
     @Id
