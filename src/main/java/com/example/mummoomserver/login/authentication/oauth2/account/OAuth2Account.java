@@ -1,6 +1,6 @@
 package com.example.mummoomserver.login.authentication.oauth2.account;
 
-import com.example.mummoomserver.login.entity.BaseEntity;
+import com.example.mummoomserver.config.BaseTimeEntity;
 import com.example.mummoomserver.login.users.User;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -8,17 +8,18 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.util.Assert;
 
-import javax.persistence.Entity;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @Table(name = "TBL_OAUTH_ACCOUNT", uniqueConstraints = {@UniqueConstraint(columnNames = {"provider", "providerId"})})
-public class OAuth2Account extends BaseEntity {
+public class OAuth2Account extends BaseTimeEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    
     private String providerId;
     private String provider;
     private String token;
@@ -56,7 +57,7 @@ public class OAuth2Account extends BaseEntity {
         return OAuth2AccountDTO.builder()
                 .provider(provider)
                 .providerId(providerId)
-                .createAt(getCreateAt())
+                .createdAt(getCreatedAt())
                 .token(token)
                 .refreshToken(refreshToken)
                 .tokenExpiredAt(tokenExpiredAt).build();

@@ -1,7 +1,7 @@
 package com.example.mummoomserver.login.users;
 
+import com.example.mummoomserver.config.BaseTimeEntity;
 import com.example.mummoomserver.login.authentication.oauth2.account.OAuth2Account;
-import com.example.mummoomserver.login.entity.BaseEntity;
 import com.example.mummoomserver.login.security.AuthorityType;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -21,9 +21,9 @@ import java.util.stream.Collectors;
 
 @Entity
 @Getter
-@Table(name = "TBL_USER")
+@Table(name = "user")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class User extends BaseEntity {
+public class User extends BaseTimeEntity {
     @Id
     private Long id;
 

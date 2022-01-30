@@ -23,13 +23,9 @@ public class Post extends BaseTimeEntity { // extends BaseTimeEntity  basetimeen
     private String content;
 
 
-    @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name="id")
-    private User id;
-
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "userIdx", referencedColumnName = "userIdx")
-    private User userIdx;
+    @JoinColumn(name = "id", referencedColumnName = "id")
+    private User id;
 
     @Column
     private String imgUrl;

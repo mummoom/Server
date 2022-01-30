@@ -1,5 +1,6 @@
 package com.example.mummoomserver.login.users;
 
+import com.example.mummoomserver.config.resTemplate.ResponseTemplate;
 import com.example.mummoomserver.login.authentication.oauth2.ClientRegistration;
 import com.example.mummoomserver.login.authentication.oauth2.ClientRegistrationRepository;
 import com.example.mummoomserver.login.authentication.oauth2.account.OAuth2AccountDTO;
@@ -11,7 +12,7 @@ import com.example.mummoomserver.login.security.UserDetailsImpl;
 import com.example.mummoomserver.login.validation.ValidationException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
@@ -27,7 +28,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/users/**")
+@RequestMapping("/api/users")
 public class UserController {
 
     private final UserService userService;
@@ -35,16 +36,17 @@ public class UserController {
     private final ClientRegistrationRepository clientRegistrationRepository;
 
     // 회원가입
-    @PostMapping("")
-    public ResponseEntity<?> signUpNewUser(@RequestBody @Valid SignUpRequest signUpRequest, BindingResult bindingResult){
+    @PostMapping("/signup")
+    public ResponseTemplate<?> signUpNewUser(@RequestBody @Valid SignUpRequest signUpRequest, BindingResult bindingResult){
         if(bindingResult.hasErrors()) throw new ValidationException("회원가입 유효성 검사 실패.", bindingResult.getFieldErrors());
         userService.saveUser(signUpRequest);
-        return ResponseEntity.ok("Success");
+
+        return new ResponseTemplate("회원가입 성공");
     }
 
     //프로필 자신 조회
     @GetMapping("/me")
-    public ResponseEntity<?> getAuthenticatedUserProfile(@AuthenticationPrincipal UserDetailsImpl loginUser) {
+    public ResponseTemplate<?> getAuthenticatedUserProfile(@AuthenticationPrincipal UserDetailsImpl loginUser) {
         log.debug("request user profile....");
         UserProfileResponse.UserProfileResponseBuilder userProfileResponseBuilder = UserProfileResponse.builder()
                 .id(loginUser.getId())
@@ -56,9 +58,9 @@ public class UserController {
         Optional<OAuth2AccountDTO> optionalOAuth2AccountDTO = userService.getOAuth2Account(loginUser.getUsername());
         if(optionalOAuth2AccountDTO.isPresent()) {
             OAuth2AccountDTO oAuth2AccountDTO = optionalOAuth2AccountDTO.get();
-            userProfileResponseBuilder.socialProvider(oAuth2AccountDTO.getProvider()).linkedAt(oAuth2AccountDTO.getCreateAt());
+            userProfileResponseBuilder.socialProvider(oAuth2AccountDTO.getProvider()).linkedAt(oAuth2AccountDTO.getCreatedAt());
         }
-        return ResponseEntity.ok(userProfileResponseBuilder.build());
+        return new ResponseTemplate(userProfileResponseBuilder.build());
     }
 
    // 프로필 수정 사항 반영
@@ -66,6 +68,7 @@ public class UserController {
     public void updateProfile(@RequestBody @Valid UpdateProfileRequest updateProfileRequest, BindingResult bindingResult, @AuthenticationPrincipal UserDetailsImpl loginUser) {
         if(bindingResult.hasErrors()) throw new ValidationException("프로필 업데이트 유효성 검사 실패", bindingResult.getFieldErrors());
         userService.updateProfile(loginUser.getUsername(), updateProfileRequest);
+
     }
 
     // 회원 탈퇴ㅣ?

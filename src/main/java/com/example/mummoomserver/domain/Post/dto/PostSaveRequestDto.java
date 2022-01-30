@@ -20,7 +20,7 @@ public class PostSaveRequestDto {
     public PostSaveRequestDto(String title, String content, String imgUrl){
         this.title = title;
         this.content = content;
-        //this.userIdx = userIdx;   // 나중에 주석 풀 예정
+        //this.id = id;   // 나중에 주석 풀 예정
         this.imgUrl = imgUrl;
     }
 
@@ -29,7 +29,7 @@ public class PostSaveRequestDto {
                 .title(title)
                 .content(content)
                 .id(id)
-                //.userIdx(userIdx)
+                //.id(id)
                 .imgUrl(imgUrl)
                 .build();
     }
