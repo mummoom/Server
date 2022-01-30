@@ -20,10 +20,8 @@ spring:
     h2:
         console:
             enabled: true
-<<<<<<< HEAD
     profiles:
         include: real-db
-=======
     # 여기서부터 로그인 부분
     servlet:
         encoding:
@@ -62,21 +60,19 @@ spring:
                         token-uri: https://kauth.kakao.com/oauth/token
                         user-info-uri: https://kapi.kakao.com/v2/user/me
                         unlink-uri: https://kapi.kakao.com/v1/user/unlink
-jwt:
-    secretKey: " sakdjfokwktgjroiygjmdflkgbgjjiflergjlzkng"
-    signatureAlgorithm: HS256
-    tokenExpired: 604800 #(sec) 7 days
+    jwt:
+        secretKey: " sakdjfokwktgjroiygjmdflkgbgjjiflergjlzkng"
+        signatureAlgorithm: HS256
+        tokenExpired: 604800 #(sec) 7 days
 
 
 # 여기까지 로그인 끝
-
->>>>>>> 200d052175216c564a72aa8055dc68adaaa648b8
 logging.level:
     org.hibernate.SQL: debug
     org.hibernate.type: trace
 
 client:
-    origins: http://localhost:8080
+    origins: http://52.78.124.45:8080
 
 
 # http://localhost:8080/swagger-ui.html
