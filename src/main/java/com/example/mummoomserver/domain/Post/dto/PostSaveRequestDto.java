@@ -15,11 +15,12 @@ public class PostSaveRequestDto {
     private User id;
     private String imgUrl;
 
+
     @Builder
-    public PostSaveRequestDto(String title, String content, User id, String imgUrl){
+    public PostSaveRequestDto(String title, String content, String imgUrl){
         this.title = title;
         this.content = content;
-        this.id = id;
+        //this.userIdx = userIdx;   // 나중에 주석 풀 예정
         this.imgUrl = imgUrl;
     }
 
@@ -28,6 +29,7 @@ public class PostSaveRequestDto {
                 .title(title)
                 .content(content)
                 .id(id)
+                //.userIdx(userIdx)
                 .imgUrl(imgUrl)
                 .build();
     }

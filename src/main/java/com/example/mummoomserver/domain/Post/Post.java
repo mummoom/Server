@@ -1,18 +1,16 @@
 package com.example.mummoomserver.domain.Post;
-
-
 import com.example.mummoomserver.login.users.User;
+import com.example.mummoomserver.config.BaseTimeEntity;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
-
 import javax.persistence.*;
 
 @Getter
 @NoArgsConstructor
 @Entity
-public class Post { // extends BaseTimeEntity  basetimeentity 클래스를 Post 가 상속받는다.
+public class Post extends BaseTimeEntity { // extends BaseTimeEntity  basetimeentity 클래스를 Post 가 상속받는다.
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,9 +22,14 @@ public class Post { // extends BaseTimeEntity  basetimeentity 클래스를 Post 
     @Column(columnDefinition = "TEXT", nullable = false)
     private String content;
 
+
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="id")
     private User id;
+
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "userIdx", referencedColumnName = "userIdx")
+    private User userIdx;
 
     @Column
     private String imgUrl;

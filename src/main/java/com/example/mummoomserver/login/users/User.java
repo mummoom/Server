@@ -1,6 +1,5 @@
 package com.example.mummoomserver.login.users;
 
-
 import com.example.mummoomserver.login.authentication.oauth2.account.OAuth2Account;
 import com.example.mummoomserver.login.entity.BaseEntity;
 import com.example.mummoomserver.login.security.AuthorityType;
