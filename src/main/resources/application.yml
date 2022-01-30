@@ -32,18 +32,18 @@ spring:
             client:
                 registration:
                     google:
-                        client-id: #client-id
-                        client-secret: #client-secret
+                        client-id:
+                        client-secret:
                         authorization-grant-type: authorization_code
-                        redirect-uri: #callback uri
+                        redirect-uri: http://localhost:8080/login/oauth2/code/google
                         scope:
                             - profile
                             - email
                     kakao:
-                        client-id: #client-id
-                        client-secret: #client-secret
+                        client-id:
+                        client-secret:
                         authorization-grant-type: authorization_code
-                        redirect-uri: #callback uri
+                        redirect-uri: http://localhost:8080/login/oauth2/code/kakao
                         scope:
                             - profile
                             - account_email
@@ -59,13 +59,11 @@ spring:
                         user-info-uri: https://kapi.kakao.com/v2/user/me
                         unlink-uri: https://kapi.kakao.com/v1/user/unlink
 jwt:
-    secretKey: "sakdjfokwktgjroiygjmdflkgbgjjiflergjlzkng"
+    secretKey: ""
     signatureAlgorithm: HS256
     tokenExpired: 604800 #(sec) 7 days
 
-server:
-    servlet:
-        context-path: /api
+
 # 여기까지 로그인 끝
 
 logging.level:

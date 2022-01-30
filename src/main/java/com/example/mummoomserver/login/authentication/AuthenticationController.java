@@ -36,6 +36,7 @@ import java.util.UUID;
 @RestController
 @Slf4j
 @RequiredArgsConstructor
+@RequestMapping("/api")
 public class AuthenticationController {
 
     private final UserService userService;
