@@ -1,12 +1,10 @@
 package com.example.mummoomserver.domain.Post;
-
+import com.example.mummoomserver.login.users.User;
 import com.example.mummoomserver.config.BaseTimeEntity;
-import com.example.mummoomserver.domain.User.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
-
 import javax.persistence.*;
 
 @Getter
@@ -24,9 +22,10 @@ public class Post extends BaseTimeEntity { // extends BaseTimeEntity  basetimeen
     @Column(columnDefinition = "TEXT", nullable = false)
     private String content;
 
+
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "userIdx", referencedColumnName = "userIdx")
-    private User userIdx;
+    @JoinColumn(name = "id", referencedColumnName = "id")
+    private User id;
 
     @Column
     private String imgUrl;
@@ -36,10 +35,10 @@ public class Post extends BaseTimeEntity { // extends BaseTimeEntity  basetimeen
     private String status;
 
     @Builder
-    public Post(String title, String content, User userIdx, String imgUrl, String status) {
+    public Post(String title, String content, User id, String imgUrl, String status) {
         this.title = title;
         this.content = content;
-        this.userIdx = userIdx;
+        this.id = id;
         this.imgUrl = imgUrl;
         this.status = status;
     }
