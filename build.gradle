@@ -41,6 +41,8 @@ dependencies {
     implementation group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.9.2'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+
+    runtimeOnly 'mysql:mysql-connector-java'
 }
 test {
     useJUnitPlatform()
