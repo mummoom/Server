@@ -26,6 +26,7 @@ import java.util.stream.Collectors;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User extends BaseTimeEntity {
     @Id
+    @GeneratedValue
     private Long id;
 
     @Column(nullable = false, length = 20)

@@ -1,8 +1,6 @@
 package com.example.mummoomserver.login.users;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -12,9 +10,8 @@ import javax.validation.constraints.Size;
 // 회원가입시 요청되는 데이터가 적절한 지 검사
 
 @Getter
-@Setter
+@NoArgsConstructor
 public class SignUpRequest {
-
     @Size(min = 1, max = 20, message = "이름이 입력되지 않았거나 너무 긴 이름입니다.")
     private String name;
 
