@@ -12,8 +12,7 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor
 @Entity
-
-@Table
+@Table(name = "Dog")
 public class Dog extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,12 +38,10 @@ public class Dog extends BaseTimeEntity {
     private String surgery;
 
     @ManyToOne(fetch = FetchType.LAZY)
-
-    @JoinColumn(name="id")
+    @JoinColumn(name="userIdx")
     private User user;
 
     @Column(name="status", nullable = false)
-
     @ColumnDefault("'active'")
     private String status;
 
