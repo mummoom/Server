@@ -56,6 +56,11 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
                 //.logout().disable() // '/logout' uri 를 사용하기 위한 설정
                 .authorizeRequests()
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/**").permitAll()
+                .antMatchers(HttpMethod.PATCH, "/**").permitAll()
+                .antMatchers(HttpMethod.POST, "/**").permitAll()
+                .antMatchers(HttpMethod.DELETE, "/**").permitAll()
+                .antMatchers(HttpMethod.PUT, "/**").permitAll()
                 .antMatchers(HttpMethod.POST, "/authorize", "/users").anonymous()
                 .antMatchers(HttpMethod.POST, "/oauth2/unlink").authenticated()
                 .antMatchers("/oauth2/**").permitAll()
