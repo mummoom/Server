@@ -24,7 +24,7 @@ public class Post extends BaseTimeEntity { // extends BaseTimeEntity  basetimeen
 
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "id", referencedColumnName = "id")
+    @JoinColumn(name = "userIdx", referencedColumnName = "userIdx")
     private User userIdx;
 
     @Column

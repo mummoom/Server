@@ -45,7 +45,7 @@ public class Dog extends BaseTimeEntity {
 
     @Column(name="status", nullable = false)
 
-    @ColumnDefault("active")
+    @ColumnDefault("'active'")
     private String status;
 
     @Builder
