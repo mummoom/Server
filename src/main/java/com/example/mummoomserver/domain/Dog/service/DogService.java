@@ -70,8 +70,9 @@ public class DogService {
 
         try {
             if (dog.isPresent()) {
-                dog.get().update(dogRequest.getDogName(), dogRequest.getDogBirth(), dogRequest.getDogType(), dogRequest.getDogSex(), dogRequest.getSurgery());
-                dogRepository.save(dog.get());
+                Dog updateDog = dog.get();
+                updateDog.update(dogRequest.getDogName(), dogRequest.getDogBirth(), dogRequest.getDogType(), dogRequest.getDogSex(), dogRequest.getSurgery());
+                dogRepository.save(updateDog);
             } else {
                 throw new ResponeException(FAIL);
             }
