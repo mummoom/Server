@@ -9,9 +9,12 @@ spring:
         pathmatch:
             matching-strategy: ant_path_matcher
     jpa:
-        generate-ddl : true
+        generate-ddl : false
         hibernate:
-            ddl-auto: create
+            ddl-auto: none
+            naming:
+                implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl
+                physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
         properties:
             hibernate:
             show_sql: true
