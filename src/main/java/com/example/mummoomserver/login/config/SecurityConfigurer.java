@@ -19,6 +19,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.header.writers.frameoptions.WhiteListedAllowFromStrategy;
+import org.springframework.security.web.header.writers.frameoptions.XFrameOptionsHeaderWriter;
+
+import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
@@ -49,6 +53,7 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
                 .permitAll();
 
 
+
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and() //세션 사용 x
                 .csrf().disable()
                 .cors().disable()
@@ -64,8 +69,11 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST, "/authorize", "/users").anonymous()
                 .antMatchers(HttpMethod.POST, "/oauth2/unlink").authenticated()
                 .antMatchers("/oauth2/**").permitAll()
+                .antMatchers("/h2-console/**").permitAll()
+                .anyRequest().authenticated()
                 .antMatchers("/swagger-ui.html").permitAll()
-                .anyRequest().authenticated();
+                .anyRequest().authenticated()
+                .and() .headers() .frameOptions().sameOrigin();;
                 //.exceptionHandling()
                 //.authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED));
 
