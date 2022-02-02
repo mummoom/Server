@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 public class PostSaveRequestDto {
     private String title;
     private String content;
-    private User id;
+    private User userIdx;
     private String imgUrl;
 
 
@@ -20,7 +20,7 @@ public class PostSaveRequestDto {
     public PostSaveRequestDto(String title, String content, String imgUrl){
         this.title = title;
         this.content = content;
-        //this.id = id;   // 나중에 주석 풀 예정
+        //this.userIdx = userIdx;   // 나중에 주석 풀 예정
         this.imgUrl = imgUrl;
     }
 
@@ -28,8 +28,7 @@ public class PostSaveRequestDto {
         return Post.builder()
                 .title(title)
                 .content(content)
-                .id(id)
-                //.id(id)
+                .userIdx(userIdx)
                 .imgUrl(imgUrl)
                 .build();
     }

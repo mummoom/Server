@@ -105,7 +105,6 @@ public abstract class OAuth2Service {
 
         JsonObject jsonObj = JsonUtils.parse(entity.getBody()).getAsJsonObject();
         String accessToken = jsonObj.get("access_token").getAsString();
-        //naver의 경우는 null
         Optional<JsonElement> optionalNewRefreshToken = Optional.ofNullable(jsonObj.get("refresh_token"));
         LocalDateTime expiredAt = LocalDateTime.now().plusSeconds(jsonObj.get("expires_in").getAsLong());
 

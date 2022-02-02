@@ -13,17 +13,17 @@ import java.util.List;
 @Setter
 public class UserProfileResponse {
 
-    private Long id;
-    private String name;
+    private Long userIdx;
+    private String nickName;
     private String email;
     private List<AuthorityType> authorities;
     private String socialProvider;
     private Long linkedAt;
 
     @Builder
-    public UserProfileResponse(Long id, String name, String email, List<AuthorityType> authorities, String socialProvider, LocalDateTime linkedAt) {
-        this.id = id;
-        this.name = name;
+    public UserProfileResponse(Long userIdx, String nickName, String email, List<AuthorityType> authorities, String socialProvider, LocalDateTime linkedAt) {
+        this.userIdx = userIdx;
+        this.nickName = nickName;
         this.email = email;
         this.authorities = authorities;
         this.socialProvider = socialProvider;

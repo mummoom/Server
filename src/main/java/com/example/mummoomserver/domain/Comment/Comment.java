@@ -25,8 +25,8 @@ public class Comment {
     private Post postIdx;
 
     @ManyToOne
-    @JoinColumn(name="id")
-    private User id;
+    @JoinColumn(name="userIdx")
+    private User userIdx;
 
     @Column(columnDefinition = "TEXT")
     private String content;
@@ -36,9 +36,9 @@ public class Comment {
     private String status;
 
     @Builder
-    public Comment(Post postIdx, User id, String content, String status){
+    public Comment(Post postIdx, User userIdx, String content, String status){
         this.postIdx = postIdx;
-        this.id = id;
+        this.userIdx = userIdx;
         this.content = content;
         this.status = status;
     }

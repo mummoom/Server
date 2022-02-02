@@ -2,13 +2,14 @@ package com.example.mummoomserver.login.authentication.oauth2;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.Collections;
 import java.util.Set;
 
 @Getter
-@Setter
+@NoArgsConstructor
 public final class ClientRegistration {
     private String registrationId;
     private String clientId;
@@ -33,7 +34,7 @@ public final class ClientRegistration {
     }
 
     @Getter
-    @Setter
+    @NoArgsConstructor
     public class ProviderDetails {
         private String authorizationUri;
         private String tokenUri;

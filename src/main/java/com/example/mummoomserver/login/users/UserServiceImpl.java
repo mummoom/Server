@@ -31,7 +31,7 @@ public class UserServiceImpl implements UserService {
         checkDuplicateEmail(signUpRequest.getEmail());
         User user = User.builder()
                 .username(signUpRequest.getEmail())
-                .name(signUpRequest.getName())
+                .nickName(signUpRequest.getNickName())
                 .email(signUpRequest.getEmail())
                 .password(passwordEncoder.encode(signUpRequest.getPassword()))
                 .type(UserType.DEFAULT)
@@ -54,8 +54,8 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findByUsername(username).get();
 
         //이름이 변경되었는지 체크
-        if (!user.getName().equals(updateProfileRequest.getName()))
-            user.updateName(updateProfileRequest.getName());
+        if (!user.getNickName().equals(updateProfileRequest.getNickName()))
+            user.updateName(updateProfileRequest.getNickName());
 
         //이메일이 변경되었는지 체크
         if (!user.getEmail().equals(updateProfileRequest.getEmail())) {
@@ -68,7 +68,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDetails loginOAuth2User(String provider, OAuth2Token oAuth2Token, OAuth2UserInfo userInfo) {
 
-        Optional<OAuth2Account> optOAuth2Account = oAuth2AccountRepository.findByProviderAndProviderId(provider, userInfo.getId());
+        Optional<OAuth2Account> optOAuth2Account = oAuth2AccountRepository.findByProviderAndProviderId(provider, userInfo.getUserIdx());
         User user = null;
 
         //가입된 계정이 존재할때
@@ -83,7 +83,7 @@ public class UserServiceImpl implements UserService {
             //소셜 계정 정보 생성
             OAuth2Account newAccount = OAuth2Account.builder()
                     .provider(provider)
-                    .providerId(userInfo.getId())
+                    .providerId(userInfo.getUserIdx())
                     .token(oAuth2Token.getToken())
                     .refreshToken(oAuth2Token.getRefreshToken())
                     .tokenExpiredAt(oAuth2Token.getExpiredAt()).build();
@@ -94,8 +94,8 @@ public class UserServiceImpl implements UserService {
                 // 같은 이메일을 사용하는 계정이 존재하는지 확인 후 있다면 소셜 계정과 연결시키고 없다면 새로 생성한다
                 user = userRepository.findByEmail(userInfo.getEmail())
                         .orElse(User.builder()
-                                .username(provider + "_" + userInfo.getId())
-                                .name(userInfo.getName())
+                                .username(provider + "_" + userInfo.getUserIdx())
+                                .nickName(userInfo.getNickName())
                                 .email(userInfo.getEmail())
                                 .type(UserType.OAUTH)
                                 .build());
@@ -103,14 +103,14 @@ public class UserServiceImpl implements UserService {
             //이메일 정보가 없을때
             else {
                 user = User.builder()
-                        .username(provider + "_" + userInfo.getId())
-                        .name(userInfo.getName())
+                        .username(provider + "_" + userInfo.getUserIdx())
+                        .nickName(userInfo.getNickName())
                         .type(UserType.OAUTH)
                         .build();
             }
 
             //새로 생성된 유저이면 db에 저장
-            if (user.getId() == null)
+            if (user.getUserIdx() == null)
                 userRepository.save(user);
 
             //연관관계 설정
@@ -118,9 +118,9 @@ public class UserServiceImpl implements UserService {
         }
 
         return UserDetailsImpl.builder()
-                .id(user.getId())
+                .userIdx(user.getUserIdx())
                 .username(user.getUsername())
-                .name(user.getName())
+                .nickName(user.getNickName())
                 .email(user.getEmail())
                 .type(user.getType())
                 .authorities(user.getAuthorities()).build();
@@ -131,12 +131,12 @@ public class UserServiceImpl implements UserService {
         User user = checkRegisteredUser(username);
 
         //이미 등록된 소셜 계정이라면 연동된 계정이 존재
-        Assert.state(oAuth2AccountRepository.existsByProviderAndProviderId(provider, userInfo.getId()) == false, "소셜 계정에 연동된 계정이 이미 존재합니다.");
+        Assert.state(oAuth2AccountRepository.existsByProviderAndProviderId(provider, userInfo.getUserIdx()) == false, "소셜 계정에 연동된 계정이 이미 존재합니다.");
 
         //소셜 계정 정보 생성
         OAuth2Account oAuth2Account = OAuth2Account.builder()
                 .provider(provider)
-                .providerId(userInfo.getId())
+                .providerId(userInfo.getUserIdx())
                 .token(oAuth2Token.getToken())
                 .refreshToken(oAuth2Token.getRefreshToken())
                 .tokenExpiredAt(oAuth2Token.getExpiredAt())
@@ -147,9 +147,9 @@ public class UserServiceImpl implements UserService {
         user.linkSocial(oAuth2Account);
 
         return UserDetailsImpl.builder()
-                .id(user.getId())
+                .userIdx(user.getUserIdx())
                 .username(user.getUsername())
-                .name(user.getName())
+                .nickName(user.getNickName())
                 .email(user.getEmail())
                 .type(user.getType())
                 .authorities(user.getAuthorities()).build();

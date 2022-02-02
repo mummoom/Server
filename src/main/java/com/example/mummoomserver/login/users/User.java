@@ -22,39 +22,40 @@ import java.util.stream.Collectors;
 
 @Entity
 @Getter
-@Table(name = "TBL_USER")
+@Table(name = "User") //원래 : tbl_user
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User extends BaseTimeEntity {
     @Id
-    private Long id;
+    @GeneratedValue
+    private Long userIdx;
 
     @Column(nullable = false, length = 20)
-    private String name;
+    private String nickName;
 
     @Column(unique = true)
     private String email;
 
     @Column(nullable = false, unique = true)
-    private String username;
+    private String username; //이메일 대체할 수도 있는 필드
 
     private String password;
 
     @Enumerated(value = EnumType.STRING)
     private UserType type;
 
-    @ElementCollection(targetClass = AuthorityType.class)
-    @CollectionTable(name = "TBL_USER_AUTHORITY", joinColumns = @JoinColumn(name = "USER_ID"))
+    @ElementCollection(targetClass = AuthorityType.class) // 테이블 형태로 저장되는 colleciton 객채(여러 원소를 담는 자료 구조)
+    @CollectionTable(name = "UserAuthority", joinColumns = @JoinColumn(name = "userIdx"))
     @Enumerated(EnumType.STRING)
     private List<AuthorityType> authorities = new ArrayList<>();
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "SOCIAL_ID")
+    @JoinColumn(name = "userIdx") // oauth2account 테이블의 social의 id와 연결되어 있음 네이밍 정의 대문자로 하는건지만 확인
     private OAuth2Account social;
 
     @Builder
-    public User(String username, String name, String email, String password, UserType type) {
+    public User(String username, String nickName, String email, String password, UserType type) {
         this.username = username;
-        this.name = name;
+        this.nickName = nickName;
         this.email = email;
         this.password = password;
         this.authorities.add(AuthorityType.ROLE_MEMBER);
@@ -65,8 +66,8 @@ public class User extends BaseTimeEntity {
         return this.authorities.stream().map(authority -> new SimpleGrantedAuthority(authority.toString())).collect(Collectors.toList());
     }
 
-    public void updateName(String name) {
-        this.name = name;
+    public void updateName(String nickName) {
+        this.nickName = nickName;
     }
 
     public void updateEmail(String email) {
