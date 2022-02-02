@@ -40,12 +40,12 @@ public class Dog extends BaseTimeEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
 
-    @JoinColumn(name="id")
+    @JoinColumn(name="userIdx")
     private User user;
 
     @Column(name="status", nullable = false)
 
-    @ColumnDefault("'active'")
+    @ColumnDefault("active")
     private String status;
 
     @Builder

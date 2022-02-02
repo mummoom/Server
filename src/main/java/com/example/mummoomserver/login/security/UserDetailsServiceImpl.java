@@ -28,9 +28,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 new UsernameNotFoundException("등록되지 않은 회원입니다."));
 
         UserDetailsImpl userDetails = UserDetailsImpl.builder()
-                .id(user.getId())
+                .userIdx(user.getUserIdx())
                 .username(user.getUsername())
-                .name(user.getName())
+                .nickName(user.getNickName())
                 .email(user.getEmail())
                 .password(user.getPassword())
                 .type(user.getType())

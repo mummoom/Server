@@ -25,7 +25,7 @@ public class Post extends BaseTimeEntity { // extends BaseTimeEntity  basetimeen
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "id", referencedColumnName = "id")
-    private User id;
+    private User userIdx;
 
     @Column
     private String imgUrl;
@@ -35,10 +35,10 @@ public class Post extends BaseTimeEntity { // extends BaseTimeEntity  basetimeen
     private String status;
 
     @Builder
-    public Post(String title, String content, User id, String imgUrl, String status) {
+    public Post(String title, String content, User userIdx, String imgUrl, String status) {
         this.title = title;
         this.content = content;
-        this.id = id;
+        this.userIdx = userIdx;
         this.imgUrl = imgUrl;
         this.status = status;
     }

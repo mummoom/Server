@@ -13,7 +13,7 @@ import javax.validation.constraints.Size;
 @NoArgsConstructor
 public class SignUpRequest {
     @Size(min = 1, max = 20, message = "이름이 입력되지 않았거나 너무 긴 이름입니다.")
-    private String name;
+    private String nickName;
 
     @NotBlank(message = "이메일을 입력해주세요.")
     @Email(message = "이메일 형식이 잘못되었습니다.")
@@ -23,8 +23,8 @@ public class SignUpRequest {
     private String password;
 
     @Builder
-    public SignUpRequest(String name, String email, String password) {
-        this.name = name;
+    public SignUpRequest(String nickName, String email, String password) {
+        this.nickName = nickName;
         this.email = email;
         this.password = password;
     }

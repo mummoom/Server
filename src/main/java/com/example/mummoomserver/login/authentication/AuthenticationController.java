@@ -49,7 +49,7 @@ public class AuthenticationController {
 
 
     /* 사용자의 계정을 인증하고 로그인 토큰을 발급해주는 컨트롤러 */
-    @PostMapping("/authorize")  //username, password 입력이라고는 알고 잇는데 안되는 중, 아마 회원가입이 된 이후에 해주는 것 같다고 예상중
+    @PostMapping("/authorize")  //username, password 입력이, 회원가입 이후 예상중, 확인 되면 토큰 발급
     public void authenticateUsernamePassword(@Valid @RequestBody AuthorizationRequest authorizationRequest, BindingResult bindingResult, HttpServletRequest request, HttpServletResponse response) throws IOException {
         if (bindingResult.hasErrors()) throw new ValidationException("로그인 유효성 검사 실패.", bindingResult.getFieldErrors());
         try {
@@ -80,7 +80,8 @@ public class AuthenticationController {
         oAuth2Service.redirectAuthorizePage(clientRegistration, state, response);
     }
 
-    /* 각 소셜 서비스로부터 인증 결과를 처리하는 컨트롤러 */
+    /* 각 소셜 서비스로부터 인증 결과를 처리하는 컨트롤러 */ //scope : profile, account_email // state : 토큰
+    // 제공되는 인증 결과 정보 : code, error, state값
     @RequestMapping("/oauth2/callback/{provider}") // provider : google, kakao
     public void oAuth2AuthenticationCallback(@PathVariable String provider, OAuth2AuthorizationResponse oAuth2AuthorizationResponse, HttpServletRequest request, HttpServletResponse response, @AuthenticationPrincipal UserDetailsImpl loginUser) throws Exception {
 
