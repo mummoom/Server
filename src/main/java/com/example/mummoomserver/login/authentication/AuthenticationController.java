@@ -4,8 +4,6 @@ import com.example.mummoomserver.config.resTemplate.ResponseTemplate;
 import com.example.mummoomserver.login.authentication.oauth2.*;
 import com.example.mummoomserver.login.authentication.oauth2.account.OAuth2AccountDTO;
 import com.example.mummoomserver.login.authentication.oauth2.service.OAuth2Service;
-import com.example.mummoomserver.login.authentication.oauth2.service.OAuth2ServiceFactory;
-import com.example.mummoomserver.login.authentication.oauth2.userInfo.OAuth2UserInfo;
 import com.example.mummoomserver.login.jwt.JwtProvider;
 import com.example.mummoomserver.login.security.UserDetailsImpl;
 import com.example.mummoomserver.login.users.UserService;
@@ -18,6 +16,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.client.registration.ClientRegistration;
+import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequest;
+import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationResponse;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
@@ -29,9 +30,6 @@ import javax.validation.Valid;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.security.SecureRandom;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
 
 @RestController
 @Slf4j

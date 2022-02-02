@@ -2,7 +2,6 @@ package com.example.mummoomserver.login.users;
 
 import com.example.mummoomserver.login.authentication.oauth2.OAuth2Token;
 import com.example.mummoomserver.login.authentication.oauth2.account.OAuth2AccountDTO;
-import com.example.mummoomserver.login.authentication.oauth2.userInfo.OAuth2UserInfo;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Optional;

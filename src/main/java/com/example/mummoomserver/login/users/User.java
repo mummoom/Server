@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 
 @Entity
 @Getter
-@Table(name = "User") //원래 : tbl_user
+@Table(name = "User")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User extends BaseTimeEntity {
     @Id
@@ -32,50 +32,43 @@ public class User extends BaseTimeEntity {
     @Column(nullable = false, length = 20)
     private String nickName;
 
-    @Column(unique = true)
+    @Column(nullable = false, unique = true)
     private String email;
 
     @Column(nullable = false, unique = true)
     private String username; //이메일 대체할 수도 있는 필드
 
+    @Column()
     private String password;
 
-    @Enumerated(value = EnumType.STRING)
+    @Column()
+    private String imgUrl;
+
+    @Enumerated(value = EnumType.STRING)  // 일반 로그인인지 소셜 로그인인지 확인하는 컬럼
     private UserType type;
 
-    @ElementCollection(targetClass = AuthorityType.class) // 테이블 형태로 저장되는 colleciton 객채(여러 원소를 담는 자료 구조)
-    @CollectionTable(name = "UserAuthority", joinColumns = @JoinColumn(name = "userIdx"))
     @Enumerated(EnumType.STRING)
-    private List<AuthorityType> authorities = new ArrayList<>();
+    @Column(nullable = false)
+    private Role role;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL) // (점검 필요)
     @JoinColumn(name = "userIdx") // oauth2account 테이블의 social의 id와 연결되어 있음 네이밍 정의 대문자로 하는건지만 확인
     private OAuth2Account social;
 
     @Builder
-    public User(String username, String nickName, String email, String password, UserType type) {
+    public User(String username, String nickName, String email, String password,String imgUrl, UserType type, Role role) {
         this.username = username;
         this.nickName = nickName;
         this.email = email;
         this.password = password;
-        this.authorities.add(AuthorityType.ROLE_MEMBER);
+        this.imgUrl = imgUrl;
+        this.role = role;
         this.type = type;
     }
-
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return this.authorities.stream().map(authority -> new SimpleGrantedAuthority(authority.toString())).collect(Collectors.toList());
-    }
-
-    public void updateName(String nickName) {
-        this.nickName = nickName;
-    }
-
-    public void updateEmail(String email) {
-        this.email = email;
-        //일반 계정이라면 username 도 함께 변경해준다.
-        if (type.equals(UserType.DEFAULT))
-            this.username = email;
-    }
+//   getRole로 대체 됨
+//    public Collection<? extends GrantedAuthority> getAuthorities() {
+//        return this.authorities.stream().map(authority -> new SimpleGrantedAuthority(authority.toString())).collect(Collectors.toList());
+//    }
 
     public void linkSocial(OAuth2Account oAuth2Account) {
         Assert.state(social == null, "하나의 소셜 서비스만 연동할 수 있습니다.");
@@ -88,5 +81,19 @@ public class User extends BaseTimeEntity {
         Assert.state(social != null, "연동된 소셜 계정 정보가 없습니다.");
         this.social.unlinkUser();
         this.social = null;
+    }
+
+    public User update(String nickName,String email, String imgUrl) {  //update email, update eimgurl, update nickname
+        this.nickName = nickName;
+        this.email = email;
+        //일반 계정이라면 username 도 함께 변경해준다.
+        if (type.equals(UserType.DEFAULT))
+            this.username = email;
+        this.imgUrl = imgUrl;
+        return this;
+    }
+
+    public String getRoleKey() {
+        return this.role.getKey();
     }
 }

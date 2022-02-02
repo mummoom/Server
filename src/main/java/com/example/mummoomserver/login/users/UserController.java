@@ -1,20 +1,18 @@
 package com.example.mummoomserver.login.users;
 
 import com.example.mummoomserver.config.resTemplate.ResponseTemplate;
-import com.example.mummoomserver.login.authentication.oauth2.ClientRegistration;
 import com.example.mummoomserver.login.authentication.oauth2.ClientRegistrationRepository;
 import com.example.mummoomserver.login.authentication.oauth2.account.OAuth2AccountDTO;
 import com.example.mummoomserver.login.authentication.oauth2.service.OAuth2Service;
-import com.example.mummoomserver.login.authentication.oauth2.service.OAuth2ServiceFactory;
 import com.example.mummoomserver.login.security.AuthorityType;
 import com.example.mummoomserver.login.security.UserDetailsImpl;
 
 import com.example.mummoomserver.login.validation.ValidationException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;

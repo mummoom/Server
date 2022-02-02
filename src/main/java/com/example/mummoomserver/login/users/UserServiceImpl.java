@@ -1,11 +1,9 @@
 package com.example.mummoomserver.login.users;
 
-import com.example.mummoomserver.login.users.*;
 import com.example.mummoomserver.login.authentication.oauth2.OAuth2Token;
 import com.example.mummoomserver.login.authentication.oauth2.account.OAuth2Account;
 import com.example.mummoomserver.login.authentication.oauth2.account.OAuth2AccountDTO;
 import com.example.mummoomserver.login.authentication.oauth2.account.OAuth2AccountRepository;
-import com.example.mummoomserver.login.authentication.oauth2.userInfo.OAuth2UserInfo;
 import com.example.mummoomserver.login.security.UserDetailsImpl;
 import com.example.mummoomserver.login.validation.SimpleFieldError;
 import lombok.RequiredArgsConstructor;
@@ -36,19 +34,19 @@ public class UserServiceImpl implements UserService {
                 .password(passwordEncoder.encode(signUpRequest.getPassword()))
                 .type(UserType.DEFAULT)
                 .build();
-
+// 더 추가 필요 imgurl과 같이 다른 정보들 .....그리고 이건 일반 회원가입이다.
         userRepository.save(user);
     }
 
     @Override
-    @Transactional(readOnly = true)
+    @Transactional(readOnly = true) // 정보들을 가져올 수 있으려나..모르겠다.
     public Optional<OAuth2AccountDTO> getOAuth2Account(String username) {
         Optional<User> optionalUser = userRepository.findByUsername(username);
         if (!optionalUser.isPresent() || optionalUser.get().getSocial() == null) return Optional.empty();
         return Optional.of(optionalUser.get().getSocial().toDTO());
     }
 
-    @Override
+    @Override //프로필을 개선하는 작업 함수는 따로 만들어서 개선해주면 될 듯
     public void updateProfile(String username, UpdateProfileRequest updateProfileRequest){
 
         User user = userRepository.findByUsername(username).get();
@@ -65,7 +63,7 @@ public class UserServiceImpl implements UserService {
     }
 
 
-    @Override
+    @Override  //잘하면 사용할 수 있을 것 같아보임 oauth2userinfo부분을 atattribute로 대체할 수 있는 지 살펴보기
     public UserDetails loginOAuth2User(String provider, OAuth2Token oAuth2Token, OAuth2UserInfo userInfo) {
 
         Optional<OAuth2Account> optOAuth2Account = oAuth2AccountRepository.findByProviderAndProviderId(provider, userInfo.getUserIdx());
@@ -126,7 +124,7 @@ public class UserServiceImpl implements UserService {
                 .authorities(user.getAuthorities()).build();
     }
 
-    @Override
+    @Override  // oauth2userinfo부분을 attribute로 대체할 수 있을 것 같아보인다.
     public UserDetails linkOAuth2Account(String username, String provider, OAuth2Token oAuth2Token, OAuth2UserInfo userInfo) {
         User user = checkRegisteredUser(username);
 
@@ -155,7 +153,7 @@ public class UserServiceImpl implements UserService {
                 .authorities(user.getAuthorities()).build();
     }
 
-    @Override
+    @Override // 할 수 있다.
     public OAuth2AccountDTO unlinkOAuth2Account(String username) {
         User user = checkRegisteredUser(username);
 
@@ -168,7 +166,7 @@ public class UserServiceImpl implements UserService {
         return oAuth2AccountDTO;
     }
 
-    @Override
+    @Override //사용할 수 있는 기능으로 보인다.
     public Optional<OAuth2AccountDTO> withdrawUser(String username) {
         OAuth2AccountDTO oAuth2AccountDTO = null;
         User user = checkRegisteredUser(username);
@@ -179,12 +177,12 @@ public class UserServiceImpl implements UserService {
         return Optional.ofNullable(oAuth2AccountDTO);
     }
 
-    private void checkDuplicateEmail(String email) {
+    private void checkDuplicateEmail(String email) { //이메일 확인은 쌉가능
         if(userRepository.existsByEmail(email))
             throw new DuplicateUserException("사용중인 이메일 입니다.", new SimpleFieldError("email", "사용중인 이메일 입니다."));
     }
 
-    private User checkRegisteredUser(String username) {
+    private User checkRegisteredUser(String username) { //등록 회원 확인 쌉가능
         Optional<User> optUser = userRepository.findByUsername(username);
         Assert.state(optUser.isPresent(), "가입되지 않은 회원입니다.");
         return optUser.get();

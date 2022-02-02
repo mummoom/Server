@@ -1,6 +1,7 @@
 package com.example.mummoomserver.login.config;
 
 
+import com.example.mummoomserver.login.authentication.oauth2.service.OAuth2Service;
 import com.example.mummoomserver.login.jwt.filter.JwtAuthenticationFilter;
 import com.example.mummoomserver.login.security.UserDetailsServiceImpl;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +28,7 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
 
     private final UserDetailsServiceImpl userDetailsService;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
-
+    private final OAuth2Service oAuth2Service;
     /*
          AuthenticationManager 에서 authenticate 메소드를 실행할때
          내부적으로 사용할 UserDetailsService 와 PasswordEncoder 를 설정
@@ -67,11 +68,11 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
                 .antMatchers("/swagger-ui.html").permitAll()
                 .anyRequest().authenticated().and()
                 .exceptionHandling()
-                .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED));
-//                .and()
-//                .oauth2Login()
-//                .userInfoEndpoint()
-//                .userService(oAuthService)
+                .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
+                .and()
+                .oauth2Login()
+                .userInfoEndpoint()
+                .userService(oAuth2Service);
 //                .and()
 //                .successHandler(oAuth2AuthenticationSuccessHandler);;
 

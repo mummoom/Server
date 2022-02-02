@@ -1,5 +1,7 @@
 package com.example.mummoomserver.login.authentication.oauth2;
 
+import org.springframework.security.oauth2.client.registration.ClientRegistration;
+
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
