@@ -1,6 +1,9 @@
 package com.example.mummoomserver.login.config;
 
 
+import com.example.mummoomserver.login.authentication.oauth2.service.GoogleOAuth2Service;
+import com.example.mummoomserver.login.authentication.oauth2.service.OAuth2Service;
+import com.example.mummoomserver.login.authentication.oauth2.service.OAuth2ServiceFactory;
 import com.example.mummoomserver.login.jwt.filter.JwtAuthenticationFilter;
 import com.example.mummoomserver.login.security.UserDetailsServiceImpl;
 import lombok.RequiredArgsConstructor;
@@ -39,44 +42,41 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
-                .antMatchers(
-                        "/v2/api-docs",
-                        "/swagger-resources/**",
-                        "/swagger-ui.html",
-                        "/webjars/**" ,
-                        /*Probably not needed*/ "/swagger.json")
-                .permitAll();
-
-        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and() //세션 사용 x
-                .csrf().disable()  // csrf 토큰을 매번 받지 않아도 된다.
-                .cors().disable()  // 서로다른 웹 자원 공유, 프로토콜 :// 도메인 :포트
-                .formLogin().disable()
-                .logout().disable() // '/logout' uri 를 사용하기 위한 설정
-                .httpBasic().disable()
-                .authorizeRequests()
-                .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                .antMatchers(HttpMethod.GET, "/**").permitAll()
-                .antMatchers(HttpMethod.PATCH, "/**").permitAll()
-                .antMatchers(HttpMethod.PUT, "/**").permitAll()
-                .antMatchers(HttpMethod.DELETE, "/**").permitAll()
-                .antMatchers(HttpMethod.POST, "/**").permitAll()
-                .antMatchers(HttpMethod.POST, "/authorize", "/users").anonymous()
-                .antMatchers(HttpMethod.POST, "/oauth2/unlink").authenticated()
-                .antMatchers("/oauth2/**").permitAll()
-                .antMatchers("/swagger-ui.html").permitAll()
-                .anyRequest().authenticated().and()
-                .exceptionHandling()
-                .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED));
+                http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                        .csrf().ignoringAntMatchers("/h2-console/**").disable()
+                        //.headers().frameOptions().disable()// csrf 토큰을 매번 받지 않아도 된다.
+                        .cors().disable()
+                        .formLogin().disable() //폼 로그인 방식을 사용하지 않는다.
+                        .logout().disable() // 로그아웃 uri를 사용하기 위한 설정 (점검 필요)
+                        .httpBasic().disable() // http basic auth기반 로그인창 사용 X
+                        .authorizeRequests()//요청에 대한 권한을 지정한다.
+                        .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                        .antMatchers(HttpMethod.POST, "/authorize", "/users").anonymous()
+                        .antMatchers(HttpMethod.POST, "/oauth2/unlink").authenticated()
+                        .antMatchers(HttpMethod.GET, "/**").permitAll()
+                        .antMatchers(HttpMethod.PATCH, "/**").permitAll()
+                        .antMatchers(HttpMethod.PUT, "/**").permitAll()
+                        .antMatchers(HttpMethod.DELETE, "/**").permitAll()
+                        .antMatchers(HttpMethod.POST, "/**").permitAll()
+                        .antMatchers("/oauth2/**").permitAll()
+                        .antMatchers(
+                                "/v2/api-docs",
+                                "/swagger-resources/**",
+                                "/webjars/**" ,
+                                /*Probably not needed*/ "/swagger.json").permitAll()
+                        .anyRequest().authenticated() // 그 이외에는 인증된 사용자만 접근 가능하다
 //                .and()
-//                .oauth2Login()
-//                .userInfoEndpoint()
-//                .userService(oAuthService)
-//                .and()
-//                .successHandler(oAuth2AuthenticationSuccessHandler);;
+//                        .oauth2Login()
+//                        .userInfoEndpoint()
+//                        .userService(oauth2Service)
+                .and()
+                        .exceptionHandling()
+                        .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED));
+                        //로그인 인증을 진행하는 필터 이전에 jwtAuthenticationFilter 가 실행되도록 설정
+                http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
-        //로그인 인증을 진행하는 필터 이전에 jwtAuthenticationFilter 가 실행되도록 설정
-        http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+
     }
 
     /*PasswordEncoder를 BCryptPasswordEncoder로 사용하도록 Bean 등록*/
