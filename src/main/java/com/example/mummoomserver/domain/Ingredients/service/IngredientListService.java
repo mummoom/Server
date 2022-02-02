@@ -1,5 +1,6 @@
 package com.example.mummoomserver.domain.Ingredients.service;
 import com.example.mummoomserver.domain.Ingredients.dto.IngredientDto;
+import com.example.mummoomserver.domain.Ingredients.entity.Ingredient;
 import com.example.mummoomserver.domain.Ingredients.repository.IngredientRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,13 +17,13 @@ public class IngredientListService {
 
     private final IngredientRepository ingredientRepository;
 
-    public List<IngredientDto> getList(String category){
-        List<IngredientDto> ret = ingredientRepository.findIngredientByCategory(category);
+    public List<Ingredient> getList(String category){
+        List<Ingredient> ret = ingredientRepository.findIngredientByCategory(category);
         return ret;
     }
 
-    public List<IngredientDto> simpleList(int level){
-        List<IngredientDto> ret;
+    public List<Ingredient> simpleList(int level){
+        List<Ingredient> ret;
 
         if(level == 1){
                 ret = ingredientRepository.findIngredientByScoreBetween(2,4);

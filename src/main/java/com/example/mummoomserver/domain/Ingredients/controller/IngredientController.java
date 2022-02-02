@@ -4,6 +4,7 @@ import com.example.mummoomserver.config.resTemplate.ResponeException;
 import com.example.mummoomserver.config.resTemplate.ResponseTemplate;
 import com.example.mummoomserver.config.resTemplate.ResponseTemplateStatus;
 import com.example.mummoomserver.domain.Ingredients.dto.IngredientDto;
+import com.example.mummoomserver.domain.Ingredients.entity.Ingredient;
 import com.example.mummoomserver.domain.Ingredients.service.IngredientListService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -25,9 +26,9 @@ public class IngredientController {
      * category 별로 재료 보여줌
      */
     @GetMapping("/api/ingredients/{category}")
-    public ResponseTemplate<List<IngredientDto>> getIngredientList(@PathVariable(name ="category") String category){
+    public ResponseTemplate<List<Ingredient>> getIngredientList(@PathVariable(name ="category") String category){
 
-        List<IngredientDto> ret = ingredientListService.getList(category);
+        List<Ingredient> ret = ingredientListService.getList(category);
 
         return new ResponseTemplate<>(ret);
 
@@ -42,7 +43,7 @@ public class IngredientController {
             value = "간단히 알아보는 음식 정보 "
             , notes = "도형 표시 로 마크된 간단히 알아보는 음식 정보 리스트를 불러온다  0 = 엑스표시, 1 = 세모표시 , 2 = 동그라미 표시  ")
     @GetMapping("/api/simple/ingredients/{level}")
-    public ResponseTemplate<List<IngredientDto>> getSimpleIngredientX(@PathVariable(name="level") int level) throws ResponeException {
+    public ResponseTemplate<List<Ingredient>> getSimpleIngredientX(@PathVariable(name="level") int level) throws ResponeException {
 
         if( 0<= level &&level <=2 )  return new ResponseTemplate<>(ingredientListService.simpleList(level));
         else{

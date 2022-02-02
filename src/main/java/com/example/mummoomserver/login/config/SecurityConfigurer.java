@@ -70,7 +70,6 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST, "/oauth2/unlink").authenticated()
                 .antMatchers("/oauth2/**").permitAll()
                 .antMatchers("/h2-console/**").permitAll()
-                .anyRequest().authenticated()
                 .antMatchers("/swagger-ui.html").permitAll()
                 .anyRequest().authenticated()
                 .and() .headers() .frameOptions().sameOrigin();;
