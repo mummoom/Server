@@ -1,5 +1,7 @@
-package com.example.mummoomserver.login.security;
+package com.example.mummoomserver.login.service;
 
+
+import com.example.mummoomserver.login.users.Role;
 import com.example.mummoomserver.login.users.UserType;
 import lombok.Builder;
 import lombok.Getter;
@@ -9,8 +11,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
-
-// 인증된 유저의 데이터를 담는 클래스
 
 @Getter
 @Setter
@@ -22,17 +22,22 @@ public class UserDetailsImpl implements UserDetails {
     private String email;
     private String username;
     private String password;
+    private String imgUrl;
     private UserType type;
+    private Role role;
     private Collection<? extends GrantedAuthority> authorities;
 
+
     @Builder
-    public UserDetailsImpl(Long userIdx, String nickName, String email, String username, String password, UserType type, Collection<? extends GrantedAuthority> authorities) {
+    public UserDetailsImpl(Long userIdx, String nickName, String email, String username, String password,String imgUrl, UserType type,Role role, Collection<? extends GrantedAuthority> authorities) {
         this.userIdx = userIdx;
         this.nickName = nickName;
         this.email = email;
         this.username = username;
         this.password = password;
+        this.imgUrl = imgUrl;
         this.type = type;
+        this.role = role;
         this.authorities = authorities;
     }
 

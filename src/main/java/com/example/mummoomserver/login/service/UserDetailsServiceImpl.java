@@ -1,7 +1,6 @@
-package com.example.mummoomserver.login.security;
+package com.example.mummoomserver.login.service;
 
-
-import com.example.mummoomserver.login.security.UserDetailsImpl;
+import com.example.mummoomserver.login.users.Role;
 import com.example.mummoomserver.login.users.User;
 import com.example.mummoomserver.login.users.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -31,10 +30,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 .userIdx(user.getUserIdx())
                 .username(user.getUsername())
                 .nickName(user.getNickName())
+                .imgUrl(user.getImgUrl())
                 .email(user.getEmail())
                 .password(user.getPassword())
                 .type(user.getType())
-                .authorities(user.getAuthorities())
+                .role(Role.USER)
                 .build();
 
         return userDetails;

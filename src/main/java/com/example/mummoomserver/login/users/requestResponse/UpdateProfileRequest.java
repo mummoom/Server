@@ -1,9 +1,8 @@
-package com.example.mummoomserver.login.users;
+package com.example.mummoomserver.login.users.requestResponse;
 
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Size;
@@ -16,9 +15,12 @@ public class UpdateProfileRequest {
     @Email(message = "이메일 형식이 잘못되었습니다.")
     private String email;
 
+    private String imgUrl;
+
     @Builder
-    public UpdateProfileRequest(String nickName, String email) {
+    public UpdateProfileRequest(String nickName, String email, String imgUrl) {
         this.nickName = nickName;
         this.email = email;
+        this.imgUrl = imgUrl;
     }
 }

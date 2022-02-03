@@ -8,7 +8,6 @@ import java.util.Optional;
 // 검사하는 메소드 저장
 
 public interface UserRepository extends JpaRepository<User, Long> {
-
     Optional<User> findByEmail(String email);
     Optional<User> findByUsername(String username);
     boolean existsByEmail(String email);
