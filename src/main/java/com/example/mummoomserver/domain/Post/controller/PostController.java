@@ -12,6 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Slf4j
 @RequiredArgsConstructor
 @RestController
@@ -28,7 +30,7 @@ public class PostController {
         }
     }
 
-    @PutMapping("/post/{postIdx}")
+    @PatchMapping("/post/{postIdx}")
     public ResponseTemplate<String> update(@PathVariable Long postIdx, @RequestBody PostUpdateRequestDto requestDto){
         try {
             postService.update(postIdx, requestDto);
@@ -45,6 +47,26 @@ public class PostController {
             PostResponseDto result = postService.findByPostIdx(postIdx);
             return new ResponseTemplate<>(result);
         } catch (ResponeException e){
+            return new ResponseTemplate<>(e.getStatus(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/posts")
+    public ResponseTemplate<List<PostResponseDto>> getPosts(){
+        try{
+            return new ResponseTemplate<>(postService.getPosts());
+        } catch (ResponeException e){
+            return new ResponseTemplate<>(e.getStatus(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @DeleteMapping("/posts/{postIdx}")
+    public ResponseTemplate<String> delete(@PathVariable Long postIdx){
+        try{
+            postService.delete(postIdx);
+            String result = "게시글 삭제에 성공했습니다.";
+            return new ResponseTemplate<>(result);
+        } catch(ResponeException e){
             return new ResponseTemplate<>(e.getStatus(), HttpStatus.BAD_REQUEST);
         }
     }

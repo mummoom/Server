@@ -30,7 +30,7 @@ public class Post extends BaseTimeEntity { // extends BaseTimeEntity  basetimeen
     @JoinColumn(name = "userIdx", referencedColumnName = "userIdx")
     private User userIdx;
 
-    @OneToMany(mappedBy = "post")
+    @OneToMany(mappedBy = "postIdx")
     private List<Comment> comments = new ArrayList<>();
 
     @Column

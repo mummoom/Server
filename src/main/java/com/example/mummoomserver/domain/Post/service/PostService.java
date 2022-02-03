@@ -12,9 +12,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Service
+@Transactional
 public class PostService {
     private final PostRepository postRepository;
     private final UserRepository userRepository;
@@ -38,5 +41,19 @@ public class PostService {
         Post entity = postRepository.findById(postIdx)
                 .orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다. postIdx="+ postIdx));
         return new PostResponseDto(entity);
+    }
+
+    public List<PostResponseDto> getPosts() throws ResponeException {
+        List<Post> entity = postRepository.findAll();
+        List<PostResponseDto> postResDtos = new ArrayList<>();
+        for (int i = 0; i < entity.size(); i++){
+            PostResponseDto postResponseDto = new PostResponseDto(entity.get(i));
+            postResDtos.add(postResponseDto);
+        }
+        return postResDtos;
+    }
+
+    public void delete(Long postIdx) throws ResponeException {
+        postRepository.deleteByPostIdx(postIdx);
     }
 }
