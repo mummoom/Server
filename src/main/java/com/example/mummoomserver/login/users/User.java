@@ -7,6 +7,7 @@ import com.example.mummoomserver.domain.Post.Post;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -21,6 +22,7 @@ import java.util.stream.Collectors;
 @Entity
 @Builder
 public class User extends BaseTimeEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userIdx;
@@ -55,7 +57,7 @@ public class User extends BaseTimeEntity {
     private Role role;
 
     @Builder
-    public User(String username, String nickName, String email, String password,String imgUrl, UserType type, Role role) {
+    public User(String username, String nickName, String email, String password, String imgUrl, UserType type, Role role) {
         this.username = username;
         this.nickName = nickName;
         this.email = email;
@@ -74,7 +76,7 @@ public class User extends BaseTimeEntity {
         this.email = email;
     }
 
-    public User update(String nickName,String email, String imgUrl) {  //update email, update eimgurl, update nickname
+    public User update(String nickName, String email, String imgUrl) {  //update email, update eimgurl, update nickname
         this.nickName = nickName;
         this.email = email;
         //일반 계정이라면 username 도 함께 변경해준다.
@@ -88,25 +90,4 @@ public class User extends BaseTimeEntity {
         return this.role.getKey();
     }
 
-    public String getUsername() {
-        return null;
-    }
-
-    //시큐리티에서는 UserDetails를 이용해 유저정보를 관리함
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
-    }
-
-    public boolean isAccountNonExpired() {
-        return false;
-    }
-
-
-    public boolean isAccountNonLocked() {
-        return false;
-    }
-
-    public boolean isCredentialsNonExpired() {
-        return false;
-    }
 }

@@ -1,6 +1,4 @@
 package com.example.mummoomserver.login.service;
-
-
 import com.example.mummoomserver.login.users.Role;
 import com.example.mummoomserver.login.users.UserType;
 import lombok.Builder;
@@ -43,7 +41,7 @@ public class UserDetailsImpl implements UserDetails {
 
     @Override
     public String getUsername() {
-        return username;
+        return nickName;
     }
 
     @Override
