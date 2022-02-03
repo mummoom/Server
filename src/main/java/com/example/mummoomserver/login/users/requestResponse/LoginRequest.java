@@ -1,21 +1,20 @@
-package com.example.mummoomserver.login.authentication;
+package com.example.mummoomserver.login.users.requestResponse;
 
 import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 
 @Getter
-@Setter
-public class AuthorizationRequest {
+@NoArgsConstructor
+public class LoginRequest {
     @NotBlank(message = "이메일을 입력하세요.")
     private String username;
     @NotBlank(message = "패스워드를 입력하세요.")
     private String password;
-
     @Builder
-    public AuthorizationRequest(String username, String password) {
+    public LoginRequest(String username, String password) {
         this.username = username;
         this.password = password;
     }

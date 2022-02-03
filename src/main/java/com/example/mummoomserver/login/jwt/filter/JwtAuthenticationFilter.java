@@ -1,52 +1,39 @@
 package com.example.mummoomserver.login.jwt.filter;
 
 import com.example.mummoomserver.login.jwt.JwtProvider;
-import com.example.mummoomserver.login.security.UserDetailsImpl;
-import com.example.mummoomserver.login.security.UserDetailsServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
-import org.springframework.web.filter.OncePerRequestFilter;
+import org.springframework.web.filter.GenericFilterBean;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @Component
-@RequiredArgsConstructor
 @Slf4j
-public class JwtAuthenticationFilter extends OncePerRequestFilter {
+@RequiredArgsConstructor
+public class JwtAuthenticationFilter extends GenericFilterBean {
 
-    private final UserDetailsServiceImpl userDetailsService;
     private final JwtProvider jwtProvider;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-
-        String username = null;
-        String jwt = null;
-
-        /**
-         * 토큰에서 username 을 정상적으로 추출할 수 있고
-         * SecurityContextHolder 내에 authentication 객체(이전에 인증된 정보)가 없는 상태인지를 검사한다.
-         */
-        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetailsImpl userDetails = (UserDetailsImpl) userDetailsService.loadUserByUsername(username);
-
-            //토큰이 유효하다면
-            if (jwtProvider.validateToken(jwt, userDetails.getUsername())) {
-                //새로운 인증 정보를 생성
-                UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-                usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                //인증 정보를 SecurityContextHolder 에 저장
-                SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
-            }
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+        // 헤더에서 JWT 를 받아옵니다.
+        String token = jwtProvider.resolveToken((HttpServletRequest) request);
+        // 유효한 토큰인지 확인합니다.
+        if (token != null && jwtProvider.validateToken(token)) {
+            // 토큰이 유효하면 토큰으로부터 유저 정보를 받아옵니다.
+            Authentication authentication = jwtProvider.getAuthentication(token);
+            // SecurityContext 에 Authentication 객체를 저장합니다.
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            System.out.println("토큰 유효하다");
         }
-        filterChain.doFilter(request, response);
+        chain.doFilter(request, response);
     }
 }

@@ -1,4 +1,4 @@
-package com.example.mummoomserver.login.users;
+package com.example.mummoomserver.login.users.requestResponse;
 
 import lombok.*;
 
@@ -22,10 +22,13 @@ public class SignUpRequest {
     @Pattern(regexp = "[a-zA-Z!@#$%^&*-_]{6,20}", message = "6~20 길이의 알파벳과 숫자, 특수문자만 사용할 수 있습니다.")
     private String password;
 
+    private String imgUrl;
+
     @Builder
-    public SignUpRequest(String nickName, String email, String password) {
+    public SignUpRequest(String nickName, String email, String password,String imgUrl) {
         this.nickName = nickName;
         this.email = email;
         this.password = password;
+        this.imgUrl =  imgUrl;
     }
 }

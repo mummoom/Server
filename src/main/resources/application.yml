@@ -1,10 +1,10 @@
 spring:
     #    로컬 테스트용 h2 DB 설정..
 #    datasource:
-#        url: jdbc:h2:tcp://localhost/~/mummoomH2
+#        driver-class-name: org.h2.Driver
+#        url: jdbc:h2:~/mummoom;DB_CLOSE_ON_EXIT=FALSE
 #        username: sa
 #        password:
-#        driver-class-name: org.h2.Driver
     mvc:
         pathmatch:
             matching-strategy: ant_path_matcher
@@ -12,9 +12,11 @@ spring:
         generate-ddl : false
         hibernate:
             ddl-auto: none
+
             naming:
                 implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl
                 physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+
         properties:
             hibernate:
             show_sql: true
