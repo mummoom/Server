@@ -58,7 +58,7 @@ public class OAuth2Account extends BaseTimeEntity {
         return OAuth2AccountDTO.builder()
                 .provider(provider)
                 .providerId(providerId)
-                .createdAt(getCreatedAt())
+                .createdAt(getCreated_at())
                 .token(token)
                 .refreshToken(refreshToken)
                 .tokenExpiredAt(tokenExpiredAt).build();

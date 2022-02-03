@@ -22,6 +22,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.header.writers.frameoptions.WhiteListedAllowFromStrategy;
+import org.springframework.security.web.header.writers.frameoptions.XFrameOptionsHeaderWriter;
+
+import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
@@ -67,16 +71,39 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
                                 "/webjars/**" ,
                                 /*Probably not needed*/ "/swagger.json").permitAll()
                         .anyRequest().authenticated() // 그 이외에는 인증된 사용자만 접근 가능하다
-//                .and()
-//                        .oauth2Login()
-//                        .userInfoEndpoint()
-//                        .userService(oauth2Service)
                 .and()
                         .exceptionHandling()
                         .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED));
                         //로그인 인증을 진행하는 필터 이전에 jwtAuthenticationFilter 가 실행되도록 설정
                 http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
+
+
+
+        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and() //세션 사용 x
+                .csrf().disable()
+                .cors().disable()
+                .formLogin().disable()
+                //.logout().disable() // '/logout' uri 를 사용하기 위한 설정
+                .authorizeRequests()
+                .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/**").permitAll()
+                .antMatchers(HttpMethod.PATCH, "/**").permitAll()
+                .antMatchers(HttpMethod.POST, "/**").permitAll()
+                .antMatchers(HttpMethod.DELETE, "/**").permitAll()
+                .antMatchers(HttpMethod.PUT, "/**").permitAll()
+                .antMatchers(HttpMethod.POST, "/authorize", "/users").anonymous()
+                .antMatchers(HttpMethod.POST, "/oauth2/unlink").authenticated()
+                .antMatchers("/oauth2/**").permitAll()
+                .antMatchers("/h2-console/**").permitAll()
+                .antMatchers("/swagger-ui.html").permitAll()
+                .anyRequest().authenticated()
+                .and() .headers() .frameOptions().sameOrigin();;
+                //.exceptionHandling()
+                //.authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED));
+
+        //로그인 인증을 진행하는 필터 이전에 jwtAuthenticationFilter 가 실행되도록 설정
+        http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
     }
 
