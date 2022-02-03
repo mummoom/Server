@@ -1,3 +1,4 @@
+
 package com.example.mummoomserver.login.service;
 
 import com.example.mummoomserver.login.users.Role;
@@ -23,7 +24,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByUsername(username).orElseThrow(() ->
+        User user = userRepository.findByNickName(username).orElseThrow(() ->
                 new UsernameNotFoundException("등록되지 않은 회원입니다."));
 
         UserDetailsImpl userDetails = UserDetailsImpl.builder()

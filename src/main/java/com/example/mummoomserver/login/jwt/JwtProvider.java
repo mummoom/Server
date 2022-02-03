@@ -16,6 +16,8 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.function.Function;
@@ -38,8 +40,8 @@ public class JwtProvider {
     }
 
     // JWT 토큰 생성
-    public String createToken(String userIdx, Role role) {
-        Claims claims = Jwts.claims().setSubject(userIdx); // JWT payload 에 저장되는 정보단위
+    public String createToken(String userName, Role role) {
+        Claims claims = Jwts.claims().setSubject(userName); // JWT payload 에 저장되는 정보단위
         claims.put("role", role.getKey()); // 정보는 key / value 쌍으로 저장된다.
         Date now = new Date();
         return Jwts.builder()
@@ -49,6 +51,16 @@ public class JwtProvider {
                 .signWith(SignatureAlgorithm.HS256, secretKey)  // 사용할 암호화 알고리즘과
                 // signature 에 들어갈 secret값 세팅
                 .compact();
+    }
+
+
+
+    public void writeTokenResponse(HttpServletResponse response, String token) throws IOException {
+        response.addHeader("X-AUTH-TOKEN",token);
+        response.setContentType("application/json;charset=UTF-8");
+        var writer = response.getWriter();
+        writer.println(token);
+        writer.flush();
     }
 
     // JWT 토큰에서 인증 정보 조회

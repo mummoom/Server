@@ -1,6 +1,4 @@
 package com.example.mummoomserver.login.service;
-
-
 import com.example.mummoomserver.login.users.Role;
 import com.example.mummoomserver.login.users.UserType;
 import lombok.Builder;

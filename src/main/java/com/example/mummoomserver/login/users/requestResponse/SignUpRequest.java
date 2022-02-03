@@ -1,5 +1,6 @@
 package com.example.mummoomserver.login.users.requestResponse;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 
 import javax.validation.constraints.Email;
@@ -11,9 +12,11 @@ import javax.validation.constraints.Size;
 
 @Getter
 @NoArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_NULL) //null 이면 생성되지 않음
 public class SignUpRequest {
+
     @Size(min = 1, max = 20, message = "이름이 입력되지 않았거나 너무 긴 이름입니다.")
-    private String nickName;
+    private String nickname;
 
     @NotBlank(message = "이메일을 입력해주세요.")
     @Email(message = "이메일 형식이 잘못되었습니다.")
@@ -25,8 +28,8 @@ public class SignUpRequest {
     private String imgUrl;
 
     @Builder
-    public SignUpRequest(String nickName, String email, String password,String imgUrl) {
-        this.nickName = nickName;
+    public SignUpRequest(String nickName, String email, String password, String imgUrl) {
+        this.nickname = nickName;
         this.email = email;
         this.password = password;
         this.imgUrl =  imgUrl;

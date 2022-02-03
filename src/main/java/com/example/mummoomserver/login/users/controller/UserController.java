@@ -3,8 +3,8 @@ package com.example.mummoomserver.login.users.controller;
 import com.example.mummoomserver.config.resTemplate.ResponseTemplate;
 import com.example.mummoomserver.login.jwt.JwtProvider;
 
-import com.example.mummoomserver.login.service.SessionUser;
-import com.example.mummoomserver.login.service.UserDetailsImpl;
+
+
 import com.example.mummoomserver.login.users.Role;
 import com.example.mummoomserver.login.users.User;
 import com.example.mummoomserver.login.users.UserRepository;
@@ -30,6 +30,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.io.IOException;
 
 @Slf4j
 @RestController
@@ -56,10 +57,15 @@ public class UserController {
     }
 
     // 로그인
+    /**
+     * 현석 로그인 이후 헤더에 토큰 삽입 하도록 수정
+     * 로그인할때는 이메일과 비밀번호로 로그인하는걸로 수정
+     *
+     */
     @PostMapping("/login")
-    public void login(@RequestBody @Valid LoginRequest loginRequest){
+    public void login(@RequestBody @Valid LoginRequest loginRequest, HttpServletResponse httpServletResponse) throws IOException {
         //실패시
-        User member = userRepository.findByEmail(loginRequest.getUsername())
+        User member = userRepository.findByEmail(loginRequest.getEmail())
                 .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 E-MAIL 입니다."));
         //비밀번호 틀릴 시
         if(!passwordEncoder.matches(loginRequest.getPassword(), member.getPassword())){
@@ -67,28 +73,39 @@ public class UserController {
         }
         // 로그인 성공 시
         // 토큰 발급 쉽게 수정하거나 변경하기
-        String token = jwtProvider.createToken(member.getUsername(), member.getRole());
+        // 유저 닉네임을 삽입
+        String token = jwtProvider.createToken(member.getNickName(), member.getRole());
+
+        jwtProvider.writeTokenResponse(httpServletResponse,token);
+
     }
 
+    /**
+     * - 현석
+     * 현재 아래 코드들은 기능상 중복되거나 유효하지 않아서 주석처리함
+     */
 
-    //프로필 자신 조회 // 권한 문제로 물려있음
-    @GetMapping("/me")
-    public ResponseEntity<UserProfileResponse> getUserProfile(@AuthenticationPrincipal UserDetailsImpl loginUser) {
-        // 자신임을 확인할 수 있는 관환 관련 코드 필요할 듯
-        UserProfileResponse.UserProfileResponseBuilder userProfileResponseBuilder = UserProfileResponse.builder()
-                .userIdx(loginUser.getUserIdx())
-                .nickName(loginUser.getNickName())
-                .email(loginUser.getEmail());
-                // .authorities(loginUser.getAuthorities().stream().map(GrantedAuthority::getAuthority).map(s -> AuthorityType.valueOf(s)).collect(Collectors.toList()));
-        return ResponseEntity.ok(userProfileResponseBuilder.build());
-    }
+//    //프로필 자신 조회 // 권한 문제로 물려있음
+//    @GetMapping("/me")
+//    public ResponseEntity<UserProfileResponse> getUserProfile(@AuthenticationPrincipal UserDetailsImpl loginUser) {
+//        // 자신임을 확인할 수 있는 관환 관련 코드 필요할 듯
+//        UserProfileResponse.UserProfileResponseBuilder userProfileResponseBuilder = UserProfileResponse.builder()
+//                .userIdx(loginUser.getUserIdx())
+//                .nickName(loginUser.getNickName())
+//                .email(loginUser.getEmail());
+//                // .authorities(loginUser.getAuthorities().stream().map(GrantedAuthority::getAuthority).map(s -> AuthorityType.valueOf(s)).collect(Collectors.toList()));
+//        return ResponseEntity.ok(userProfileResponseBuilder.build());
+//    }
+//
+//   // 프로필 수정 사항 반영
+//    @PutMapping("/me")
+//    public void updateProfile(@RequestBody @Valid UpdateProfileRequest updateProfileRequest, BindingResult bindingResult, @AuthenticationPrincipal UserDetailsImpl loginUser) {
+//        if(bindingResult.hasErrors()) throw new ValidationException("프로필 업데이트 유효성 검사 실패", bindingResult.getFieldErrors());
+//        userService.updateProfile(loginUser.getUsername(), updateProfileRequest);
+//    }
 
-   // 프로필 수정 사항 반영
-    @PutMapping("/me")
-    public void updateProfile(@RequestBody @Valid UpdateProfileRequest updateProfileRequest, BindingResult bindingResult, @AuthenticationPrincipal UserDetailsImpl loginUser) {
-        if(bindingResult.hasErrors()) throw new ValidationException("프로필 업데이트 유효성 검사 실패", bindingResult.getFieldErrors());
-        userService.updateProfile(loginUser.getUsername(), updateProfileRequest);
-    }
+
+
 
     // 회원 탈퇴ㅣ?
 //    @DeleteMapping("/withdraw")

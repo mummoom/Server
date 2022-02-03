@@ -26,11 +26,11 @@ public class UserServiceImpl implements UserService {
     public void saveUser(SignUpRequest signUpRequest){
         checkDuplicateEmail(signUpRequest.getEmail());
         User user = User.builder()
-                .username(signUpRequest.getEmail())
-                .nickName(signUpRequest.getNickName())
+                .nickName(signUpRequest.getNickname())
                 .email(signUpRequest.getEmail())
                 .password(passwordEncoder.encode(signUpRequest.getPassword()))
                 .type(UserType.DEFAULT)
+                .username(signUpRequest.getEmail())
                 .role(Role.GUEST)
                 .build();
 
@@ -41,7 +41,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void updateProfile(String username, UpdateProfileRequest updateProfileRequest){
 
-        User user = userRepository.findByUsername(username).get();
+        User user = userRepository.findByNickName(username).get();
 
         //이름이 변경되었는지 체크
         if (!user.getNickName().equals(updateProfileRequest.getNickName()))
@@ -60,7 +60,7 @@ public class UserServiceImpl implements UserService {
     }
 
     private User checkRegisteredUser(String username) {
-        Optional<User> optUser = userRepository.findByUsername(username);
+        Optional<User> optUser = userRepository.findByNickName(username);
         Assert.state(optUser.isPresent(), "가입되지 않은 회원입니다.");
         return optUser.get();
     }

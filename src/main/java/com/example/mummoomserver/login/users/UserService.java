@@ -2,7 +2,6 @@ package com.example.mummoomserver.login.users;
 
 import com.example.mummoomserver.config.resTemplate.ResponeException;
 import com.example.mummoomserver.config.resTemplate.ResponseTemplateStatus;
-import com.example.mummoomserver.login.service.SessionUser;
 import com.example.mummoomserver.login.users.requestResponse.SignUpRequest;
 import com.example.mummoomserver.login.users.requestResponse.UpdateProfileRequest;
 import lombok.Getter;

@@ -1,7 +1,6 @@
 package com.example.mummoomserver.login.config;
 
 import com.example.mummoomserver.login.jwt.filter.JwtAuthenticationFilter;
-import com.example.mummoomserver.login.service.UserDetailsServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -28,17 +27,26 @@ import java.util.Arrays;
 @RequiredArgsConstructor
 public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
 
-    private final UserDetailsServiceImpl userDetailsService;
+
+    /**
+     * 현석 - 해당 userDetailService를 이용할 필요가 없어서 주석 처리함
+     */
+//    private final UserDetailsServiceImpl userDetailsService;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
     /*
          AuthenticationManager 에서 authenticate 메소드를 실행할때
          내부적으로 사용할 UserDetailsService 와 PasswordEncoder 를 설정
     */
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
-    }
+
+//    @Override
+//    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+//        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
+//    }
+
+
+
+
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
