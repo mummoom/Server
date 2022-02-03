@@ -1,9 +1,6 @@
 package com.example.mummoomserver.login.users;
 
-import com.example.mummoomserver.login.authentication.oauth2.OAuth2Token;
-import com.example.mummoomserver.login.authentication.oauth2.account.OAuth2Account;
-import com.example.mummoomserver.login.authentication.oauth2.account.OAuth2AccountDTO;
-import com.example.mummoomserver.login.authentication.oauth2.account.OAuth2AccountRepository;
+import com.example.mummoomserver.login.authentication.oauth2.userInfo.OAuthAttributes;
 import com.example.mummoomserver.login.security.UserDetailsImpl;
 import com.example.mummoomserver.login.validation.SimpleFieldError;
 import lombok.RequiredArgsConstructor;
@@ -24,29 +21,29 @@ public class UserServiceImpl implements UserService {
     private final OAuth2AccountRepository oAuth2AccountRepository;
     private final PasswordEncoder passwordEncoder;
 
-    @Override
+    @Override //일반 회원 가입 시 필요한 정보들
     public void saveUser(SignUpRequest signUpRequest){
         checkDuplicateEmail(signUpRequest.getEmail());
         User user = User.builder()
                 .username(signUpRequest.getEmail())
                 .nickName(signUpRequest.getNickName())
                 .email(signUpRequest.getEmail())
+                .imgUrl(signUpRequest.getImgUrl())
                 .password(passwordEncoder.encode(signUpRequest.getPassword()))
                 .type(UserType.DEFAULT)
                 .build();
-// 더 추가 필요 imgurl과 같이 다른 정보들 .....그리고 이건 일반 회원가입이다.
         userRepository.save(user);
     }
 
     @Override
-    @Transactional(readOnly = true) // 정보들을 가져올 수 있으려나..모르겠다.
+    @Transactional(readOnly = true) // 정보들을 가져올 수 있으려나..,?모르겠다.
     public Optional<OAuth2AccountDTO> getOAuth2Account(String username) {
         Optional<User> optionalUser = userRepository.findByUsername(username);
         if (!optionalUser.isPresent() || optionalUser.get().getSocial() == null) return Optional.empty();
         return Optional.of(optionalUser.get().getSocial().toDTO());
     }
 
-    @Override //프로필을 개선하는 작업 함수는 따로 만들어서 개선해주면 될 듯
+    @Override
     public void updateProfile(String username, UpdateProfileRequest updateProfileRequest){
 
         User user = userRepository.findByUsername(username).get();
@@ -64,7 +61,8 @@ public class UserServiceImpl implements UserService {
 
 
     @Override  //잘하면 사용할 수 있을 것 같아보임 oauth2userinfo부분을 atattribute로 대체할 수 있는 지 살펴보기
-    public UserDetails loginOAuth2User(String provider, OAuth2Token oAuth2Token, OAuth2UserInfo userInfo) {
+    // 카카오 구글 일반 유저에 대한 개발 oauthattributes 처리가 필요하다. 이거는 물어보기
+    public UserDetails loginOAuth2User(String provider, OAuth2Token oAuth2Token, OAuthAttributes userInfo) {
 
         Optional<OAuth2Account> optOAuth2Account = oAuth2AccountRepository.findByProviderAndProviderId(provider, userInfo.getUserIdx());
         User user = null;
@@ -124,7 +122,8 @@ public class UserServiceImpl implements UserService {
                 .authorities(user.getAuthorities()).build();
     }
 
-    @Override  // oauth2userinfo부분을 attribute로 대체할 수 있을 것 같아보인다.
+    @Override
+    // 위와 동일한 문제
     public UserDetails linkOAuth2Account(String username, String provider, OAuth2Token oAuth2Token, OAuth2UserInfo userInfo) {
         User user = checkRegisteredUser(username);
 
@@ -157,7 +156,7 @@ public class UserServiceImpl implements UserService {
     public OAuth2AccountDTO unlinkOAuth2Account(String username) {
         User user = checkRegisteredUser(username);
 
-        //연관관계 해제
+        //연관관계 해제  oauth2 계정을 user 세션이나 다른 것으로 변환 필요하다.
         OAuth2Account oAuth2Account = user.getSocial();
         OAuth2AccountDTO oAuth2AccountDTO = oAuth2Account.toDTO();
         user.unlinkSocial();
@@ -166,7 +165,7 @@ public class UserServiceImpl implements UserService {
         return oAuth2AccountDTO;
     }
 
-    @Override //사용할 수 있는 기능으로 보인다.
+    @Override //위와 동일한 이유
     public Optional<OAuth2AccountDTO> withdrawUser(String username) {
         OAuth2AccountDTO oAuth2AccountDTO = null;
         User user = checkRegisteredUser(username);
@@ -179,7 +178,7 @@ public class UserServiceImpl implements UserService {
 
     private void checkDuplicateEmail(String email) { //이메일 확인은 쌉가능
         if(userRepository.existsByEmail(email))
-            throw new DuplicateUserException("사용중인 이메일 입니다.", new SimpleFieldError("email", "사용중인 이메일 입니다."));
+            throw new DuplicateUserException("사용중인 이메일입니다.", new SimpleFieldError("email", "사용중인 이메일 입니다."));
     }
 
     private User checkRegisteredUser(String username) { //등록 회원 확인 쌉가능

@@ -2,6 +2,7 @@ package com.example.mummoomserver.login.authentication.oauth2.service;
 
 import com.example.mummoomserver.login.authentication.oauth2.userInfo.OAuthAttributes;
 
+import com.example.mummoomserver.login.authentication.oauth2.userInfo.SessionUser;
 import com.example.mummoomserver.login.users.User;
 import com.example.mummoomserver.login.users.UserRepository;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

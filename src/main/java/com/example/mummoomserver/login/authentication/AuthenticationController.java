@@ -2,31 +2,24 @@ package com.example.mummoomserver.login.authentication;
 
 import com.example.mummoomserver.config.resTemplate.ResponseTemplate;
 import com.example.mummoomserver.login.authentication.oauth2.*;
-import com.example.mummoomserver.login.authentication.oauth2.account.OAuth2AccountDTO;
 import com.example.mummoomserver.login.authentication.oauth2.service.OAuth2Service;
 import com.example.mummoomserver.login.jwt.JwtProvider;
 import com.example.mummoomserver.login.security.UserDetailsImpl;
 import com.example.mummoomserver.login.users.UserService;
-import com.example.mummoomserver.login.validation.ValidationException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequest;
 import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationResponse;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.security.SecureRandom;
@@ -44,20 +37,6 @@ public class AuthenticationController {
     private final RestTemplate restTemplate;
     private final JwtProvider jwtProvider;
 
-
-
-    /* 사용자의 계정을 인증하고 로그인 토큰을 발급해주는 컨트롤러 */
-    @PostMapping("/authorize")  //username, password 입력이, 회원가입 이후 예상중, 확인 되면 토큰 발급
-    public void authenticateUsernamePassword(@Valid @RequestBody AuthorizationRequest authorizationRequest, BindingResult bindingResult, HttpServletRequest request, HttpServletResponse response) throws IOException {
-        if (bindingResult.hasErrors()) throw new ValidationException("로그인 유효성 검사 실패.", bindingResult.getFieldErrors());
-        try {
-            Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authorizationRequest.getUsername(), authorizationRequest.getPassword()));
-            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-            generateTokenCookie(userDetails, request, response);
-        } catch (AuthenticationException e) {
-            throw new AuthenticationFailedException("아이디 또는 패스워드가 틀렸습니다.");
-        }
-    }
 
     /* 토큰 쿠키를 삭제하는 컨트롤러 (로그아웃) */
     @PostMapping("/logout")

@@ -1,5 +1,6 @@
 package com.example.mummoomserver.login.security;
 
+import com.example.mummoomserver.login.users.Role;
 import com.example.mummoomserver.login.users.UserType;
 import lombok.Builder;
 import lombok.Getter;
@@ -22,16 +23,18 @@ public class UserDetailsImpl implements UserDetails {
     private String email;
     private String username;
     private String password;
+    private String imgUrl;
     private UserType type;
-    private Collection<? extends GrantedAuthority> authorities;
+    private Collection<? extends AuthorityType> authorities;
 
     @Builder
-    public UserDetailsImpl(Long userIdx, String nickName, String email, String username, String password, UserType type, Collection<? extends GrantedAuthority> authorities) {
+    public UserDetailsImpl(Long userIdx, String nickName, String email, String username,String imgUrl, String password, UserType type, Collection<? extends GrantedAuthority> authorities) {
         this.userIdx = userIdx;
         this.nickName = nickName;
         this.email = email;
         this.username = username;
         this.password = password;
+        this.imgUrl = imgUrl;
         this.type = type;
         this.authorities = authorities;
     }
