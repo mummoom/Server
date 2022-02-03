@@ -26,11 +26,11 @@ public class Post extends BaseTimeEntity { // extends BaseTimeEntity  basetimeen
     @Column(columnDefinition = "TEXT", nullable = false)
     private String content;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userIdx", referencedColumnName = "userIdx")
     private User userIdx;
 
-    @OneToMany(mappedBy = "postIdx")
+    @OneToMany(mappedBy = "postIdx", cascade = CascadeType.ALL)
     private List<Comment> comments = new ArrayList<>();
 
     @Column

@@ -14,6 +14,7 @@ import javax.transaction.Transactional;
 
 @RequiredArgsConstructor
 @Service
+@Transactional
 public class CommentService {
     private final CommentRepository commentRepository;
     private final UserRepository userRepository;
@@ -31,4 +32,8 @@ public class CommentService {
         return commentRepository.save(requestDto.toEntity()).getCommentIdx();
     }
 
+    public void delete(Long commentIdx) throws ResponeException {
+        commentRepository.deleteByCommentIdx(commentIdx)
+                .orElseThrow(() -> new IllegalArgumentException("없는 게시글입니다. commentIdx="+commentIdx));
+    }
 }

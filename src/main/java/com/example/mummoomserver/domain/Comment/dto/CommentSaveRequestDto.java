@@ -17,9 +17,9 @@ public class CommentSaveRequestDto {
 
     @Builder
     public CommentSaveRequestDto(Post postIdx, User userIdx, String content){
-        this.content = content;
         this.postIdx = postIdx;
         this.userIdx = userIdx;
+        this.content = content;
     }
 
     public Comment toEntity(){

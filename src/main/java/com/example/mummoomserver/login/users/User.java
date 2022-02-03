@@ -45,10 +45,10 @@ public class User extends BaseTimeEntity {
     @Enumerated(value = EnumType.STRING)
     private UserType type;
 
-    @OneToMany(mappedBy = "userIdx")
+    @OneToMany(mappedBy = "userIdx", cascade = CascadeType.ALL)
     private List<Post> posts = new ArrayList<>();
 
-    @OneToMany(mappedBy = "userIdx")
+    @OneToMany(mappedBy = "userIdx", cascade = CascadeType.ALL)
     private List<Comment> comments = new ArrayList<>();
 
     @ElementCollection(targetClass = AuthorityType.class) // 테이블 형태로 저장되는 colleciton 객채(여러 원소를 담는 자료 구조)

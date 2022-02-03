@@ -6,10 +6,7 @@ import com.example.mummoomserver.domain.Comment.dto.CommentSaveRequestDto;
 import com.example.mummoomserver.domain.Comment.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RestController
@@ -20,6 +17,17 @@ public class CommentController {
     public ResponseTemplate<Long> commentSave(@PathVariable Long postIdx, @PathVariable Long userIdx, @RequestBody CommentSaveRequestDto requestDto) {
         try {
             Long result = commentService.save(postIdx, userIdx, requestDto);
+            return new ResponseTemplate<>(result);
+        } catch (ResponeException e){
+            return new ResponseTemplate<>(e.getStatus(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @DeleteMapping("/comment/{commentIdx}") // 왜 유저도 같이 지워지지
+    public ResponseTemplate<String> commentDelete(@PathVariable Long commentIdx){
+        try{
+            commentService.delete(commentIdx);
+            String result = "댓글 삭제에 성공했습니다.";
             return new ResponseTemplate<>(result);
         } catch (ResponeException e){
             return new ResponseTemplate<>(e.getStatus(), HttpStatus.BAD_REQUEST);

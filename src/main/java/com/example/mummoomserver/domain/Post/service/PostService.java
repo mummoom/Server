@@ -54,6 +54,7 @@ public class PostService {
     }
 
     public void delete(Long postIdx) throws ResponeException {
-        postRepository.deleteByPostIdx(postIdx);
+        postRepository.deleteByPostIdx(postIdx)
+                .orElseThrow(() -> new IllegalArgumentException("게시글을 찾을 수 없습니다. postIdx="+postIdx));
     }
 }

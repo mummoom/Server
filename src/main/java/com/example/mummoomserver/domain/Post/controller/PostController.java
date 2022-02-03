@@ -60,7 +60,7 @@ public class PostController {
         }
     }
 
-    @DeleteMapping("/posts/{postIdx}")
+    @DeleteMapping("/post/{postIdx}")
     public ResponseTemplate<String> delete(@PathVariable Long postIdx){
         try{
             postService.delete(postIdx);
