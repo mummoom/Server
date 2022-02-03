@@ -2,6 +2,8 @@ package com.example.mummoomserver.login.users;
 
 
 import com.example.mummoomserver.config.BaseTimeEntity;
+import com.example.mummoomserver.domain.Comment.Comment;
+import com.example.mummoomserver.domain.Post.Post;
 import com.example.mummoomserver.login.authentication.oauth2.account.OAuth2Account;
 import com.example.mummoomserver.login.security.AuthorityType;
 import lombok.AccessLevel;
@@ -26,7 +28,7 @@ import java.util.stream.Collectors;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User extends BaseTimeEntity {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userIdx;
 
     @Column(nullable = false, length = 20)
@@ -42,6 +44,12 @@ public class User extends BaseTimeEntity {
 
     @Enumerated(value = EnumType.STRING)
     private UserType type;
+
+    @OneToMany(mappedBy = "userIdx")
+    private List<Post> posts = new ArrayList<>();
+
+    @OneToMany(mappedBy = "userIdx")
+    private List<Comment> comments = new ArrayList<>();
 
     @ElementCollection(targetClass = AuthorityType.class) // 테이블 형태로 저장되는 colleciton 객채(여러 원소를 담는 자료 구조)
     @CollectionTable(name = "UserAuthority", joinColumns = @JoinColumn(name = "userIdx"))
