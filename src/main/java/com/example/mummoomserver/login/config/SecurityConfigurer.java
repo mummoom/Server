@@ -1,9 +1,7 @@
 package com.example.mummoomserver.login.config;
 
-import com.example.mummoomserver.login.service.OAuth2Service;
 import com.example.mummoomserver.login.jwt.filter.JwtAuthenticationFilter;
 import com.example.mummoomserver.login.service.UserDetailsServiceImpl;
-import com.example.mummoomserver.login.users.Role;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,6 +18,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.header.writers.frameoptions.WhiteListedAllowFromStrategy;
+import org.springframework.security.web.header.writers.frameoptions.XFrameOptionsHeaderWriter;
+
+import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
@@ -28,7 +30,7 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
 
     private final UserDetailsServiceImpl userDetailsService;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
-    private final OAuth2Service oAuth2Service;
+
     /*
          AuthenticationManager 에서 authenticate 메소드를 실행할때
          내부적으로 사용할 UserDetailsService 와 PasswordEncoder 를 설정
@@ -40,44 +42,64 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
-                .antMatchers(
-                        "/v2/api-docs",
-                        "/swagger-resources/**",
-                        "/swagger-ui.html",
-                        "/webjars/**" ,
-                        /*Probably not needed*/ "/swagger.json")
-                .permitAll();
         http.headers().frameOptions().disable();
-
-        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and() //세션 사용 x
-                .csrf().ignoringAntMatchers("/h2-console/**").disable()  // csrf 토큰을 매번 받지 않아도 된다.
-                .cors().disable()  // 서로다른 웹 자원 공유, 프로토콜 :// 도메인 :포트
-                .formLogin().disable()
-                .logout().disable() // '/logout' uri 를 사용하기 위한 설정
-                .httpBasic().disable()
-                .authorizeRequests()
+        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .csrf().ignoringAntMatchers("/h2-console/**").disable()
+                //.headers().frameOptions().disable()// csrf 토큰을 매번 받지 않아도 된다.
+                .cors().disable()
+                .formLogin().disable() //폼 로그인 방식을 사용하지 않는다.
+                .logout().disable() // 로그아웃 uri를 사용하기 위한 설정 (점검 필요)
+                .httpBasic().disable() // http basic auth기반 로그인창 사용 X
+                .authorizeRequests()//요청에 대한 권한을 지정한다.
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                .antMatchers(HttpMethod.POST, "/authorize", "/users").anonymous()
+                .antMatchers(HttpMethod.POST, "/oauth2/unlink").authenticated()
                 .antMatchers(HttpMethod.GET, "/**").permitAll()
                 .antMatchers(HttpMethod.PATCH, "/**").permitAll()
                 .antMatchers(HttpMethod.PUT, "/**").permitAll()
                 .antMatchers(HttpMethod.DELETE, "/**").permitAll()
                 .antMatchers(HttpMethod.POST, "/**").permitAll()
+                .antMatchers("/oauth2/**").permitAll()
+                .antMatchers(
+                        "/v2/api-docs",
+                        "/swagger-resources/**",
+                        "/webjars/**" ,
+                        /*Probably not needed*/ "/swagger.json").permitAll()
+                .anyRequest().authenticated() // 그 이외에는 인증된 사용자만 접근 가능하다
+                .and()
+                .exceptionHandling()
+                .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED));
+        //로그인 인증을 진행하는 필터 이전에 jwtAuthenticationFilter 가 실행되도록 설정
+        http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+
+
+
+
+        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and() //세션 사용 x
+                .csrf().disable()
+                .cors().disable()
+                .formLogin().disable()
+                //.logout().disable() // '/logout' uri 를 사용하기 위한 설정
+                .authorizeRequests()
+                .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/**").permitAll()
+                .antMatchers(HttpMethod.PATCH, "/**").permitAll()
+                .antMatchers(HttpMethod.POST, "/**").permitAll()
+                .antMatchers(HttpMethod.DELETE, "/**").permitAll()
+                .antMatchers(HttpMethod.PUT, "/**").permitAll()
                 .antMatchers(HttpMethod.POST, "/authorize", "/users").anonymous()
                 .antMatchers(HttpMethod.POST, "/oauth2/unlink").authenticated()
                 .antMatchers("/oauth2/**").permitAll()
+                .antMatchers("/h2-console/**").permitAll()
                 .antMatchers("/swagger-ui.html").permitAll()
-                .antMatchers("/api/**").hasRole(Role.USER.name())
-                .anyRequest().authenticated().and()
-                .exceptionHandling()
-                .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
-                .and()
-                .oauth2Login()
-                .userInfoEndpoint()
-                .userService(oAuth2Service);
-                        //로그인 인증을 진행하는 필터 이전에 jwtAuthenticationFilter 가 실행되도록 설정
-                http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+                .anyRequest().authenticated()
+                .and() .headers() .frameOptions().sameOrigin();;
+        //.exceptionHandling()
+        //.authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED));
 
+        //로그인 인증을 진행하는 필터 이전에 jwtAuthenticationFilter 가 실행되도록 설정
+        http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
     }
 

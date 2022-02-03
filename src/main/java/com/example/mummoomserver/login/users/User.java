@@ -2,12 +2,16 @@ package com.example.mummoomserver.login.users;
 
 
 import com.example.mummoomserver.config.BaseTimeEntity;
+import com.example.mummoomserver.domain.Comment.Comment;
+import com.example.mummoomserver.domain.Post.Post;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 
 // 회원 테이블과 매핑되는 user entity 클래스
@@ -43,6 +47,11 @@ public class User extends BaseTimeEntity {
     @Column(nullable = false)
     private Role role;
 
+    @OneToMany(mappedBy = "userIdx", cascade = CascadeType.ALL)
+    private List<Post> posts = new ArrayList<>();
+
+    @OneToMany(mappedBy = "userIdx", cascade = CascadeType.ALL)
+    private List<Comment> comments = new ArrayList<>();
 
     @Builder
     public User(String username, String nickName, String email, String password,String imgUrl, UserType type, Role role) {
