@@ -25,7 +25,7 @@ public class UserDetailsImpl implements UserDetails {
     private String password;
     private String imgUrl;
     private UserType type;
-    private Collection<? extends AuthorityType> authorities;
+    private Role role;
 
     @Builder
     public UserDetailsImpl(Long userIdx, String nickName, String email, String username,String imgUrl, String password, UserType type, Collection<? extends GrantedAuthority> authorities) {
@@ -36,7 +36,8 @@ public class UserDetailsImpl implements UserDetails {
         this.password = password;
         this.imgUrl = imgUrl;
         this.type = type;
-        this.authorities = authorities;
+        this.role = role;
+
     }
 
     @Override
@@ -50,9 +51,7 @@ public class UserDetailsImpl implements UserDetails {
     }
 
     @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return authorities;
-    }
+    public Role getRole() { return role;}
 
     @Override
     public boolean isAccountNonExpired() {

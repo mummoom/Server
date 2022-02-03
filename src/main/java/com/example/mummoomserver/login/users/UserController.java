@@ -47,6 +47,7 @@ public class UserController {
                 .role(loginUser.getRole().stream().map(GrantedAuthority::getAuthority).map(s -> AuthorityType.valueOf(s)).collect(Collectors.toList()));
 
         //연동된 소셜 계정이 존재하면 소셜 계정 정보 추가
+        // 유저 란에서 추가하도록 수정 필요하다.
         Optional<OAuth2AccountDTO> optionalOAuth2AccountDTO = userService.getOAuth2Account(loginUser.getUsername());
         if(optionalOAuth2AccountDTO.isPresent()) {
             OAuth2AccountDTO oAuth2AccountDTO = optionalOAuth2AccountDTO.get();
