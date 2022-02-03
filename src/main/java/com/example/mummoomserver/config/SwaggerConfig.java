@@ -25,9 +25,9 @@ public class SwaggerConfig {
 
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("플로깅 API")
+                .title("멈뭄 API")
                 .version("1.0.0")
-                .description("plogging api 리스트 입니다.")
+                .description("멈뭄 api 리스트 입니다.")
                 .build();
     }
 }

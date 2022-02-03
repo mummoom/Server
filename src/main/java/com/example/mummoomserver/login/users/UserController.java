@@ -49,8 +49,8 @@ public class UserController {
     public ResponseTemplate<?> getAuthenticatedUserProfile(@AuthenticationPrincipal UserDetailsImpl loginUser) {
         log.debug("request user profile....");
         UserProfileResponse.UserProfileResponseBuilder userProfileResponseBuilder = UserProfileResponse.builder()
-                .id(loginUser.getId())
-                .name(loginUser.getName())
+                .userIdx(loginUser.getUserIdx())
+                .nickName(loginUser.getNickName())
                 .email(loginUser.getEmail())
                 .authorities(loginUser.getAuthorities().stream().map(GrantedAuthority::getAuthority).map(s -> AuthorityType.valueOf(s)).collect(Collectors.toList()));
 

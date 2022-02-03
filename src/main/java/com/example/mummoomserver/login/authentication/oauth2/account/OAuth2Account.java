@@ -13,18 +13,19 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter
-@NoArgsConstructor
-@Table(name = "TBL_OAUTH_ACCOUNT", uniqueConstraints = {@UniqueConstraint(columnNames = {"provider", "providerId"})})
+@NoArgsConstructor  //oauth테이블 새로 필요 // provider(kakao google) , providerId
+@Table(name = "OauthAccount", uniqueConstraints = {@UniqueConstraint(columnNames = {"provider", "providerId"})})
 public class OAuth2Account extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long userIdx;
     
     private String providerId;
     private String provider;
     private String token;
     private String refreshToken;
     private LocalDateTime tokenExpiredAt;
+
     @OneToOne(mappedBy = "social")
     private User user;
 

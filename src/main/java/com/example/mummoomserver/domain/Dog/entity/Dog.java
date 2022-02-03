@@ -33,7 +33,6 @@ public class Dog extends BaseTimeEntity {
     private String dogSex;
 
     @Column(name="surgery", nullable = false)
-
     @ColumnDefault("'Y'")
     private String surgery;
 

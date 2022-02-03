@@ -17,8 +17,8 @@ import java.util.Collection;
 @NoArgsConstructor
 public class UserDetailsImpl implements UserDetails {
 
-    private Long id;
-    private String name;
+    private Long userIdx;
+    private String nickName;
     private String email;
     private String username;
     private String password;
@@ -26,9 +26,9 @@ public class UserDetailsImpl implements UserDetails {
     private Collection<? extends GrantedAuthority> authorities;
 
     @Builder
-    public UserDetailsImpl(Long id, String name, String email, String username, String password, UserType type, Collection<? extends GrantedAuthority> authorities) {
-        this.id = id;
-        this.name = name;
+    public UserDetailsImpl(Long userIdx, String nickName, String email, String username, String password, UserType type, Collection<? extends GrantedAuthority> authorities) {
+        this.userIdx = userIdx;
+        this.nickName = nickName;
         this.email = email;
         this.username = username;
         this.password = password;

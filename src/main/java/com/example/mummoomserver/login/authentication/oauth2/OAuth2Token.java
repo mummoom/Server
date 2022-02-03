@@ -13,9 +13,6 @@ public class OAuth2Token {
     private String refreshToken;
     private LocalDateTime expiredAt;
 
-    public OAuth2Token() {
-    }
-
     public OAuth2Token(String token, String refreshToken, LocalDateTime expiredAt) {
         this.token = token;
         this.refreshToken = refreshToken;

@@ -49,7 +49,7 @@ public class AuthenticationController {
 
 
     /* 사용자의 계정을 인증하고 로그인 토큰을 발급해주는 컨트롤러 */
-    @PostMapping("/authorize")
+    @PostMapping("/authorize")  //username, password 입력이, 회원가입 이후 예상중, 확인 되면 토큰 발급
     public void authenticateUsernamePassword(@Valid @RequestBody AuthorizationRequest authorizationRequest, BindingResult bindingResult, HttpServletRequest request, HttpServletResponse response) throws IOException {
         if (bindingResult.hasErrors()) throw new ValidationException("로그인 유효성 검사 실패.", bindingResult.getFieldErrors());
         try {
@@ -68,7 +68,7 @@ public class AuthenticationController {
     }
 
     /* 사용자의 소셜 로그인 요청을 받아 각 소셜 서비스로 인증을 요청하는 컨트롤러 */
-    @GetMapping("/oauth2/authorize/{provider}")
+    @GetMapping("/oauth2/authorize/{provider}")  //provider google, kakao입력 // redirect_uri입력 // callback uri입력
     public void redirectSocialAuthorizationPage(@PathVariable String provider, @RequestParam(name = "redirect_uri") String redirectUri, @RequestParam String callback, HttpServletRequest request, HttpServletResponse response) throws Exception {
         String state = generateState();
 
@@ -80,8 +80,9 @@ public class AuthenticationController {
         oAuth2Service.redirectAuthorizePage(clientRegistration, state, response);
     }
 
-    /* 각 소셜 서비스로부터 인증 결과를 처리하는 컨트롤러 */
-    @RequestMapping("/oauth2/callback/{provider}")
+    /* 각 소셜 서비스로부터 인증 결과를 처리하는 컨트롤러 */ //scope : profile, account_email // state : 토큰
+    // 제공되는 인증 결과 정보 : code, error, state값
+    @RequestMapping("/oauth2/callback/{provider}") // provider : google, kakao
     public void oAuth2AuthenticationCallback(@PathVariable String provider, OAuth2AuthorizationResponse oAuth2AuthorizationResponse, HttpServletRequest request, HttpServletResponse response, @AuthenticationPrincipal UserDetailsImpl loginUser) throws Exception {
 
         //인증을 요청할 때 저장했던 request 정보를 가져온다.
@@ -125,7 +126,7 @@ public class AuthenticationController {
         response.sendRedirect(oAuth2AuthorizationRequest.getRedirectUri());
     }
 
-    @PostMapping("/oauth2/unlink")
+    @PostMapping("/oauth2/unlink") // 연결해제
     public void unlinkOAuth2Account(@AuthenticationPrincipal UserDetailsImpl loginUser) {
 
         OAuth2AccountDTO oAuth2AccountDTO = userService.unlinkOAuth2Account(loginUser.getUsername());
