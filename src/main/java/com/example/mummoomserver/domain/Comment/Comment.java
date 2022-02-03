@@ -32,7 +32,7 @@ public class Comment extends BaseTimeEntity {
     @Column(columnDefinition = "TEXT")
     private String content;
 
-    @Column(nullable = false)
+    @Column
     @ColumnDefault("'active'")
     private String status;
 

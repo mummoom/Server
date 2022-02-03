@@ -10,13 +10,14 @@ public class PostResponseDto {
     private String title;
     private String content;
     private String imgUrl;
-    private User userIdx;
+    private Long userIdx;
+
 
     public PostResponseDto(Post entity){
         this.postIdx = entity.getPostIdx();
         this.title = entity.getTitle();
         this.content = entity.getContent();
         this.imgUrl = entity.getImgUrl();
-        this.userIdx = entity.getUserIdx();
+        this.userIdx = entity.getUserIdx().getUserIdx();
     }
 }
