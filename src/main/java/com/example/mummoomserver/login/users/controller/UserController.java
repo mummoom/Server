@@ -4,29 +4,20 @@ import com.example.mummoomserver.config.resTemplate.ResponseTemplate;
 import com.example.mummoomserver.login.jwt.JwtProvider;
 
 
-
-import com.example.mummoomserver.login.users.Role;
 import com.example.mummoomserver.login.users.User;
 import com.example.mummoomserver.login.users.UserRepository;
-import com.example.mummoomserver.login.users.UserService;
+import com.example.mummoomserver.login.users.service.UserService;
 import com.example.mummoomserver.login.users.requestResponse.LoginRequest;
 import com.example.mummoomserver.login.users.requestResponse.SignUpRequest;
-import com.example.mummoomserver.login.users.requestResponse.UpdateProfileRequest;
-import com.example.mummoomserver.login.users.requestResponse.UserProfileResponse;
 import com.example.mummoomserver.login.validation.ValidationException;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;

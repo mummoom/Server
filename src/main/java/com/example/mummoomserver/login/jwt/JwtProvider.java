@@ -8,6 +8,7 @@ import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -26,6 +27,7 @@ import java.util.function.Function;
 
 @RequiredArgsConstructor
 @Component
+@Slf4j
 public class JwtProvider {
     private String secretKey = "llshlllshlllshlllshl";
 
@@ -41,6 +43,7 @@ public class JwtProvider {
 
     // JWT 토큰 생성
     public String createToken(String userName, Role role) {
+        log.info("jwt token 생성 userName {}",userName);
         Claims claims = Jwts.claims().setSubject(userName); // JWT payload 에 저장되는 정보단위
         claims.put("role", role.getKey()); // 정보는 key / value 쌍으로 저장된다.
         Date now = new Date();
