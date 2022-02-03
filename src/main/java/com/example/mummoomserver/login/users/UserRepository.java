@@ -9,7 +9,6 @@ import java.util.Optional;
 // 검사하는 메소드 저장
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
-
     Optional<User> findByUserIdx(Long userIdx);
     Optional<User> findByEmail(String email);
     Optional<User> findByUsername(String username);
