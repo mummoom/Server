@@ -1,6 +1,7 @@
 package com.example.mummoomserver.login.advice;
 
 import com.example.mummoomserver.login.authentication.AuthenticationFailedException;
+import com.example.mummoomserver.login.authentication.UnauthorizedException;
 import com.example.mummoomserver.login.validation.ValidationException;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

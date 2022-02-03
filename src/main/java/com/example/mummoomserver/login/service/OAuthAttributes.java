@@ -1,5 +1,4 @@
-package com.example.mummoomserver.login.authentication.oauth2.userInfo;
-
+package com.example.mummoomserver.login.service;
 
 import com.example.mummoomserver.login.users.Role;
 import com.example.mummoomserver.login.users.User;

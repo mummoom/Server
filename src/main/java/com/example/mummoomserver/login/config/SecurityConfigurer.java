@@ -1,9 +1,10 @@
 package com.example.mummoomserver.login.config;
 
 
-import com.example.mummoomserver.login.authentication.oauth2.service.OAuth2Service;
+import com.example.mummoomserver.login.service.OAuth2Service;
 import com.example.mummoomserver.login.jwt.filter.JwtAuthenticationFilter;
-import com.example.mummoomserver.login.security.UserDetailsServiceImpl;
+import com.example.mummoomserver.login.service.UserDetailsServiceImpl;
+import com.example.mummoomserver.login.users.Role;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -48,9 +49,10 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
                         "/webjars/**" ,
                         /*Probably not needed*/ "/swagger.json")
                 .permitAll();
+        http.headers().frameOptions().disable();
 
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and() //세션 사용 x
-                .csrf().disable()  // csrf 토큰을 매번 받지 않아도 된다.
+                .csrf().ignoringAntMatchers("/h2-console/**").disable()  // csrf 토큰을 매번 받지 않아도 된다.
                 .cors().disable()  // 서로다른 웹 자원 공유, 프로토콜 :// 도메인 :포트
                 .formLogin().disable()
                 .logout().disable() // '/logout' uri 를 사용하기 위한 설정
@@ -66,6 +68,7 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST, "/oauth2/unlink").authenticated()
                 .antMatchers("/oauth2/**").permitAll()
                 .antMatchers("/swagger-ui.html").permitAll()
+                .antMatchers("/api/**").hasRole(Role.USER.name())
                 .anyRequest().authenticated().and()
                 .exceptionHandling()
                 .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))

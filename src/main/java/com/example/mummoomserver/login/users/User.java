@@ -2,17 +2,20 @@ package com.example.mummoomserver.login.users;
 
 
 import com.example.mummoomserver.config.BaseTimeEntity;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+
 import javax.persistence.*;
+import java.util.Collection;
+import java.util.stream.Collectors;
 
 // 회원 테이블과 매핑되는 user entity 클래스
-@Entity
 @Getter
-@Table(name = "User")
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
+@Builder
 public class User extends BaseTimeEntity {
     @Id
     @GeneratedValue
@@ -52,6 +55,7 @@ public class User extends BaseTimeEntity {
         this.type = type;
     }
 
+
     public void updateName(String nickName) {
         this.nickName = nickName;
     }
@@ -72,5 +76,27 @@ public class User extends BaseTimeEntity {
 
     public String getRoleKey() {
         return this.role.getKey();
+    }
+
+    public String getUsername() {
+        return null;
+    }
+
+    //시큐리티에서는 UserDetails를 이용해 유저정보를 관리함
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return null;
+    }
+
+    public boolean isAccountNonExpired() {
+        return false;
+    }
+
+
+    public boolean isAccountNonLocked() {
+        return false;
+    }
+
+    public boolean isCredentialsNonExpired() {
+        return false;
     }
 }

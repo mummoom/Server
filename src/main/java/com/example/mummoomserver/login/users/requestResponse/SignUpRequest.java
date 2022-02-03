@@ -1,4 +1,4 @@
-package com.example.mummoomserver.login.users;
+package com.example.mummoomserver.login.users.requestResponse;
 
 import lombok.*;
 
