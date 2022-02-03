@@ -6,20 +6,28 @@ import com.example.mummoomserver.domain.Comment.dto.CommentSaveRequestDto;
 import com.example.mummoomserver.domain.Comment.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RestController
 public class CommentController {
     private final CommentService commentService;
 
-    @PostMapping("/comment/save")
-    public ResponseTemplate<String> commentSave(@RequestBody CommentSaveRequestDto requestDto) {
+    @PostMapping("/comment/{postIdx}/{userIdx}")
+    public ResponseTemplate<Long> commentSave(@PathVariable Long postIdx, @PathVariable Long userIdx, @RequestBody CommentSaveRequestDto requestDto) {
         try {
-            commentService.save(requestDto);
-            String result = "댓글 등록에 성공했습니다.";
+            Long result = commentService.save(postIdx, userIdx, requestDto);
+            return new ResponseTemplate<>(result);
+        } catch (ResponeException e){
+            return new ResponseTemplate<>(e.getStatus(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @DeleteMapping("/comment/{commentIdx}") // 왜 유저도 같이 지워지지
+    public ResponseTemplate<String> commentDelete(@PathVariable Long commentIdx){
+        try{
+            commentService.delete(commentIdx);
+            String result = "댓글 삭제에 성공했습니다.";
             return new ResponseTemplate<>(result);
         } catch (ResponeException e){
             return new ResponseTemplate<>(e.getStatus(), HttpStatus.BAD_REQUEST);

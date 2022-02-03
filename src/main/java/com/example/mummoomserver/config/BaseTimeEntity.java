@@ -19,3 +19,4 @@ public class BaseTimeEntity {
     @LastModifiedDate
     private LocalDateTime updated_at;
 }
+

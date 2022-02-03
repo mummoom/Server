@@ -2,6 +2,9 @@ package com.example.mummoomserver.domain.Ingredients.entity;
 
 import com.example.mummoomserver.config.BaseTimeEntity;
 import com.example.mummoomserver.domain.Component.entity.Component;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,37 +20,37 @@ public class Ingredient extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long ingredient_idx;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="component_idx") // fk 이름 component_idx 로 설정됨
+    @JsonBackReference
+    private Component component;
+
     @Column(nullable = false)
     private String name;
     @Column(nullable = false)
     private String category;
     @Column(nullable = false)
-    private String imgUrl;
-    @Column(nullable = false)
+    private String img_url;
+
+    private int kcal;
+    @Column
     private String warning;
     @Column(nullable = false)
     private String spec;
-
-    @Column(nullable = false)
+    @Column
     private int score;
-
-    @Column(nullable = false)
-    private int kcal;
-
     @Column(nullable = false)
     @ColumnDefault("'active'")
     private String status;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="component_idx") // fk 이름 component_idx 로 설정됨
-    private Component component;
+
 
 
     @Builder
     public Ingredient(String category, String name, String imgUrl, String warning, String spec, int score) {
         this.category = category;
         this.name = name;
-        this.imgUrl = imgUrl;
+        this.img_url = imgUrl;
         this.warning = warning;
         this.spec = spec;
         this.score = score;
@@ -55,7 +58,7 @@ public class Ingredient extends BaseTimeEntity {
 
     public void update(String name, String imgUrl,String warning, String spec, int score) {
         this.name = name;
-        this.imgUrl = imgUrl;
+        this.img_url = imgUrl;
         this.warning = warning;
         this.spec = spec;
         this.score = score;

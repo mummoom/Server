@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 @Builder
 public class User extends BaseTimeEntity {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userIdx;
 
     @Column(nullable = false, length = 20)
@@ -43,15 +43,16 @@ public class User extends BaseTimeEntity {
     @Enumerated(value = EnumType.STRING)  // 일반 로그인인지 소셜 로그인인지 확인하는 컬럼
     private UserType type;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private Role role;
-
     @OneToMany(mappedBy = "userIdx", cascade = CascadeType.ALL)
     private List<Post> posts = new ArrayList<>();
 
     @OneToMany(mappedBy = "userIdx", cascade = CascadeType.ALL)
     private List<Comment> comments = new ArrayList<>();
+
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Role role;
 
     @Builder
     public User(String username, String nickName, String email, String password,String imgUrl, UserType type, Role role) {

@@ -1,13 +1,9 @@
 package com.example.mummoomserver.domain.Ingredients.dto;
 
-import com.example.mummoomserver.domain.Component.entity.Component;
 import com.example.mummoomserver.domain.Ingredients.entity.Ingredient;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
-
-import javax.persistence.Column;
 
 /**
  *
@@ -41,7 +37,7 @@ public class IngredientSearchResultDto {
 
         this.name = ingredient.getName();
         this.category = ingredient.getCategory();
-        this.imgUrl = ingredient.getImgUrl();
+        this.imgUrl = ingredient.getImg_url();
         this.warning = ingredient.getWarning();
         this.spec = ingredient.getSpec();
         this.score = ingredient.getScore();

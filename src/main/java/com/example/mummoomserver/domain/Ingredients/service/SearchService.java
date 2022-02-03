@@ -3,6 +3,7 @@ package com.example.mummoomserver.domain.Ingredients.service;
 import com.example.mummoomserver.config.resTemplate.ResponeException;
 
 import com.example.mummoomserver.domain.Component.repository.ComponentRepository;
+import com.example.mummoomserver.domain.Ingredients.dto.IngredientDto;
 import com.example.mummoomserver.domain.Ingredients.dto.IngredientSearchResultDto;
 import com.example.mummoomserver.domain.Ingredients.entity.Ingredient;
 import com.example.mummoomserver.domain.Ingredients.repository.IngredientRepository;
