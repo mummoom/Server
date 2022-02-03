@@ -9,6 +9,7 @@ import com.example.mummoomserver.domain.Post.service.PostService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
@@ -17,11 +18,10 @@ import org.springframework.web.bind.annotation.*;
 public class PostController {
     private final PostService postService;
 
-    @PostMapping("/post/save")
-    public ResponseTemplate<String> save(@RequestBody PostSaveRequestDto requestDto){
+    @PostMapping("/post/{userIdx}")
+    public ResponseTemplate<Long> save(@PathVariable Long userIdx, @RequestBody PostSaveRequestDto requestDto) {
         try{
-            postService.save(requestDto);
-            String result = "게시글 등록에 성공했습니다.";
+            Long result = postService.save(userIdx, requestDto);
             return new ResponseTemplate<>(result);
         } catch (ResponeException e){
             return new ResponseTemplate<>(e.getStatus(), HttpStatus.BAD_REQUEST);

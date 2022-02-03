@@ -6,6 +6,8 @@ import com.example.mummoomserver.domain.Post.PostRepository;
 import com.example.mummoomserver.domain.Post.dto.PostResponseDto;
 import com.example.mummoomserver.domain.Post.dto.PostSaveRequestDto;
 import com.example.mummoomserver.domain.Post.dto.PostUpdateRequestDto;
+import com.example.mummoomserver.login.users.User;
+import com.example.mummoomserver.login.users.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -15,9 +17,13 @@ import javax.transaction.Transactional;
 @Service
 public class PostService {
     private final PostRepository postRepository;
+    private final UserRepository userRepository;
 
     @Transactional
-    public Long save(PostSaveRequestDto requestDto) throws ResponeException {
+    public Long save(Long userIdx, PostSaveRequestDto requestDto) throws ResponeException {
+        User user = userRepository.findByUserIdx(userIdx)
+                .orElseThrow(() -> new IllegalArgumentException("회원정보를 찾을 수 없습니다."));
+        requestDto.setUserIdx(user);
         return postRepository.save(requestDto.toEntity()).getPostIdx();
     }
 
