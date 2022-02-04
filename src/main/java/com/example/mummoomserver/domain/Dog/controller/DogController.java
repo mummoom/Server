@@ -25,8 +25,6 @@ public class DogController {
     * */
     @ApiOperation(value = "강아지 정보 추가 API", notes = "강아지 정보(이름, 종, 생년월일, 성별, 중성화 수술 여부) 추가 " +
             "성공 시 강아지 index 반환")
-    @ApiImplicitParam(name = "dogRequest", value = "dogName: 강아지 이름, dogBirth: 강아지 생년월일, " +
-                    "dogSex: 강아지 성별('0' 또는 '1'), dogType: 강아지 종, surgery: 중성화 여부('Y' 또는 'N')")
     @ResponseBody
     @PostMapping("/api/dog/save")
     public ResponseTemplate<DogSaveResponseDto> saveDog(@RequestBody DogDto dogRequest){
@@ -70,13 +68,9 @@ public class DogController {
     /*
     *   강아지 정보 수정
     * */
-    @ApiOperation(value = "강아지 정보 수정 API", notes = "강아지 index로 강아지 정보 수정")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "dogIdx", value = "강아지 index"),
-            @ApiImplicitParam
-                    (name = "dogRequest", value = "dogName: 강아지 이름, dogBirth: 강아지 생년월일, " +
-                            "dogSex: 강아지 성별('0' 또는 '1'), dogType: 강아지 종, surgery: 중성화 여부('Y' 또는 'N')")
-    })
+    @ApiOperation(value = "강아지 정보 수정 API", notes = "강아지 index로 강아지 정보(dogName: 강아지 이름, dogBirth: 강아지 생년월일," +
+            " dogSex: 강아지 성별('0' 또는 '1'), dogType: 강아지 종, surgery: 중성화 여부('Y' 또는 'N')) 수정")
+    @ApiImplicitParam(name = "dogIdx", value = "강아지 index")
     @ResponseBody
     @PatchMapping("/api/dog/update/{dogIdx}")
     public ResponseTemplate<String> updateDog(@PathVariable("dogIdx") Long dogIdx, @RequestBody DogDto dogRequest){
