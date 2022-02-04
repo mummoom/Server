@@ -15,9 +15,11 @@ spring:
         pathmatch:
             matching-strategy: ant_path_matcher
     jpa:
+        # generate-ddl : false로 바꾸기
         generate-ddl : false
         hibernate:
-            ddl-auto: update
+            # ddl-auto: none으로 바꾸기
+            ddl-auto: none
             naming:
                 implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl
                 physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
