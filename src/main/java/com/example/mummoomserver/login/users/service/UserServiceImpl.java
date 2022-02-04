@@ -7,14 +7,12 @@ import com.example.mummoomserver.login.users.requestResponse.UpdateProfileReques
 import com.example.mummoomserver.login.validation.SimpleFieldError;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
-import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.Optional;
 
@@ -34,9 +32,6 @@ public class UserServiceImpl implements UserService {
 //    private final OAuth2AccountRepository oAuth2AccountRepository;
     private final PasswordEncoder passwordEncoder;
 
-
-
-
     @Override
     public void saveUser(SignUpRequest signUpRequest){
         checkDuplicateEmail(signUpRequest.getEmail());
@@ -45,7 +40,6 @@ public class UserServiceImpl implements UserService {
                 .email(signUpRequest.getEmail())
                 .password(passwordEncoder.encode(signUpRequest.getPassword()))
                 .type(UserType.DEFAULT)
-                .username(signUpRequest.getEmail())
                 .role(Role.GUEST)
                 .build();
 
@@ -54,9 +48,9 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public void updateProfile(String username, UpdateProfileRequest updateProfileRequest){
+    public void updateProfile(String nickName, UpdateProfileRequest updateProfileRequest){
 
-        User user = userRepository.findByNickName(username).get();
+        User user = userRepository.findByNickName(nickName).get();
 
         //이름이 변경되었는지 체크
         if (!user.getNickName().equals(updateProfileRequest.getNickName()))
@@ -74,8 +68,8 @@ public class UserServiceImpl implements UserService {
             throw new DuplicateUserException("사용중인 이메일 입니다.", new SimpleFieldError("email", "사용중인 이메일 입니다."));
     }
 
-    private User checkRegisteredUser(String username) {
-        Optional<User> optUser = userRepository.findByNickName(username);
+    private User checkRegisteredUser(String nickName) {
+        Optional<User> optUser = userRepository.findByNickName(nickName);
         Assert.state(optUser.isPresent(), "가입되지 않은 회원입니다.");
         return optUser.get();
     }

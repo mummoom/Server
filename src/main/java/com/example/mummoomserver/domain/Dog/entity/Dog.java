@@ -43,6 +43,7 @@ public class Dog extends BaseTimeEntity {
     @Column(name="status", nullable = false)
     private String status;
 
+
     @Builder
     public Dog(String dogName, String dogBirth, String dogType, String dogSex, String surgery, User user, String status) {
         this.dogName = dogName;
