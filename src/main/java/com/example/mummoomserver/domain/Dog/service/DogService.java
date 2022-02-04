@@ -36,6 +36,7 @@ public class DogService {
                     .dogType(dogRequest.getDogType())
                     .dogSex(dogRequest.getDogSex())
                     .surgery(dogRequest.getSurgery())
+                    .status("active")
                     .build();
 
             return new DogSaveResponseDto(dogRepository.save(dog).getDogIdx());
