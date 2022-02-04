@@ -2,10 +2,11 @@ package com.example.mummoomserver.domain.Dog.service;
 
 import com.example.mummoomserver.config.resTemplate.ResponeException;
 import com.example.mummoomserver.domain.Dog.dto.DogDto;
-import com.example.mummoomserver.domain.Dog.dto.DogSaveRequestDto;
 import com.example.mummoomserver.domain.Dog.dto.DogSaveResponseDto;
 import com.example.mummoomserver.domain.Dog.entity.Dog;
 import com.example.mummoomserver.domain.Dog.repository.DogRepository;
+import com.example.mummoomserver.login.users.User;
+import com.example.mummoomserver.login.users.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -21,28 +22,23 @@ import static com.example.mummoomserver.config.resTemplate.ResponseTemplateStatu
 public class DogService {
 
     private final DogRepository dogRepository;
+    private final UserRepository userRepository;
 
     //강아지 정보 추가
-    //나중에 주석 풀기...??
-    //userIdx 수정
-    public DogSaveResponseDto save(DogSaveRequestDto dogRequest) throws ResponeException {
-        //User user = userRepoitory.findById(dogRequest.getUserIdx());
+    public DogSaveResponseDto save(DogDto dogRequest, String nickname) throws ResponeException {
+        User user = userRepository.findByNickName(nickname).get();
 
         try {
-            //if(user.isPresent()){
-                Dog dog = Dog.builder()
-            //            .user(user.getUserIdx)
-                        .dogName(dogRequest.getDogName())
-                        .dogBirth(dogRequest.getDogBirth())
-                        .dogType(dogRequest.getDogType())
-                        .dogSex(dogRequest.getDogSex())
-                        .surgery(dogRequest.getSurgery())
-                        .build();
+            Dog dog = Dog.builder()
+                    .user(user)
+                    .dogName(dogRequest.getDogName())
+                    .dogBirth(dogRequest.getDogBirth())
+                    .dogType(dogRequest.getDogType())
+                    .dogSex(dogRequest.getDogSex())
+                    .surgery(dogRequest.getSurgery())
+                    .build();
 
-                return new DogSaveResponseDto(dogRepository.save(dog).getDogIdx());
-            //}else{
-            //    throw new ResponeException(FAIL);
-            //}
+            return new DogSaveResponseDto(dogRepository.save(dog).getDogIdx());
         }catch (Exception e){
             throw new ResponeException(DATABASE_ERROR);
         }
