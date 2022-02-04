@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 @RequiredArgsConstructor
 public class LikecntController {
     private final LikecntService likecntService;
+    //private final JwtProvider provider;
 
     @GetMapping("/post/{postIdx}")//postIdx 를 불러옴
     public LikecntDto findByPostIdx(@PathVariable Long postIdx){
