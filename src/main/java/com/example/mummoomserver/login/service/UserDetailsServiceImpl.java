@@ -23,13 +23,12 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     @Transactional(readOnly = true)
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByNickName(username).orElseThrow(() ->
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        User user = userRepository.findByEmail(email).orElseThrow(() ->
                 new UsernameNotFoundException("등록되지 않은 회원입니다."));
 
         UserDetailsImpl userDetails = UserDetailsImpl.builder()
                 .userIdx(user.getUserIdx())
-                .username(user.getUsername())
                 .nickName(user.getNickName())
                 .imgUrl(user.getImgUrl())
                 .email(user.getEmail())

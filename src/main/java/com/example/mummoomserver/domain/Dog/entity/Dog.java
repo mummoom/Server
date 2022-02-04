@@ -40,7 +40,7 @@ public class Dog extends BaseTimeEntity {
     @JoinColumn(name="userIdx")
     private User user;
 
-    @Column(name="status", nullable = false)
+    @Column(name="status")
     @ColumnDefault("'active'")
     private String status;
 
