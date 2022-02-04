@@ -1,10 +1,8 @@
 package com.example.mummoomserver.domain.Component.entity;
 
 import com.example.mummoomserver.config.BaseTimeEntity;
-import com.example.mummoomserver.domain.Ingredients.entity.Ingredient;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.example.mummoomserver.domain.Ingredients.entity.Ingredients;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,7 +22,7 @@ public class Component extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "component")
     @JsonManagedReference
-    List<Ingredient> ingredients = new ArrayList<>();
+    List<Ingredients> ingredients = new ArrayList<>();
 
     @Column(nullable = false)
     private float dan;

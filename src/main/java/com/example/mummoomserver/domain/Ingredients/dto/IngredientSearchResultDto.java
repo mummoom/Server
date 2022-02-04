@@ -1,6 +1,6 @@
 package com.example.mummoomserver.domain.Ingredients.dto;
 
-import com.example.mummoomserver.domain.Ingredients.entity.Ingredient;
+import com.example.mummoomserver.domain.Ingredients.entity.Ingredients;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -33,7 +33,7 @@ public class IngredientSearchResultDto {
     private String effect;
 
 
-    public IngredientSearchResultDto(Ingredient ingredient){
+    public IngredientSearchResultDto(Ingredients ingredient){
 
         this.name = ingredient.getName();
         this.category = ingredient.getCategory();

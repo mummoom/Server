@@ -15,7 +15,7 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor
 @Entity
-public class Ingredient extends BaseTimeEntity {
+public class Ingredients extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long ingredient_idx;
@@ -47,7 +47,7 @@ public class Ingredient extends BaseTimeEntity {
 
 
     @Builder
-    public Ingredient(String category, String name, String imgUrl, String warning, String spec, int score) {
+    public Ingredients(String category, String name, String imgUrl, String warning, String spec, int score) {
         this.category = category;
         this.name = name;
         this.img_url = imgUrl;
