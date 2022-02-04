@@ -45,7 +45,7 @@ public class UserController {
 
     // 회원가입
     @PostMapping("/signup")
-    @ApiImplicitParam
+    @ApiImplicitParam(name = "paassword", value = "6~20 길이의 알파벳과 숫자, 특수문자만 사용할 수 있습니다.")
     public ResponseTemplate<?> signUpNewUser(@RequestBody SignUpRequest signUpRequest, BindingResult bindingResult) {
         //유효성 검사
         if (bindingResult.hasErrors()) throw new ValidationException("회원가입 유효성 검사 실패.", bindingResult.getFieldErrors());
