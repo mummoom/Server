@@ -72,7 +72,7 @@ public class UserController {
         // 로그인 성공 시
         // 토큰 발급 쉽게 수정하거나 변경하기
         // 유저 닉네임을 삽입
-        String token = jwtProvider.createToken(member.getNickName(), member.getRole());
+        String token = jwtProvider.createToken(member.getEmail(), member.getRole());
 
         jwtProvider.writeTokenResponse(httpServletResponse, token);
     }

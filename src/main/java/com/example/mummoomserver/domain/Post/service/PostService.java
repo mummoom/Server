@@ -23,8 +23,8 @@ public class PostService {
     private final UserRepository userRepository;
 
     @Transactional
-    public Long save(Long userIdx, PostSaveRequestDto requestDto) throws ResponeException {
-        User user = userRepository.findByUserIdx(userIdx)
+    public Long save(String email, PostSaveRequestDto requestDto) throws ResponeException {
+        User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalArgumentException("회원정보를 찾을 수 없습니다."));
         requestDto.setUserIdx(user);
         return postRepository.save(requestDto.toEntity()).getPostIdx();
@@ -34,7 +34,7 @@ public class PostService {
     public Long update(Long postIdx, PostUpdateRequestDto requestDto) throws ResponeException {
         Post post = postRepository.findById(postIdx)
                 .orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다. postIdx=" + postIdx));
-        post.update(requestDto.getTitle(), requestDto.getContent(), requestDto.getImgUrl(), requestDto.getStatus());
+        post.update(requestDto.getTitle(), requestDto.getContent(), requestDto.getImgUrl());
         return postIdx;
     }
     public PostResponseDto findByPostIdx(Long postIdx) throws ResponeException {
