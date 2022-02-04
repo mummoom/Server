@@ -1,7 +1,7 @@
 package com.example.mummoomserver.domain.Component.entity;
 
 import com.example.mummoomserver.config.BaseTimeEntity;
-import com.example.mummoomserver.domain.Ingredients.entity.Ingredient;
+import com.example.mummoomserver.domain.Ingredients.entity.Ingredients;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
@@ -20,11 +20,11 @@ import java.util.List;
 public class Component extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long component_idx;
+    private Long componentIdx;
 
     @OneToMany(mappedBy = "component")
     @JsonManagedReference
-    List<Ingredient> ingredients = new ArrayList<>();
+    List<Ingredients> ingredients = new ArrayList<>();
 
     @Column(nullable = false)
     private float dan;
@@ -49,7 +49,7 @@ public class Component extends BaseTimeEntity {
     private String status;
 
     @Builder
-    public Component(int kcal, float dan, float tan, float gi, float mu, float water, String effect, String status) {
+    public Component(float dan, float tan, float gi, float mu, float water, String effect, String status) {
         this.dan = dan;
         this.tan = tan;
         this.gi = gi;

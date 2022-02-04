@@ -40,18 +40,19 @@ public class Dog extends BaseTimeEntity {
     @JoinColumn(name="userIdx")
     private User user;
 
-    @Column(name="status")
-    @ColumnDefault("'active'")
+    @Column(name="status", nullable = false)
     private String status;
 
+
     @Builder
-    public Dog(String dogName, String dogBirth, String dogType, String dogSex, String surgery, User user) {
+    public Dog(String dogName, String dogBirth, String dogType, String dogSex, String surgery, User user, String status) {
         this.dogName = dogName;
         this.dogBirth = dogBirth;
         this.dogType = dogType;
         this.dogSex = dogSex;
         this.surgery = surgery;
         this.user = user;
+        this.status = status;
     }
 
     public void update(String dogName, String dogBirth, String dogType, String dogSex, String surgery) {
