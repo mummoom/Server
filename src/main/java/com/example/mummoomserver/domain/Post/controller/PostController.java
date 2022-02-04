@@ -6,11 +6,13 @@ import com.example.mummoomserver.domain.Post.dto.PostResponseDto;
 import com.example.mummoomserver.domain.Post.dto.PostSaveRequestDto;
 import com.example.mummoomserver.domain.Post.dto.PostUpdateRequestDto;
 import com.example.mummoomserver.domain.Post.service.PostService;
+import com.example.mummoomserver.login.users.service.UserService;
+import io.swagger.annotations.ApiImplicitParam;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.List;
 
@@ -19,11 +21,13 @@ import java.util.List;
 @RestController
 public class PostController {
     private final PostService postService;
+    private final UserService userService;
 
-    @PostMapping("/post/{userIdx}")
-    public ResponseTemplate<Long> save(@PathVariable Long userIdx, @RequestBody PostSaveRequestDto requestDto) {
+    @PostMapping("/post")
+    public ResponseTemplate<Long> save(@RequestBody @ApiIgnore PostSaveRequestDto requestDto) {
         try{
-            Long result = postService.save(userIdx, requestDto);
+            String email = userService.getAuthUserEmail();
+            Long result = postService.save(email, requestDto);
             return new ResponseTemplate<>(result);
         } catch (ResponeException e){
             return new ResponseTemplate<>(e.getStatus(), HttpStatus.BAD_REQUEST);
