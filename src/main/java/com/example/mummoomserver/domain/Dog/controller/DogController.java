@@ -32,7 +32,8 @@ public class DogController {
     public ResponseTemplate<DogSaveResponseDto> saveDog(@RequestBody DogDto dogRequest){
 
         try{
-            DogSaveResponseDto dogResponse = dogService.save(dogRequest);
+            String nickname = userService.getAuthUserNickname();
+            DogSaveResponseDto dogResponse = dogService.save(dogRequest, nickname);
             return new ResponseTemplate<>(dogResponse);
 
         }catch(ResponeException e){
