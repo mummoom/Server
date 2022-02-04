@@ -2,7 +2,6 @@ package com.example.mummoomserver.domain.Dog.service;
 
 import com.example.mummoomserver.config.resTemplate.ResponeException;
 import com.example.mummoomserver.domain.Dog.dto.DogDto;
-import com.example.mummoomserver.domain.Dog.dto.DogSaveRequestDto;
 import com.example.mummoomserver.domain.Dog.dto.DogSaveResponseDto;
 import com.example.mummoomserver.domain.Dog.entity.Dog;
 import com.example.mummoomserver.domain.Dog.repository.DogRepository;
@@ -25,7 +24,7 @@ public class DogService {
     //강아지 정보 추가
     //나중에 주석 풀기...??
     //userIdx 수정
-    public DogSaveResponseDto save(DogSaveRequestDto dogRequest) throws ResponeException {
+    public DogSaveResponseDto save(DogDto dogRequest) throws ResponeException {
         //User user = userRepoitory.findById(dogRequest.getUserIdx());
 
         try {
