@@ -16,11 +16,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 // 회원 테이블과 매핑되는 user entity 클래스
-@Getter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "User")
+@Builder
 public class User extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

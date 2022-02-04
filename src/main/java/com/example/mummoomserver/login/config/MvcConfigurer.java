@@ -27,3 +27,5 @@ public class MvcConfigurer implements WebMvcConfigurer {
 
 
 }
+
+//WEBMVCCONFIG, CONFIGUREVIEWRESOLVERS
