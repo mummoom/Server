@@ -37,7 +37,7 @@ public class IngredientSearchResultDto {
 
         this.name = ingredient.getName();
         this.category = ingredient.getCategory();
-        this.imgUrl = ingredient.getImg_url();
+        this.imgUrl = ingredient.getImgUrl();
         this.warning = ingredient.getWarning();
         this.spec = ingredient.getSpec();
         this.score = ingredient.getScore();

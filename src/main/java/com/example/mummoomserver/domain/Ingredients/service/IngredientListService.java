@@ -1,4 +1,8 @@
 package com.example.mummoomserver.domain.Ingredients.service;
+<<<<<<< HEAD
+=======
+import com.example.mummoomserver.domain.Ingredients.dto.IngredientDto;
+>>>>>>> 9772067ddc40402b3275e7e81bc390892cfabb8c
 import com.example.mummoomserver.domain.Ingredients.entity.Ingredients;
 import com.example.mummoomserver.domain.Ingredients.repository.IngredientRepository;
 import lombok.RequiredArgsConstructor;

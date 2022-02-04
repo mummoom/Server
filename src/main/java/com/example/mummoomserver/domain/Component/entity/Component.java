@@ -2,6 +2,10 @@ package com.example.mummoomserver.domain.Component.entity;
 
 import com.example.mummoomserver.config.BaseTimeEntity;
 import com.example.mummoomserver.domain.Ingredients.entity.Ingredients;
+<<<<<<< HEAD
+=======
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+>>>>>>> 9772067ddc40402b3275e7e81bc390892cfabb8c
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,7 +22,7 @@ import java.util.List;
 public class Component extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long component_idx;
+    private Long componentIdx;
 
     @OneToMany(mappedBy = "component")
     @JsonManagedReference
@@ -47,7 +51,7 @@ public class Component extends BaseTimeEntity {
     private String status;
 
     @Builder
-    public Component(int kcal, float dan, float tan, float gi, float mu, float water, String effect, String status) {
+    public Component(float dan, float tan, float gi, float mu, float water, String effect, String status) {
         this.dan = dan;
         this.tan = tan;
         this.gi = gi;

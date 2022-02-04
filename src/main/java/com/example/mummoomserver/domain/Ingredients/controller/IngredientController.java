@@ -26,9 +26,7 @@ public class IngredientController {
      */
     @GetMapping("/api/ingredients/{category}")
     public ResponseTemplate<List<Ingredients>> getIngredientList(@PathVariable(name ="category") String category){
-
         List<Ingredients> ret = ingredientListService.getList(category);
-
         return new ResponseTemplate<>(ret);
 
     }

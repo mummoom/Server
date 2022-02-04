@@ -1,5 +1,6 @@
 package com.example.mummoomserver.domain.Ingredients.repository;
 
+
 import com.example.mummoomserver.domain.Ingredients.entity.Ingredients;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -11,7 +12,6 @@ import java.util.Optional;
 public interface IngredientRepository extends JpaRepository<Ingredients,Long> {
 
     Optional<Ingredients> findIngredientByName(String name);
-
 
     List<Ingredients> findIngredientByCategory(String category);
 
