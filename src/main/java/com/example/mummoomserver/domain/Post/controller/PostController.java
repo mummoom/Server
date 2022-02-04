@@ -30,7 +30,7 @@ public class PostController {
             Long result = postService.save(email, requestDto);
             return new ResponseTemplate<>(result);
         } catch (ResponeException e){
-            return new ResponseTemplate<>(e.getStatus(), HttpStatus.BAD_REQUEST);
+            return new ResponseTemplate<>(e.getStatus());
         }
     }
 
@@ -41,7 +41,7 @@ public class PostController {
             String result = "게시글 수정에 성공했습니다.";
             return new ResponseTemplate<>(result);
         } catch (ResponeException e){
-            return new ResponseTemplate<>(e.getStatus(), HttpStatus.BAD_REQUEST);
+            return new ResponseTemplate<>(e.getStatus());
         }
     }
 
@@ -51,7 +51,7 @@ public class PostController {
             PostResponseDto result = postService.findByPostIdx(postIdx);
             return new ResponseTemplate<>(result);
         } catch (ResponeException e){
-            return new ResponseTemplate<>(e.getStatus(), HttpStatus.BAD_REQUEST);
+            return new ResponseTemplate<>(e.getStatus());
         }
     }
 
@@ -60,7 +60,7 @@ public class PostController {
         try{
             return new ResponseTemplate<>(postService.getPosts());
         } catch (ResponeException e){
-            return new ResponseTemplate<>(e.getStatus(), HttpStatus.BAD_REQUEST);
+            return new ResponseTemplate<>(e.getStatus());
         }
     }
 
@@ -71,7 +71,7 @@ public class PostController {
             String result = "게시글 삭제에 성공했습니다.";
             return new ResponseTemplate<>(result);
         } catch(ResponeException e){
-            return new ResponseTemplate<>(e.getStatus(), HttpStatus.BAD_REQUEST);
+            return new ResponseTemplate<>(e.getStatus());
         }
     }
 

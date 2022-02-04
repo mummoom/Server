@@ -36,7 +36,7 @@ public class SearchController {
             return new ResponseTemplate<IngredientSearchResultDto>(result);
 
         }catch (ResponeException e){
-            return new ResponseTemplate<>(e.getStatus(), HttpStatus.BAD_REQUEST);
+            return new ResponseTemplate<>(e.getStatus());
         }
 
     }

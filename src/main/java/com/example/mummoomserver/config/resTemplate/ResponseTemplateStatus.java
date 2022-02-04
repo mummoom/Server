@@ -25,11 +25,21 @@ public enum ResponseTemplateStatus {
     INVALID_JWT(false, "유효하지 않은 JWT입니다.",2002),
 
 
+
     /**
      *
      * DB 부분 오류
+     *
      */
-    DATABASE_ERROR(false, "데이터베이스 요청 에러.",3000);
+    DATABASE_ERROR(false, "데이터베이스 요청 에러.",3000),
+
+    /**
+     * 4000 : 식재료 요청 관련 오류
+     */
+    INVALID_PARAM(false,"잘못된 PathVariable Parameter입니다,",4000);
+
+
+
 
 
 

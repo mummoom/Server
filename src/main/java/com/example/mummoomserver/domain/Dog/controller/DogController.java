@@ -35,7 +35,7 @@ public class DogController {
             return new ResponseTemplate<>(dogResponse);
 
         }catch(ResponeException e){
-            return new ResponseTemplate<>(e.getStatus(), HttpStatus.BAD_REQUEST);
+            return new ResponseTemplate<>(e.getStatus());
         }
     }
 
@@ -51,7 +51,7 @@ public class DogController {
             DogDto dogResponse = dogService.getByIdx(dogIdx);
             return new ResponseTemplate<>(dogResponse);
         }catch(ResponeException e){
-            return new ResponseTemplate<>(e.getStatus(), HttpStatus.BAD_REQUEST);
+            return new ResponseTemplate<>(e.getStatus());
         }
     }
 
@@ -81,7 +81,7 @@ public class DogController {
             return new ResponseTemplate<>(result);
 
         }catch(ResponeException e){
-            return new ResponseTemplate<>(e.getStatus(), HttpStatus.BAD_REQUEST);
+            return new ResponseTemplate<>(e.getStatus());
         }
     }
 
@@ -99,7 +99,7 @@ public class DogController {
             return new ResponseTemplate<>(result);
 
         }catch (ResponeException e){
-            return new ResponseTemplate<>(e.getStatus(), HttpStatus.BAD_REQUEST);
+            return new ResponseTemplate<>(e.getStatus());
         }
     }
 }
