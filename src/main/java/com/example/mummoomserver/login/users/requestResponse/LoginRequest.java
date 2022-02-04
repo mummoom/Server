@@ -10,12 +10,12 @@ import javax.validation.constraints.NotBlank;
 @NoArgsConstructor
 public class LoginRequest {
     @NotBlank(message = "이메일을 입력하세요.")
-    private String username;
+    private String email;
     @NotBlank(message = "패스워드를 입력하세요.")
     private String password;
     @Builder
-    public LoginRequest(String username, String password) {
-        this.username = username;
+    public LoginRequest(String email, String password) {
+        this.email = email;
         this.password = password;
     }
 }
