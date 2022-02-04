@@ -3,8 +3,10 @@ package com.example.mummoomserver.domain.Ingredients.dto;
 import lombok.*;
 
 @Getter @Setter
-@RequiredArgsConstructor
+@AllArgsConstructor
+@NoArgsConstructor
 public class IngredientDto {
+
     private String name;
     private String category;
     private String imgUrl;
@@ -12,4 +14,6 @@ public class IngredientDto {
     private String spec;
     private int score;
     private int kcal;
+
+
 }

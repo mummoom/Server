@@ -7,6 +7,8 @@ import java.util.Optional;
 
 @Repository
 public interface PostRepository extends JpaRepository<Post, Long> {
-    @Override
-    Optional<Post> findById(Long aLong);
+
+    Optional<Post> findByPostIdx(Long postIdx);
+    Optional<Post> deleteByPostIdx(Long postIdx);
+
 }

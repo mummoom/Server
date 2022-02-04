@@ -4,6 +4,7 @@ build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
+**/src/main/com/example/mummoomserver/config/H2ServerConfig
 
 ### STS ###
 .apt_generated

@@ -12,4 +12,5 @@ import java.util.Optional;
 
 @Repository
 public interface LikecntRepository extends JpaRepository<Likecnt, Long> {
+
 }

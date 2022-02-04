@@ -1,27 +1,91 @@
 spring:
-    #    로컬 테스트용 h2 DB 설정..
-    #    datasource:
-    #        url: jdbc:h2:tcp://localhost/~/mummoomH2
-    #        username: sa
-    #        password:
-    #        driver-class-name: org.h2.Driver
+
+    datasource:
+        driver-class-name: org.h2.Driver
+        url: jdbc:h2:~/mummoom;DB_CLOSE_ON_EXIT=FALSE
+        username: sa
+        password:
+
+#    datasource:
+#        driver-class-name: org.h2.Driver
+#        url: jdbc:h2:file:~/data/h2/mummoomH2;MODE=MYSQL
+#        username: sa
+#        password:
     mvc:
         pathmatch:
             matching-strategy: ant_path_matcher
     jpa:
-        generate-ddl : true
+        generate-ddl : false
         hibernate:
-            ddl-auto: create
+            ddl-auto: update
+            naming:
+                implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl
+                physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+
         properties:
             hibernate:
-            # show_sql: true
+            show_sql: true
             format_sql: true
             dialect: org.hibernate.dialect.MySQL5Dialect
     h2:
         console:
             enabled: true
+    profiles:
+        include: real-db
+
+    # 여기서부터 로그인 부분
+    servlet:
+        encoding:
+            charset: UTF-8 #utf-8 encoding
+            force : true
+    main:
+        allow-bean-definition-overriding: true
+    security:
+        oauth2:
+            client:
+                registration:
+                    google:
+                        client-id: 658312263287-vnme95dn8nc59k16pqod0ro99a6mfld1.apps.googleusercontent.com
+                        client-secret: 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
+                        authorization-grant-type: authorization_code
+                        redirect-uri: http://localhost:8080/login/oauth2/code/google
+                        scope:
+                            - profile
+                            - email
+                    kakao:
+                        client-id: 805bbf422b921a63ed8df325ed13428b
+                        client-secret: KMbqaAreZ6U2sZkOr5Q0qOPGrUyRQyHG
+                        authorization-grant-type: authorization_code
+                        redirect-uri: http://localhost:8080/login/oauth2/code/kakao
+                        scope:
+                            - profile
+                            - account_email
+                provider:
+                    google:
+                        authorization-uri: https://accounts.google.com/o/oauth2/auth
+                        token-uri: https://www.googleapis.com/oauth2/v4/token
+                        user-info-uri: https://www.googleapis.com/oauth2/v2/userinfo
+                        unlink-uri: https://accounts.google.com/o/oauth2/revoke
+                    kakao:
+                        authorization-uri: https://kauth.kakao.com/oauth/authorize
+                        token-uri: https://kauth.kakao.com/oauth/token
+                        user-info-uri: https://kapi.kakao.com/v2/user/me
+                        unlink-uri: https://kapi.kakao.com/v1/user/unlink
+jwt:
+    secretKey: " sakdjfokwktgjroiygjmdflkgbgjjiflergjlzkng"
+    signatureAlgorithm: HS256
+    tokenExpired: 604800 #(sec) 7 days
+
+
+# 여기까지 로그인 끝
+
 logging.level:
     org.hibernate.SQL: debug
     org.hibernate.type: trace
 
+client:
+    origins: http://localhost:8080
+
+
 # http://localhost:8080/swagger-ui.html
+
