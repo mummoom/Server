@@ -49,10 +49,9 @@ public class Post extends BaseTimeEntity { // extends BaseTimeEntity  basetimeen
         this.status = status;
     }
 
-    public void update(String title, String content, String imgUrl, String status) {
+    public void update(String title, String content, String imgUrl) {
         this.title = title;
         this.content = content;
         this.imgUrl = imgUrl;
-        this.status = status;
     }
 }

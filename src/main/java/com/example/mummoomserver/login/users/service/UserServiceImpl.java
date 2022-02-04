@@ -83,7 +83,6 @@ public class UserServiceImpl implements UserService {
         if(userDetails instanceof UserDetails){ //인증된 유저여야함
             return userDetails.getNickName();
         }else{
-
             log.info("인증되지 않은 유저의 정보이므로 유저 닉네임을 불러올 수 없습니다.");
             return userDetails.toString();
         }
