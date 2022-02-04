@@ -23,8 +23,8 @@ public class PostService {
     private final UserRepository userRepository;
 
     @Transactional
-    public Long save(Long userIdx, PostSaveRequestDto requestDto) throws ResponeException {
-        User user = userRepository.findByUserIdx(userIdx)
+    public Long save(String userName, PostSaveRequestDto requestDto) throws ResponeException {
+        User user = userRepository.findByNickName(userName)
                 .orElseThrow(() -> new IllegalArgumentException("회원정보를 찾을 수 없습니다."));
         requestDto.setUserIdx(user);
         return postRepository.save(requestDto.toEntity()).getPostIdx();

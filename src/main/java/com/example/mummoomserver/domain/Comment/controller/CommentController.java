@@ -23,7 +23,7 @@ public class CommentController {
         }
     }
 
-    @DeleteMapping("/comment/{commentIdx}") // 왜 유저도 같이 지워지지
+    @DeleteMapping("/comment/{commentIdx}") // 왜 유저도 같이 지워지지 고쳣습니다
     public ResponseTemplate<String> commentDelete(@PathVariable Long commentIdx){
         try{
             commentService.delete(commentIdx);
