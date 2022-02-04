@@ -2,9 +2,8 @@ package com.example.mummoomserver.domain.Component.entity;
 
 import com.example.mummoomserver.config.BaseTimeEntity;
 import com.example.mummoomserver.domain.Ingredients.entity.Ingredients;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,20 +26,28 @@ public class Component extends BaseTimeEntity {
     List<Ingredients> ingredients = new ArrayList<>();
 
     @Column(nullable = false)
+    @ApiModelProperty(example = "단백질(g)")
     private float dan;
 
+    @ApiModelProperty(example = "탄수화물(g)")
     @Column(nullable = false)
     private float tan;
 
+    @ApiModelProperty(example = "지방(g)")
     @Column(nullable = false)
     private float gi;
 
+
+    @ApiModelProperty(example = "무기질(g)")
     @Column(nullable = false)
     private float mu;
 
+    @ApiModelProperty(example = "물(g)")
     @Column(nullable = false)
     private float water;
 
+
+    @ApiModelProperty(example = "재료의 효과(g)")
     @Column(columnDefinition = "TEXT")
     private String effect;
 

@@ -12,6 +12,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -20,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 public class SearchController {
 
-    private final UserServiceImpl userService;
+
     private final SearchService searchService;
     /**
      *
@@ -35,11 +36,10 @@ public class SearchController {
             return new ResponseTemplate<IngredientSearchResultDto>(result);
 
         }catch (ResponeException e){
-            return new ResponseTemplate<>(e.getStatus(), HttpStatus.BAD_REQUEST);
+            return new ResponseTemplate<>(e.getStatus());
         }
 
     }
-
 
 
 

@@ -19,7 +19,7 @@ public class CommentController {
             Long result = commentService.save(postIdx, userIdx, requestDto);
             return new ResponseTemplate<>(result);
         } catch (ResponeException e){
-            return new ResponseTemplate<>(e.getStatus(), HttpStatus.BAD_REQUEST);
+            return new ResponseTemplate<>(e.getStatus());
         }
     }
 
@@ -30,7 +30,7 @@ public class CommentController {
             String result = "댓글 삭제에 성공했습니다.";
             return new ResponseTemplate<>(result);
         } catch (ResponeException e){
-            return new ResponseTemplate<>(e.getStatus(), HttpStatus.BAD_REQUEST);
+            return new ResponseTemplate<>(e.getStatus());
         }
     }
 }

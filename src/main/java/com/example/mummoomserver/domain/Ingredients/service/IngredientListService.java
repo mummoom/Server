@@ -1,12 +1,11 @@
 package com.example.mummoomserver.domain.Ingredients.service;
-import com.example.mummoomserver.domain.Ingredients.dto.IngredientDto;
+
 import com.example.mummoomserver.domain.Ingredients.entity.Ingredients;
 import com.example.mummoomserver.domain.Ingredients.repository.IngredientRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
