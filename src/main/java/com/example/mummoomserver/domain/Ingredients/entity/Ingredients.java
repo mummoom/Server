@@ -15,13 +15,14 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor
 @Entity
-public class Ingredient extends BaseTimeEntity {
+@Table(name="Ingredients")
+public class Ingredients extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long ingredient_idx;
+    private Long ingredientsIdx;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="component_idx") // fk 이름 component_idx 로 설정됨
+    @JoinColumn(name="componentIdx") // fk 이름 component_idx 로 설정됨
     @JsonBackReference
     private Component component;
 
@@ -30,9 +31,9 @@ public class Ingredient extends BaseTimeEntity {
     @Column(nullable = false)
     private String category;
     @Column(nullable = false)
-    private String img_url;
-
-    private int kcal;
+    private String imgUrl;
+    @Column
+    private Integer kcal;
     @Column
     private String warning;
     @Column(nullable = false)
@@ -45,20 +46,20 @@ public class Ingredient extends BaseTimeEntity {
 
 
 
-
     @Builder
-    public Ingredient(String category, String name, String imgUrl, String warning, String spec, int score) {
+    public Ingredients(String category, String name, String imgUrl, String warning, String spec, int score, int kcal) {
         this.category = category;
         this.name = name;
-        this.img_url = imgUrl;
+        this.imgUrl = imgUrl;
         this.warning = warning;
         this.spec = spec;
         this.score = score;
+        this.kcal = kcal;
     }
 
-    public void update(String name, String imgUrl,String warning, String spec, int score) {
+    public void update(String name, String imgUrl,String warning, String spec, int score, int kcal) {
         this.name = name;
-        this.img_url = imgUrl;
+        this.imgUrl = imgUrl;
         this.warning = warning;
         this.spec = spec;
         this.score = score;
