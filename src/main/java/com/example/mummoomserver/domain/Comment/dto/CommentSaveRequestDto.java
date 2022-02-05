@@ -6,26 +6,22 @@ import com.example.mummoomserver.domain.Post.Post;
 import com.example.mummoomserver.login.users.User;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
+@NoArgsConstructor
 public class CommentSaveRequestDto {
-    private Post postIdx;
-    private User userIdx;
     private String content;
 
     @Builder
-    public CommentSaveRequestDto(Post postIdx, User userIdx, String content){
-        this.postIdx = postIdx;
-        this.userIdx = userIdx;
+    public CommentSaveRequestDto(String content){
         this.content = content;
     }
 
     public Comment toEntity(){
         return Comment.builder()
-                .userIdx(userIdx)
-                .postIdx(postIdx)
                 .content(content)
                 .build();
     }

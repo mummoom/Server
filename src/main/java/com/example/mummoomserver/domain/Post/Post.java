@@ -27,10 +27,10 @@ public class Post extends BaseTimeEntity { // extends BaseTimeEntity  basetimeen
     private String content;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "userIdx", referencedColumnName = "userIdx")
-    private User userIdx;
+    @JoinColumn(name = "userIdx")
+    private User user;
 
-    @OneToMany(mappedBy = "postIdx", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<Comment> comments = new ArrayList<>();
 
     @Column
@@ -41,10 +41,10 @@ public class Post extends BaseTimeEntity { // extends BaseTimeEntity  basetimeen
     private String status;
 
     @Builder
-    public Post(String title, String content, User userIdx, String imgUrl, String status) {
+    public Post(String title, String content, User user, String imgUrl, String status) {
         this.title = title;
         this.content = content;
-        this.userIdx = userIdx;
+        this.user = user;
         this.imgUrl = imgUrl;
         this.status = status;
     }
