@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ import java.util.List;
 
 @Getter
 @NoArgsConstructor
+@DynamicInsert
 @Table(name="Comment")
 @Entity
 // @Table(name="") 테이블 이름 명시
@@ -36,7 +38,6 @@ public class Comment extends BaseTimeEntity {
     private String content;
 
     @Column
-    @ColumnDefault("'active'")
     private String status;
 
     @OneToMany(mappedBy = "comment", cascade = CascadeType.ALL)
@@ -47,12 +48,6 @@ public class Comment extends BaseTimeEntity {
         this.post = post;
         this.user = user;
         this.content = content;
-        this.status = status;
-    }
-
-    public void update(String content, User user, String status){
-        this.content = content;
-        this.user = user;
         this.status = status;
     }
 }
