@@ -11,6 +11,7 @@ import javax.persistence.*;
 
 @Entity
 @Getter
+@Table(name="NestedComment")
 @NoArgsConstructor
 public class NestedComment extends BaseTimeEntity {
     @Id

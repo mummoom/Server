@@ -15,7 +15,7 @@ import java.util.List;
 
 @Getter
 @NoArgsConstructor
-@Table(name="comment")
+@Table(name="Comment")
 @Entity
 // @Table(name="") 테이블 이름 명시
 // fk 가져오기 방법 적용해보기
