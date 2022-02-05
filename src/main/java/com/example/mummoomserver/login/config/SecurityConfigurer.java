@@ -43,7 +43,8 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .csrf().ignoringAntMatchers("/h2-console/**").disable()
-                //.headers().frameOptions().disable()// csrf 토큰을 매번 받지 않아도 된다.
+                .headers().frameOptions().disable()// csrf 토큰을 매번 받지 않아도 된다.
+                .and()
                 .cors().disable()
                 .formLogin().disable() //폼 로그인 방식을 사용하지 않는다.
                 .logout().disable() // 로그아웃 uri를 사용하기 위한 설정 (점검 필요)

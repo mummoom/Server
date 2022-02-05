@@ -30,7 +30,6 @@ public class OAuth2Service implements OAuth2UserService<OAuth2UserRequest, OAuth
         OAuth2UserService delegate = new DefaultOAuth2UserService();
         OAuth2User oAuth2User = delegate.loadUser(userRequest);
 
-
         String registrationId = userRequest.getClientRegistration().getRegistrationId();
         String userNameAttributeName = userRequest.getClientRegistration().getProviderDetails()
                 .getUserInfoEndpoint().getUserNameAttributeName();
@@ -51,7 +50,4 @@ public class OAuth2Service implements OAuth2UserService<OAuth2UserRequest, OAuth
                 .orElse(attributes.toEntity());
         return userRepository.save(user);
     }
-
-
 }
-//kakaooauth2service google oauth2service

@@ -36,7 +36,7 @@ spring:
         console:
             enabled: true
     profiles:
-        include: real-db, oauth
+        include: real-db
 
     # 여기서부터 로그인 부분
     servlet:
@@ -50,10 +50,8 @@ spring:
             client:
                 registration:
                     google:
-                        client-id: 658312263287-vnme95dn8nc59k16pqod0ro99a6mfld1.apps.googleusercontent.com
-                        client-secret: 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
-#                        authorization-grant-type: authorization_code
-#                        redirect-uri: http://localhost:8080/login/oauth2/code/google
+                        client-id: 658312263287-danrtjun8da6im0r5rudcsg6e6au5kok.apps.googleusercontent.com
+                        client-secret: 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
                         scope: profile, email
 
                     kakao:
@@ -66,11 +64,6 @@ spring:
                         client-authentication-method: POST
 
                 provider:
-                    google:
-                        authorization-uri: https://accounts.google.com/o/oauth2/auth
-                        token-uri: https://www.googleapis.com/oauth2/v4/token
-                        user-info-uri: https://www.googleapis.com/oauth2/v2/userinfo
-                        unlink-uri: https://accounts.google.com/o/oauth2/revoke
                     kakao:
                         authorization_uri: https://kauth.kakao.com/oauth/authorize
                         token_uri: https://kauth.kakao.com/oauth/token

@@ -30,7 +30,7 @@ public class OAuthAttributes {
         if("kakao".equals(registrationId)){
             return ofKakao("id", attributes);
         } else{
-        return ofGoogle("sub", attributes);
+        return ofGoogle(userNameAttributeName, attributes);
         }
     }
 
