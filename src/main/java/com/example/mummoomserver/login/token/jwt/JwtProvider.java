@@ -1,4 +1,4 @@
-package com.example.mummoomserver.login.jwt;
+package com.example.mummoomserver.login.token.jwt;
 
 
 import com.example.mummoomserver.login.users.Role;
@@ -42,9 +42,9 @@ public class JwtProvider {
     }
 
     // JWT 토큰 생성
-    public String createToken(String userName, Role role) {
-        log.info("jwt token 생성 userName {}",userName);
-        Claims claims = Jwts.claims().setSubject(userName); // JWT payload 에 저장되는 정보단위
+    public String createToken(String email, Role role) {
+        log.info("jwt token 생성 email {}",email);
+        Claims claims = Jwts.claims().setSubject(email); // JWT payload 에 저장되는 정보단위
         claims.put("role", role.getKey()); // 정보는 key / value 쌍으로 저장된다.
         Date now = new Date();
         return Jwts.builder()

@@ -1,8 +1,15 @@
 package com.example.mummoomserver.domain.Post.service;
 
 import com.example.mummoomserver.config.resTemplate.ResponeException;
+import com.example.mummoomserver.domain.Comment.Comment;
+import com.example.mummoomserver.domain.Comment.CommentRepository;
+import com.example.mummoomserver.domain.Comment.dto.CommentResponseDto;
+import com.example.mummoomserver.domain.NestedComment.NestedComment;
+import com.example.mummoomserver.domain.NestedComment.NestedCommentRepository;
+import com.example.mummoomserver.domain.NestedComment.dto.NestedCommentResponseDto;
 import com.example.mummoomserver.domain.Post.Post;
 import com.example.mummoomserver.domain.Post.PostRepository;
+import com.example.mummoomserver.domain.Post.dto.PostIdxResponseDto;
 import com.example.mummoomserver.domain.Post.dto.PostResponseDto;
 import com.example.mummoomserver.domain.Post.dto.PostSaveRequestDto;
 import com.example.mummoomserver.domain.Post.dto.PostUpdateRequestDto;
@@ -21,26 +28,54 @@ import java.util.List;
 public class PostService {
     private final PostRepository postRepository;
     private final UserRepository userRepository;
+    private final CommentRepository commentRepository;
+    private final NestedCommentRepository nestedCommentRepository;
 
-    @Transactional
-    public Long save(Long userIdx, PostSaveRequestDto requestDto) throws ResponeException {
-        User user = userRepository.findByUserIdx(userIdx)
+    public Long save(String email, PostSaveRequestDto requestDto) throws ResponeException {
+        User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalArgumentException("회원정보를 찾을 수 없습니다."));
-        requestDto.setUserIdx(user);
-        return postRepository.save(requestDto.toEntity()).getPostIdx();
+        Post post = Post.builder()
+                .title(requestDto.getTitle())
+                .user(user)
+                .content(requestDto.getContent())
+                .imgUrl(requestDto.getImgUrl())
+                .build();
+
+        return postRepository.save(post).getPostIdx();
     }
 
-    @Transactional
-    public Long update(Long postIdx, PostUpdateRequestDto requestDto) throws ResponeException {
+    public Long update(Long postIdx, String email, PostUpdateRequestDto requestDto) throws ResponeException {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("회원정보를 찾을 수 없습니다."));
         Post post = postRepository.findById(postIdx)
                 .orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다. postIdx=" + postIdx));
-        post.update(requestDto.getTitle(), requestDto.getContent(), requestDto.getImgUrl(), requestDto.getStatus());
+        if(post.getUser().getUserIdx() != user.getUserIdx())
+            throw new IllegalArgumentException("글 작성자만 수정할 수 있습니다.");
+        post.update(requestDto.getTitle(), requestDto.getContent(), requestDto.getImgUrl());
         return postIdx;
     }
-    public PostResponseDto findByPostIdx(Long postIdx) throws ResponeException {
-        Post entity = postRepository.findById(postIdx)
-                .orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다. postIdx="+ postIdx));
-        return new PostResponseDto(entity);
+
+    public PostIdxResponseDto findByPostIdx(Long postIdx) throws ResponeException {
+        Post post = postRepository.findByPostIdx(postIdx)
+                .orElseThrow(() -> new IllegalArgumentException("없는 게시글 입니다."));
+        List<Comment> comments = commentRepository.findAllByPost_postIdx(post.getPostIdx());
+        PostIdxResponseDto postResIdxDto = new PostIdxResponseDto(post);
+        List<CommentResponseDto> commentResponseDtos = new ArrayList<>();
+
+        for (int i = 0; i<comments.size(); i++){
+            CommentResponseDto comment = new CommentResponseDto(comments.get(i));
+            commentResponseDtos.add(comment);
+            List<NestedComment> nestedComments = nestedCommentRepository.findAllByComment_commentIdx(comments.get(i).getCommentIdx());
+            List<NestedCommentResponseDto> nestedCommentResponseDtos = new ArrayList<>();
+            for (int j =0; j<nestedComments.size();j++){
+                NestedCommentResponseDto nestedCommentResponseDto = new NestedCommentResponseDto(nestedComments.get(j));
+                nestedCommentResponseDtos.add(nestedCommentResponseDto);
+            }
+            comment.setNestedComments(nestedCommentResponseDtos);
+        }
+        postResIdxDto.setComments(commentResponseDtos);
+
+        return postResIdxDto;
     }
 
     public List<PostResponseDto> getPosts() throws ResponeException {
@@ -53,7 +88,13 @@ public class PostService {
         return postResDtos;
     }
 
-    public void delete(Long postIdx) throws ResponeException {
+    public void delete(String email, Long postIdx) throws ResponeException {
+        User user = userRepository.findByEmail(email)
+                        .orElseThrow(() -> new IllegalStateException("회원정보를 찾을 수 없습니다."));
+        Post post = postRepository.findByPostIdx(postIdx)
+                        .orElseThrow(() -> new IllegalArgumentException("게시글을 찾을 수 없습니다."));
+        if(post.getUser().getUserIdx() != user.getUserIdx())
+            throw new IllegalArgumentException("글 작성자만 삭제할 수 있습니다.");
         postRepository.deleteByPostIdx(postIdx)
                 .orElseThrow(() -> new IllegalArgumentException("게시글을 찾을 수 없습니다. postIdx="+postIdx));
     }

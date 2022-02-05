@@ -2,10 +2,8 @@ package com.example.mummoomserver.domain.Ingredients.service;
 
 import com.example.mummoomserver.config.resTemplate.ResponeException;
 
-import com.example.mummoomserver.domain.Component.repository.ComponentRepository;
-import com.example.mummoomserver.domain.Ingredients.dto.IngredientDto;
 import com.example.mummoomserver.domain.Ingredients.dto.IngredientSearchResultDto;
-import com.example.mummoomserver.domain.Ingredients.entity.Ingredient;
+import com.example.mummoomserver.domain.Ingredients.entity.Ingredients;
 import com.example.mummoomserver.domain.Ingredients.repository.IngredientRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,7 +24,7 @@ public class SearchService {
     public IngredientSearchResultDto getSearchResult(String name) throws ResponeException {
 
         try{
-            Optional<Ingredient> ret = ingredientRepository.findIngredientByName(name);
+            Optional<Ingredients> ret = ingredientRepository.findIngredientByName(name);
             return new IngredientSearchResultDto(ret.orElse(null));
 
         }catch (Exception e){

@@ -66,10 +66,3 @@ public class OAuthAttributes {
 
 
 }
-
-// 이전파일
-//    defaultoauth2userinfo
-//    googleoauth2userinfo
-//    kakaooauth2userinfo
-//    oauth2userinfo
-// id라고 불리는, 닉네임, 이메일 받아옴

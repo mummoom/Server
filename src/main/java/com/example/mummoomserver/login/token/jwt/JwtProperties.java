@@ -1,4 +1,4 @@
-package com.example.mummoomserver.login.jwt;
+package com.example.mummoomserver.login.token.jwt;
 
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.Getter;
