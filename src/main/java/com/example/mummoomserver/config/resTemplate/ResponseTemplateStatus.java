@@ -36,10 +36,20 @@ public enum ResponseTemplateStatus {
     /**
      * 4000 : 식재료 요청 관련 오류
      */
-    INVALID_PARAM(false,"잘못된 PathVariable Parameter입니다,",4000);
+    INVALID_PARAM(false,"잘못된 PathVariable Parameter입니다,",4000),
 
 
 
+    /**
+     * 6000 : 강아지 정보 요청 관련 오류
+     */
+    EMPTY_DOG_NAME(false, "강아지 이름을 입력해주세요.", 6000),
+    EMPTY_DOG_BIRTH(false, "강아지 성별을 입력해주세요.", 6001),
+    EMPTY_DOG_TYPE(false, "강아지 종을 입력해주세요.", 6002),
+    EMPTY_DOG_SEX(false, "강아지 성별을 입력해주세요.", 6003),
+    EMPTY_DOG_SURGERY(false, "강아지 중성화 수술 정보를 입력해주세요.", 6004),
+    INVALID_DOG_INDEX(false, "존재하지 않는 강아지 Index입니다.", 6005),
+    INVALID_DOG_USER(false, "유효하지 않은 유저입니다.", 6006);
 
 
 
