@@ -35,7 +35,7 @@ public class User extends BaseTimeEntity {
     @Column(nullable = false, length = 20)
     private String nickName;
 
-    @Column()
+    @Column(nullable = false)
     private String imgUrl;
 
     @Enumerated(value = EnumType.STRING)  // 일반 로그인인지 소셜 로그인인지 확인하는 컬럼

@@ -30,6 +30,7 @@ public class OAuth2Service implements OAuth2UserService<OAuth2UserRequest, OAuth
         OAuth2UserService delegate = new DefaultOAuth2UserService();
         OAuth2User oAuth2User = delegate.loadUser(userRequest);
 
+
         String registrationId = userRequest.getClientRegistration().getRegistrationId();
         String userNameAttributeName = userRequest.getClientRegistration().getProviderDetails()
                 .getUserInfoEndpoint().getUserNameAttributeName();
@@ -46,7 +47,7 @@ public class OAuth2Service implements OAuth2UserService<OAuth2UserRequest, OAuth
 
     private User saveOrUpdate(OAuthAttributes attributes) {
         User user = userRepository.findByEmail(attributes.getEmail())
-                .map(entity -> entity.update(attributes.getNickName(),attributes.getEmail(), attributes.getImgUrl()))
+                .map(entity -> entity.update(attributes.getName(),attributes.getEmail(), attributes.getPicture()))
                 .orElse(attributes.toEntity());
         return userRepository.save(user);
     }

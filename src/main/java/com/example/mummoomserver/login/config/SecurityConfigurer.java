@@ -1,5 +1,6 @@
 package com.example.mummoomserver.login.config;
 
+import com.example.mummoomserver.login.service.OAuth2Service;
 import com.example.mummoomserver.login.token.jwt.filter.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true) // 특정 주소 접근시 권한 및 인증을 위한 어노테이션 활성화
 public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
 
-
+    private final OAuth2Service oAuth2Service;
     /**
      * 현석 - 해당 userDetailService를 이용할 필요가 없어서 주석 처리함
      */
@@ -40,7 +41,7 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.headers().frameOptions().disable();
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-            .and()
+                .and()
                 .csrf().ignoringAntMatchers("/h2-console/**").disable()
                 //.headers().frameOptions().disable()// csrf 토큰을 매번 받지 않아도 된다.
                 .cors().disable()
@@ -56,7 +57,8 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.PUT, "/**").permitAll()
                 .antMatchers(HttpMethod.DELETE, "/**").permitAll()
                 .antMatchers(HttpMethod.POST, "/**").permitAll()
-//                .antMatchers("/oauth2/**").permitAll()
+                .antMatchers("/login/oauth2/code/google").permitAll()
+                .antMatchers("/login/oauth2/code/kakao").permitAll()
                 .antMatchers(
                         "/v2/api-docs",
                         "/swagger-resources/**",
@@ -64,9 +66,12 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
                         /*Probably not needed*/ "/swagger.json").permitAll()
                 .anyRequest().authenticated() // 그 이외에는 인증된 사용자만 접근 가능하다
                 .and()
-                .exceptionHandling()
-                .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)
-                );
+                .logout()
+                .logoutSuccessUrl("/")
+                .and()
+                .oauth2Login()
+                .userInfoEndpoint()
+                .userService(oAuth2Service);
         //로그인 인증을 진행하는 필터 이전에 jwtAuthenticationFilter 가 실행되도록 설정
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
     }
