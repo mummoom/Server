@@ -36,16 +36,14 @@ public class LikecntService {
         Post post =  postRepository.findById(postIdx).get();
         User user = userRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new IllegalArgumentException("회원정보를 찾을 수 없습니다."));
-        Likecnt likecnt = Likecnt.builder().postIdx(post).userIdx(user).build();
+        Likecnt likecntIdx = likecntRepository.findByUser_IdxAndPost_Idx(user.getUserIdx(),post.getPostIdx()).get();
 
-        likecntRepository.delete(likecnt);
-    }
+//               .orElseThrow(() -> new IllegalArgumentException("게시글을 찾을 수 없습니다."));
+//
+//        Likecnt likecnt1 = likecntRepository.findLikecntByPost(postIdx)
+//                .orElseThrow(() -> new IllegalArgumentException("게시글을 찾을 수 없습니다."));
 
-
-    public LikecntDto findByIdx(Long likecntIdx) {
-        Likecnt entity = likecntRepository.findById(likecntIdx)
-                .orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다. postIdx="+ likecntIdx));
-        return new LikecntDto(entity);
+        likecntRepository.delete(likecntIdx);
     }
 
 }

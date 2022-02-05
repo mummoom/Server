@@ -1,5 +1,6 @@
 package com.example.mummoomserver.domain.Likecnt.entity;
 
+import com.example.mummoomserver.config.BaseTimeEntity;
 import com.example.mummoomserver.domain.Post.Post;
 import com.example.mummoomserver.login.users.User;
 import io.swagger.annotations.ApiModelProperty;
@@ -15,7 +16,7 @@ import javax.persistence.*;
 @Entity
 @NoArgsConstructor
 @DynamicInsert
-public class Likecnt {
+public class Likecnt extends BaseTimeEntity {
 
     @ApiModelProperty(example = "좋아하는 게시글 목록 Idx")
     @Id
@@ -37,8 +38,9 @@ public class Likecnt {
     private String status;
 
     @Builder
-    public Likecnt( User userIdx,Post postIdx) {
+    public Likecnt( User userIdx,Post postIdx,String status) {
         this.userIdx = userIdx;
         this.postIdx = postIdx;
+        this.status = status;
     }
 }
