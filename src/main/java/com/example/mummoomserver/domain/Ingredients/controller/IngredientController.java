@@ -58,7 +58,7 @@ public class IngredientController {
     @ApiImplicitParam(name ="level", value="0 ,1 , 2 중 하나의 값이 level이 된다", required = true)
     @ApiResponses({
             @ApiResponse(code = 200, message = "요청 성공 "),
-            @ApiResponse(code = 4000, message = "잘못된 파라미터 값입니다 0~2까지의 파라미터만 받을 수 있습니다")
+            @ApiResponse(code = 4001, message = "잘못된 파라미터 값입니다 0~2까지의 파라미터만 받을 수 있습니다")
     })
     public ResponseTemplate<List<Ingredients>> getSimpleIngredientX(@PathVariable(name="level") int level) throws ResponeException {
 
