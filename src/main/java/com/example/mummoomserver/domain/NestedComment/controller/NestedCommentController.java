@@ -29,7 +29,7 @@ public class NestedCommentController {
             Long result = nestedCommentService.save(email, commentIdx, requestDto);
             return new ResponseTemplate<>(result);
         } catch (ResponeException e){
-            return new ResponseTemplate<>(e.getStatus(), HttpStatus.BAD_REQUEST);
+            return new ResponseTemplate<>(e.getStatus());
         }
     }
 
@@ -42,7 +42,7 @@ public class NestedCommentController {
             String result = "대댓글 삭제에 성공했습니다.";
             return new ResponseTemplate<>(result);
         } catch (ResponeException e){
-            return new ResponseTemplate<>(e.getStatus(), HttpStatus.BAD_REQUEST);
+            return new ResponseTemplate<>(e.getStatus());
         }
     }
 }
