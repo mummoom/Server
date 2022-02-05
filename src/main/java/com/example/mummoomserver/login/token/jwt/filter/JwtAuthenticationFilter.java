@@ -37,6 +37,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             SecurityContextHolder.getContext().setAuthentication(authentication);
             log.info("토큰 유효하다");
         }
+
+
         filterChain.doFilter(request, response);
     }
 
@@ -45,7 +47,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
         Collection<String> excludeUrlPatterns = new LinkedHashSet<>();
         excludeUrlPatterns.add("/login/**");
-        excludeUrlPatterns.add("/join/**");
+        excludeUrlPatterns.add("/signup/**");
 
         return excludeUrlPatterns.stream()
                 .anyMatch(pattern -> new AntPathMatcher().match(pattern, request.getServletPath()));

@@ -37,7 +37,7 @@ public enum ResponseTemplateStatus {
      * 4000 : 식재료 요청 관련 오류
      */
     INVALID_PARAM(false,"잘못된 PathVariable Parameter입니다,",4000),
-
+    NO_SEARCH_RESULT(false,"해당 재료의 검색 결과가 없습니다",4001),
 
 
     /**
