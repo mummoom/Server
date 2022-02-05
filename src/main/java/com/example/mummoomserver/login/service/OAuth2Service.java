@@ -46,11 +46,8 @@ public class OAuth2Service implements OAuth2UserService<OAuth2UserRequest, OAuth
 
     private User saveOrUpdate(OAuthAttributes attributes) {
         User user = userRepository.findByEmail(attributes.getEmail())
-                .map(entity -> entity.update(attributes.getNickName(),attributes.getEmail(), attributes.getImgUrl()))
+                .map(entity -> entity.update(attributes.getName(),attributes.getEmail(), attributes.getPicture()))
                 .orElse(attributes.toEntity());
         return userRepository.save(user);
     }
-
-
 }
-//kakaooauth2service google oauth2service

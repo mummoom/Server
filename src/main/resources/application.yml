@@ -2,11 +2,11 @@ spring:
 
 # datasource 주석처리하기
 
-#    datasource:
-#        driver-class-name: org.h2.Driver
-#        url: jdbc:h2:~/mummoom;DB_CLOSE_ON_EXIT=FALSE
-#        username: sa
-#        password:
+    datasource:
+        driver-class-name: org.h2.Driver
+        url: jdbc:h2:~/mummoom;DB_CLOSE_ON_EXIT=FALSE
+        username: sa
+        password:
 
 #    datasource:
 #        driver-class-name: org.h2.Driver
@@ -50,32 +50,25 @@ spring:
             client:
                 registration:
                     google:
-                        client-id: 658312263287-vnme95dn8nc59k16pqod0ro99a6mfld1.apps.googleusercontent.com
-                        client-secret: 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
-                        authorization-grant-type: authorization_code
-                        redirect-uri: http://localhost:8080/login/oauth2/code/google
-                        scope:
-                            - profile
-                            - email
+                        client-id: 658312263287-danrtjun8da6im0r5rudcsg6e6au5kok.apps.googleusercontent.com
+                        client-secret: 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
+                        scope: profile, email
+
                     kakao:
                         client-id: 805bbf422b921a63ed8df325ed13428b
                         client-secret: KMbqaAreZ6U2sZkOr5Q0qOPGrUyRQyHG
                         authorization-grant-type: authorization_code
                         redirect-uri: http://localhost:8080/login/oauth2/code/kakao
-                        scope:
-                            - profile
-                            - account_email
+                        scope: profile_nickname, profile_image, account_email
+                        client-name: kakao
+                        client-authentication-method: POST
+
                 provider:
-                    google:
-                        authorization-uri: https://accounts.google.com/o/oauth2/auth
-                        token-uri: https://www.googleapis.com/oauth2/v4/token
-                        user-info-uri: https://www.googleapis.com/oauth2/v2/userinfo
-                        unlink-uri: https://accounts.google.com/o/oauth2/revoke
                     kakao:
-                        authorization-uri: https://kauth.kakao.com/oauth/authorize
-                        token-uri: https://kauth.kakao.com/oauth/token
+                        authorization_uri: https://kauth.kakao.com/oauth/authorize
+                        token_uri: https://kauth.kakao.com/oauth/token
                         user-info-uri: https://kapi.kakao.com/v2/user/me
-                        unlink-uri: https://kapi.kakao.com/v1/user/unlink
+                        user_name_attribute: id
 jwt:
     secretKey: " sakdjfokwktgjroiygjmdflkgbgjjiflergjlzkng"
     signatureAlgorithm: HS256
