@@ -6,12 +6,15 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
 @Getter
 @NoArgsConstructor
+@DynamicInsert
 @Table(name="Post")
 @Entity
 public class Post extends BaseTimeEntity { // extends BaseTimeEntity  basetimeentity 클래스를 Post 가 상속받는다.
@@ -37,7 +40,6 @@ public class Post extends BaseTimeEntity { // extends BaseTimeEntity  basetimeen
     private String imgUrl;
 
     @Column
-    @ColumnDefault("'active'")
     private String status;
 
     @Builder
