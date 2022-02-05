@@ -20,7 +20,7 @@ public class Likecnt {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long likecntIdx;
 
-    @ApiModelProperty(example = "UserIdx 불러옴")
+    @ApiModelProperty(example = "유저 Idx 불러옴")
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "userIdx", referencedColumnName = "userIdx")
     private User userIdx;
