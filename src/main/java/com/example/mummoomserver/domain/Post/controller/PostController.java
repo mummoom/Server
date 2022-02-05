@@ -21,7 +21,7 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-public class PostApiController {
+public class PostController {
     private final PostService postService;
     private final UserService userService;
 
