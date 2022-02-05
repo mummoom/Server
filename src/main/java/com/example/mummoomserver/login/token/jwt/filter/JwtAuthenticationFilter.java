@@ -1,5 +1,6 @@
 package com.example.mummoomserver.login.token.jwt.filter;
 
+import com.example.mummoomserver.config.resTemplate.ResponeException;
 import com.example.mummoomserver.login.token.jwt.JwtProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +17,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.LinkedHashSet;
+
+import static com.example.mummoomserver.config.resTemplate.ResponseTemplateStatus.*;
 
 @Component
 @Slf4j
@@ -37,6 +40,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             SecurityContextHolder.getContext().setAuthentication(authentication);
             log.info("토큰 유효하다");
         }
+
         filterChain.doFilter(request, response);
     }
 

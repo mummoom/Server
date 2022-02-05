@@ -16,11 +16,6 @@ public interface UserService {
 
     String getAuthUserNickname();
 
-    String getAuthUserEmail() throws ResponeException;
-
-
-
-
-
+    String getAuthUserEmail();
 
 }
