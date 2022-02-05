@@ -12,7 +12,7 @@ import java.util.List;
 
 @Getter
 @NoArgsConstructor
-@Table(name="post")
+@Table(name="Post")
 @Entity
 public class Post extends BaseTimeEntity { // extends BaseTimeEntity  basetimeentity 클래스를 Post 가 상속받는다.
 
