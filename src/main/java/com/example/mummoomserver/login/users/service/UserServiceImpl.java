@@ -58,7 +58,7 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    public void updateProfile(String email, UpdateProfileRequest updateProfileRequest) throw ResponeException {
+    public void updateProfile(String email, UpdateProfileRequest updateProfileRequest) throws ResponeException {
 
         User user = userRepository.findByEmail(email).get();
         // 이미지가 변경되었는지 체크
