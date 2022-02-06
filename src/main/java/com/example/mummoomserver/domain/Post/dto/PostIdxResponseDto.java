@@ -39,6 +39,9 @@ public class PostIdxResponseDto {
     @ApiModelProperty(example = "글에 달린 댓글 리스트")
     private List<CommentResponseDto> comments;
 
+    @ApiModelProperty(example = "좋아요 개수")
+    private String likecnt;
+
     @ApiModelProperty(example = "글 작성 시간")
     private LocalDateTime createdAt;
 
