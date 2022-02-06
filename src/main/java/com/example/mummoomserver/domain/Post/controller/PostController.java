@@ -2,6 +2,7 @@ package com.example.mummoomserver.domain.Post.controller;
 
 import com.example.mummoomserver.config.resTemplate.ResponeException;
 import com.example.mummoomserver.config.resTemplate.ResponseTemplate;
+import com.example.mummoomserver.domain.Post.Post;
 import com.example.mummoomserver.domain.Post.dto.PostIdxResponseDto;
 import com.example.mummoomserver.domain.Post.dto.PostResponseDto;
 import com.example.mummoomserver.domain.Post.dto.PostSaveRequestDto;
@@ -81,6 +82,28 @@ public class PostController {
             String result = "게시글 삭제에 성공했습니다.";
             return new ResponseTemplate<>(result);
         } catch(ResponeException e){
+            return new ResponseTemplate<>(e.getStatus());
+        }
+    }
+
+    @ApiOperation(value="내가 쓴 게시글 조회", notes="내가 쓴 게시글을 조회합니다. JWT 토큰 입력 필수!")
+    @GetMapping("/post/findMypost")
+    public ResponseTemplate<List<PostResponseDto>> findMyPost(){
+        try{
+            String email = userService.getAuthUserEmail();
+            return new ResponseTemplate<>(postService.findMyPost(email));
+        }catch(ResponeException e){
+            return new ResponseTemplate<>(e.getStatus());
+        }
+    }
+
+    @ApiOperation(value="좋아요한 게시글 조회", notes="좋아요한 게시글을 조회합니다. JWT 토큰 입력 필수!")
+    @GetMapping("/post/findMyLikes")
+    public ResponseTemplate<List<PostResponseDto>> findMyLikes(){
+        try{
+            String email = userService.getAuthUserEmail();
+            return new ResponseTemplate<>(postService.findMyLikes(email));
+        }catch(ResponeException e){
             return new ResponseTemplate<>(e.getStatus());
         }
     }

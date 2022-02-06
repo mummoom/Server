@@ -11,4 +11,6 @@ public interface LikecntRepository extends JpaRepository<Likecnt,Long> {
     boolean existsByUser_userIdxAndPost_postIdx(long userIdx, long postIdx);
 
     void deleteByUser_userIdxAndPost_postIdx(long userIdx, long postIdx);
+
+    int countByPost_postIdx(long postIdx);
 }
