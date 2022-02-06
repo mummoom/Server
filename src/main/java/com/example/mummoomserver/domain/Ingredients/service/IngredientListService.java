@@ -26,7 +26,7 @@ public class IngredientListService {
         if(level == 1){ //세모
                 ret = ingredientRepository.findIngredientByScoreBetween(2,4);
         }
-        else if(level == 5){ //동그라미
+        else if(level == 2){ //동그라미
                 ret = ingredientRepository.findIngredientByScore(5);
         }
         else { //엑스

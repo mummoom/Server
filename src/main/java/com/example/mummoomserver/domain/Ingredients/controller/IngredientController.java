@@ -73,10 +73,4 @@ public class IngredientController {
     }
 
 
-
-    @GetMapping("/api/test")
-    public String testing(){
-
-        return "testing!!";
-    }
 }

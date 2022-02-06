@@ -2,9 +2,7 @@ package com.example.mummoomserver.domain.Ingredients.entity;
 
 import com.example.mummoomserver.config.BaseTimeEntity;
 import com.example.mummoomserver.domain.Component.entity.Component;
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.*;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,14 +16,15 @@ import javax.persistence.*;
 @Entity
 
 @Table(name="Ingredients")
+@JsonPropertyOrder({"ingredientsIdx","name","category","imgUrl","kcal","warning","spec","score"})
 public class Ingredients extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long ingredientsIdx;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name="componentIdx") // fk 이름 component_idx 로 설정됨
-    @JsonBackReference
+    @JsonManagedReference
     @ApiModelProperty(example = "성분")
     private Component component;
 
