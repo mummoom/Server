@@ -23,4 +23,5 @@ public interface IngredientRepository extends JpaRepository<Ingredients,Long> {
 
 
 
+
 }
