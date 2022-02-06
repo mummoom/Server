@@ -1,5 +1,6 @@
 package com.example.mummoomserver.domain.Post;
 import com.example.mummoomserver.domain.Comment.Comment;
+import com.example.mummoomserver.domain.Likecnt.entity.Likecnt;
 import com.example.mummoomserver.login.users.User;
 import com.example.mummoomserver.config.BaseTimeEntity;
 import lombok.Builder;
@@ -41,6 +42,9 @@ public class Post extends BaseTimeEntity { // extends BaseTimeEntity  basetimeen
 
     @Column
     private String status;
+
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    private List<Likecnt> likecnts = new ArrayList<>();
 
     @Builder
     public Post(String title, String content, User user, String imgUrl, String status) {

@@ -3,6 +3,8 @@ package com.example.mummoomserver.login.users;
 
 import com.example.mummoomserver.config.BaseTimeEntity;
 import com.example.mummoomserver.domain.Comment.Comment;
+import com.example.mummoomserver.domain.Dog.entity.Dog;
+import com.example.mummoomserver.domain.Likecnt.entity.Likecnt;
 import com.example.mummoomserver.domain.Post.Post;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -46,10 +48,16 @@ public class User extends BaseTimeEntity {
     private Role role;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Dog> dogs = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Post> posts = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Comment> comments = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Likecnt> likecnts = new ArrayList<>();
 
     @Builder
     public User(String nickName, String email, String password, String imgUrl, UserType type, Role role) {
