@@ -50,10 +50,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             log.info("토큰 유효하지 않음");
 
 
-
         }
-
-
 
         filterChain.doFilter(request, response);
     }
@@ -62,8 +59,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
         Collection<String> excludeUrlPatterns = new LinkedHashSet<>();
-        excludeUrlPatterns.add("/login/**");
-        excludeUrlPatterns.add("/signup/**");
+        excludeUrlPatterns.add("/api/users/login/**");
+        excludeUrlPatterns.add("/api/users/signup/**");
 
         return excludeUrlPatterns.stream()
                 .anyMatch(pattern -> new AntPathMatcher().match(pattern, request.getServletPath()));
