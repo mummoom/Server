@@ -18,7 +18,6 @@ public class UserDetailsImpl implements UserDetails {
     private Long userIdx;
     private String nickName;
     private String email;
-    private String username;
     private String password;
     private String imgUrl;
     private UserType type;
@@ -28,13 +27,13 @@ public class UserDetailsImpl implements UserDetails {
 
     @Builder
     public UserDetailsImpl(Long userIdx, String nickName, String email,  String password,String imgUrl, UserType type,Role role, Collection<? extends GrantedAuthority> authorities) {
-        this.userIdx = userIdx;
+//        this.userIdx = userIdx;
         this.nickName = nickName;
         this.email = email;
-        this.password = password;
+//        this.password = password;
         this.imgUrl = imgUrl;
-        this.type = type;
-        this.role = role;
+//        this.type = type;
+//        this.role = role;
         this.authorities = authorities;
     }
 

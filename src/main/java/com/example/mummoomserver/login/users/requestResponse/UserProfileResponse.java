@@ -12,14 +12,14 @@ public class UserProfileResponse {
     private Long userIdx;
     private String nickName;
     private String email;
-    private Role role;
+    private String imgUrl;
 
     @Builder
-    public UserProfileResponse(Long userIdx, String nickName, String email, Role role) {
+    public UserProfileResponse(Long userIdx, String nickName, String email, String imgUrl) {
         this.userIdx = userIdx;
         this.nickName = nickName;
         this.email = email;
-        this.role = role;
+        this.imgUrl = imgUrl;
 
     }
 }
