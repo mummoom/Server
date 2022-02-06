@@ -69,6 +69,11 @@ public class User extends BaseTimeEntity {
         this.email = email;
     }
 
+    public void updateImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
+    }
+
+
     public User update(String nickName, String email, String imgUrl) {  //update email, update eimgurl, update nickname
         this.nickName = nickName;
         //일반 계정이라면 이메일도 함께 변경해준다.

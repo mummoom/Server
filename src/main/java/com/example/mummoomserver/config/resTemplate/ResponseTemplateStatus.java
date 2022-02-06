@@ -49,8 +49,14 @@ public enum ResponseTemplateStatus {
     EMPTY_DOG_SEX(false, "강아지 성별을 입력해주세요.", 6003),
     EMPTY_DOG_SURGERY(false, "강아지 중성화 수술 정보를 입력해주세요.", 6004),
     INVALID_DOG_INDEX(false, "존재하지 않는 강아지 Index입니다.", 6005),
+
     INVALID_DOG_USER(false, "유효하지 않은 유저입니다.", 6006);
 
+    /**
+     * 7000 : 유저 정보 요청 관련 오류
+     */
+//    EMPTY_PASSWORD(false, "비밀번호를 조건에 맞춰 정확히 입력해주세요", 7000),
+//    EMPTY_NICKNAME(false, "중복된 닉네임입니다. ", 7001);
 
 
 

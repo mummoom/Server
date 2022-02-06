@@ -12,7 +12,7 @@ import javax.validation.constraints.*;
 @JsonInclude(JsonInclude.Include.NON_NULL) //null 이면 생성되지 않음
 public class SignUpRequest {
 
-    @Size(min = 5, max = 20, message = "이름이 입력되지 않았거나 너무 긴 이름입니다.")
+    @Size(min = 1, max = 20, message = "이름이 입력되지 않았거나 너무 긴 이름입니다.")
     private String nickName;
 
     @NotBlank(message = "이메일을 입력해주세요.")

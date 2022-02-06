@@ -3,6 +3,7 @@ package com.example.mummoomserver.login.users.service;
 import com.example.mummoomserver.config.resTemplate.ResponeException;
 import com.example.mummoomserver.login.service.UserDetailsImpl;
 import com.example.mummoomserver.login.users.*;
+import com.example.mummoomserver.login.users.dto.UserDto;
 import com.example.mummoomserver.login.users.requestResponse.SignUpRequest;
 import com.example.mummoomserver.login.users.requestResponse.UpdateProfileRequest;
 import com.example.mummoomserver.login.validation.SimpleFieldError;
@@ -13,9 +14,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.Assert;
-
-import java.util.Optional;
 
 import static com.example.mummoomserver.config.resTemplate.ResponseTemplateStatus.*;
 
@@ -42,7 +40,6 @@ public class UserServiceImpl implements UserService {
                 .nickName(signUpRequest.getNickName())
                 .email(signUpRequest.getEmail())
                 .password(passwordEncoder.encode(signUpRequest.getPassword()))
-                .imgUrl(signUpRequest.getImgUrl())
                 .type(UserType.DEFAULT)
                 .role(Role.GUEST)
                 .build();
@@ -50,21 +47,36 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
     }
 
-
     @Override
-    public void updateProfile(String nickName, UpdateProfileRequest updateProfileRequest){
+    public UserDto getUserProfile(String email) throws ResponeException {
+        //이메일을 입력받으면 정보를 내어주는 로직을 짜야함
+        User user = userRepository.findByEmail(email).get();
+        try {
+            return new UserDto(user.getEmail(), user.getNickName(), user.getImgUrl(), user.getPassword());
+        } catch (Exception e) {
+            throw new ResponeException(DATABASE_ERROR);
+        }
+    }
 
-        User user = userRepository.findByNickName(nickName).get();
+    public void updateProfile(String email, UpdateProfileRequest updateProfileRequest){
+
+        User user = userRepository.findByEmail(email).get();
+        // 이미지가 변경되었는지 체크
+        if (!user.getImgUrl().equals(updateProfileRequest.getImgUrl()))
+            user.updateImgUrl(updateProfileRequest.getImgUrl());
 
         //이름이 변경되었는지 체크
         if (!user.getNickName().equals(updateProfileRequest.getNickName()))
+            checkDuplicateNickname(updateProfileRequest.getNickName());
             user.updateName(updateProfileRequest.getNickName());
 
-        //이메일이 변경되었는지 체크
+        //이메일이 변경되었는지 체크.. 질문 : 이메일 업데이트 해주면 토큰도 새로 업데이트가 필요한가?
         if (!user.getEmail().equals(updateProfileRequest.getEmail())) {
             checkDuplicateEmail(updateProfileRequest.getEmail());
             user.updateEmail(updateProfileRequest.getEmail());
         }
+        userRepository.save(user);
+
     }
 
     private void checkDuplicateEmail(String email) {
@@ -72,11 +84,16 @@ public class UserServiceImpl implements UserService {
             throw new DuplicateUserException("사용중인 이메일 입니다.", new SimpleFieldError("email", "사용중인 이메일 입니다."));
     }
 
-    private User checkRegisteredUser(String nickName) {
-        Optional<User> optUser = userRepository.findByNickName(nickName);
-        Assert.state(optUser.isPresent(), "가입되지 않은 회원입니다.");
-        return optUser.get();
+    private void checkDuplicateNickname(String nickName) {
+        if(userRepository.existsByEmail(nickName))
+            throw new DuplicateUserException("사용중인 닉네임 입니다.", new SimpleFieldError("nickname", "사용중인 닉네임 입니다."));
     }
+
+//    private User checkRegisteredUser(String nickName) {
+//        Optional<User> optUser = userRepository.findByNickName(nickName);
+//        Assert.state(optUser.isPresent(), "가입되지 않은 회원입니다.");
+//        return optUser.get();
+//    }
 
 
     // 현석- 추가됨
