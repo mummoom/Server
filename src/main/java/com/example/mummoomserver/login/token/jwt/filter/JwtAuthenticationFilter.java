@@ -31,7 +31,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtProvider jwtProvider;
 
 
-    @SneakyThrows
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         // 헤더에서 JWT 를 받아옵니다.
@@ -40,8 +39,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         // 유효한 토큰인지 확인합니다.
         if(token == null){
             log.info("토큰 없음");
-            throw new ResponeException(EMPTY_JWT);
-
 
         }else if(jwtProvider.validateToken(token)){
             // 토큰이 유효하면 토큰으로부터 유저 정보를 받아옵니다.
@@ -51,7 +48,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             log.info("토큰 유효하다");
         }else{
             log.info("토큰 유효하지 않음");
-            throw new ResponeException(INVALID_JWT);
+
 
 
         }
