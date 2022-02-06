@@ -39,9 +39,10 @@ public class UserServiceImpl implements UserService {
     public void saveUser(SignUpRequest signUpRequest){
         checkDuplicateEmail(signUpRequest.getEmail());
         User user = User.builder()
-                .nickName(signUpRequest.getNickname())
+                .nickName(signUpRequest.getNickName())
                 .email(signUpRequest.getEmail())
                 .password(passwordEncoder.encode(signUpRequest.getPassword()))
+                .imgUrl(signUpRequest.getImgUrl())
                 .type(UserType.DEFAULT)
                 .role(Role.GUEST)
                 .build();
