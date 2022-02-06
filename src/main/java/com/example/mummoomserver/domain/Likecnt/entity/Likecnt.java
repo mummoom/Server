@@ -26,21 +26,21 @@ public class Likecnt extends BaseTimeEntity {
     @ApiModelProperty(example = "유저 Idx 불러옴")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userIdx", referencedColumnName = "userIdx")
-    private User userIdx;
+    private User user;
 
     @ApiModelProperty(example = "게시글 Idx 불러옴")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "postIdx", referencedColumnName = "postIdx")
-    private Post postIdx;
+    private Post post;
 
     @ApiModelProperty(example = "상태 코드")
     @Column
     private String status;
 
     @Builder
-    public Likecnt( User userIdx,Post postIdx,String status) {
-        this.userIdx = userIdx;
-        this.postIdx = postIdx;
+    public Likecnt( User user,Post post,String status) {
+        this.user = user;
+        this.post = post;
         this.status = status;
     }
 }

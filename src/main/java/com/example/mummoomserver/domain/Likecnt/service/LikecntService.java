@@ -1,6 +1,6 @@
 package com.example.mummoomserver.domain.Likecnt.service;
 
-import com.example.mummoomserver.domain.Likecnt.dto.LikecntDto;
+import com.example.mummoomserver.config.resTemplate.ResponeException;
 import com.example.mummoomserver.domain.Likecnt.entity.Likecnt;
 import com.example.mummoomserver.domain.Likecnt.repository.LikecntRepository;
 import com.example.mummoomserver.domain.Post.Post;
@@ -8,10 +8,16 @@ import com.example.mummoomserver.domain.Post.PostRepository;
 import com.example.mummoomserver.login.users.User;
 import com.example.mummoomserver.login.users.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import javax.transaction.Transactional;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
+@Transactional
 public class LikecntService {
     private final LikecntRepository likecntRepository;
     private final PostRepository postRepository;
@@ -19,31 +25,24 @@ public class LikecntService {
 
 
 
-    public void like(Long postIdx,String userEmail){
-
-        Post post =  postRepository.findById(postIdx).get();
-        User user = userRepository.findByEmail(userEmail)
-                .orElseThrow(() -> new IllegalArgumentException("회원정보를 찾을 수 없습니다."));
-        Likecnt likecnt = Likecnt.builder().postIdx(post).userIdx(user).build();
-
-        likecntRepository.save(likecnt);
-
-
-    }
-
-    public void unlike(Long postIdx,String userEmail){
-
-        Post post =  postRepository.findById(postIdx).get();
-        User user = userRepository.findByEmail(userEmail)
-                .orElseThrow(() -> new IllegalArgumentException("회원정보를 찾을 수 없습니다."));
-        Likecnt likecntIdx = likecntRepository.findByUser_IdxAndPost_Idx(user.getUserIdx(),post.getPostIdx()).get();
-
-//               .orElseThrow(() -> new IllegalArgumentException("게시글을 찾을 수 없습니다."));
-//
-//        Likecnt likecnt1 = likecntRepository.findLikecntByPost(postIdx)
-//                .orElseThrow(() -> new IllegalArgumentException("게시글을 찾을 수 없습니다."));
-
-        likecntRepository.delete(likecntIdx);
+    public boolean postLike(String email, long postIdx) throws ResponeException {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalStateException("회원정보를 찾을 수 없습니다."));
+        Post post = postRepository.findByPostIdx(postIdx)
+                .orElseThrow(() -> new IllegalArgumentException("없는 게시글 입니다."));
+        boolean check = likecntRepository.existsByUser_userIdxAndPost_postIdx(user.getUserIdx(),postIdx);
+        if (check == false){
+            Likecnt likecnt = Likecnt.builder()
+                    .user(user)
+                    .post(post)
+                    .status("ACTIVE")
+                    .build();
+            likecntRepository.save(likecnt);
+            return true;
+        }else{
+            likecntRepository.deleteByUser_userIdxAndPost_postIdx(user.getUserIdx(), postIdx);
+            return false;
+        }
     }
 
 }

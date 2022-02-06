@@ -12,6 +12,6 @@ public class LikecntDto {
     private Post postIdx;
 
     public LikecntDto(Likecnt entity) {
-        this.postIdx = entity.getPostIdx();
+        this.postIdx = entity.getPost();
     }
 }
