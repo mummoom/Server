@@ -23,13 +23,16 @@ public class IngredientListService {
 
     public List<Ingredients> simpleList(int level){
         List<Ingredients> ret;
-
-        if(level == 1){
+        if(level == 1){ //세모
                 ret = ingredientRepository.findIngredientByScoreBetween(2,4);
         }
-        else {
+        else if(level == 5){ //동그라미
                 ret = ingredientRepository.findIngredientByScore(5);
         }
+        else { //엑스
+            ret = ingredientRepository.findIngredientByScoreBetween(0,1);
+        }
+
         log.info("리스트 empty? => {}",ret.isEmpty());
         return ret;
     }

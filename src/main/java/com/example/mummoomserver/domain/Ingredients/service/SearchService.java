@@ -9,7 +9,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static com.example.mummoomserver.config.resTemplate.ResponseTemplateStatus.*;
 
@@ -21,11 +23,17 @@ public class SearchService {
     private final IngredientRepository ingredientRepository;
 
 
-    public IngredientSearchResultDto getSearchResult(String name) throws ResponeException {
+    public List<IngredientSearchResultDto> getSearchResult(String name) throws ResponeException {
 
         try{
-            Optional<Ingredients> ret = ingredientRepository.findIngredientByName(name);
-            return new IngredientSearchResultDto(ret.orElse(null));
+            List<Ingredients> ret = ingredientRepository.findIngredientsByNameContains(name);
+            if(!ret.isEmpty()){
+                 List<IngredientSearchResultDto> convertedRet = ret.stream()
+                         .map(e -> new IngredientSearchResultDto(e))
+                         .collect(Collectors.toList());
+                return convertedRet;
+            }
+            else throw new ResponeException(NO_SEARCH_RESULT);
 
         }catch (Exception e){
             log.info("Search Service log = {}",e.getMessage());
