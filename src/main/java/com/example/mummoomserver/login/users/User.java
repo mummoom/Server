@@ -28,6 +28,9 @@ public class User extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userIdx;
 
+    @Column(nullable = false, unique = true,length = 20)
+    private String nickName;
+
     @Column(nullable = false, unique = true)
     private String email;
 
@@ -36,7 +39,7 @@ public class User extends BaseTimeEntity {
 
     @Column(nullable = false, length = 20)
     private String nickName;
-
+  
     @Column
     private String imgUrl;
 

@@ -10,6 +10,7 @@ import com.example.mummoomserver.domain.Post.service.PostService;
 import com.example.mummoomserver.login.users.service.UserService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
+import com.example.mummoomserver.login.jwt.JwtProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -22,6 +23,8 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 public class PostController {
+
+    private final JwtProvider jwtProvider;
     private final PostService postService;
     private final UserService userService;
 
