@@ -23,12 +23,12 @@ public class Likecnt extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long likecntIdx;
 
-    @ApiModelProperty(example = "유저 Idx 불러옴")
+    @ApiModelProperty(example = "유저 불러옴")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userIdx", referencedColumnName = "userIdx")
     private User user;
 
-    @ApiModelProperty(example = "게시글 Idx 불러옴")
+    @ApiModelProperty(example = "게시글 불러옴")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "postIdx", referencedColumnName = "postIdx")
     private Post post;

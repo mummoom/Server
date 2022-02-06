@@ -22,29 +22,17 @@ public class LikecntController {
     private final UserServiceImpl userService;
 
 
-
-
-//    /*
-//    게시글을 좋아요 목록에 추가해주는 친구
-//    */
-//    @GetMapping("/like/{postIdx}")
-//    @ApiOperation(value = "좋아하는 게시글 조회",notes = "좋아하는 게시글을 등록해줍니다.")
-//    public ResponseTemplate<String> makelikecnt(@PathVariable Long postIdx){
-//        String email = userService.getAuthUserEmail();
-//        log.info("이메일 {}",email);
-//        likecntService.like(postIdx,email);
-//
-//
-//        String result = "좋아하는 게시글 등록에 성공했습니다.";
-//        return new ResponseTemplate<>(result);
-//    }
-
-
     /*
-       게시글을 좋아요 목록에 추가해주는 친구
+       게시글을 좋아요 목록에 추가,삭제 해주는 친구
     */
+    @ApiImplicitParam(
+            name = "postIdx"
+            , value = "게시글 Idx 즉 게시글 생성 후 나오는 data 값을 입력해주시면 됩니다 !"
+            , paramType = "path"
+            , defaultValue = "None"
+    )
+    @ApiOperation(value = "좋아하는 게시글 등록,삭제",notes = "좋아하는 게시글을 등록(data = true),삭제(data = false) 해줍니다.")
     @PostMapping("/like/{postIdx}")
-    @ApiOperation(value = "좋아하는 게시글 조회",notes = "좋아하는 게시글을 등록해줍니다.")
     public ResponseTemplate<Boolean> postLike(@PathVariable long postIdx){
         try {
             String email = userService.getAuthUserEmail();
