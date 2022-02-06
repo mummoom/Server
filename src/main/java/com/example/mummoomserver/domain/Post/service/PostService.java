@@ -4,6 +4,8 @@ import com.example.mummoomserver.config.resTemplate.ResponeException;
 import com.example.mummoomserver.domain.Comment.Comment;
 import com.example.mummoomserver.domain.Comment.CommentRepository;
 import com.example.mummoomserver.domain.Comment.dto.CommentResponseDto;
+import com.example.mummoomserver.domain.Likecnt.entity.Likecnt;
+import com.example.mummoomserver.domain.Likecnt.repository.LikecntRepository;
 import com.example.mummoomserver.domain.NestedComment.NestedComment;
 import com.example.mummoomserver.domain.NestedComment.NestedCommentRepository;
 import com.example.mummoomserver.domain.NestedComment.dto.NestedCommentResponseDto;
@@ -30,6 +32,7 @@ public class PostService {
     private final UserRepository userRepository;
     private final CommentRepository commentRepository;
     private final NestedCommentRepository nestedCommentRepository;
+    private final LikecntRepository likecntRepository;
 
     public Long save(String email, PostSaveRequestDto requestDto) throws ResponeException {
         User user = userRepository.findByEmail(email)
@@ -61,6 +64,8 @@ public class PostService {
         List<Comment> comments = commentRepository.findAllByPost_postIdx(post.getPostIdx());
         PostIdxResponseDto postResIdxDto = new PostIdxResponseDto(post);
         List<CommentResponseDto> commentResponseDtos = new ArrayList<>();
+        int likecnt = likecntRepository.countByPost_postIdx(postIdx);
+        postResIdxDto.setLikecnt(Integer.toString(likecnt));
 
         for (int i = 0; i<comments.size(); i++){
             CommentResponseDto comment = new CommentResponseDto(comments.get(i));
@@ -90,12 +95,40 @@ public class PostService {
 
     public void delete(String email, Long postIdx) throws ResponeException {
         User user = userRepository.findByEmail(email)
-                        .orElseThrow(() -> new IllegalStateException("회원정보를 찾을 수 없습니다."));
+                        .orElseThrow(() -> new IllegalArgumentException("회원정보를 찾을 수 없습니다."));
         Post post = postRepository.findByPostIdx(postIdx)
                         .orElseThrow(() -> new IllegalArgumentException("게시글을 찾을 수 없습니다."));
         if(post.getUser().getUserIdx() != user.getUserIdx())
             throw new IllegalArgumentException("글 작성자만 삭제할 수 있습니다.");
         postRepository.deleteByPostIdx(postIdx)
                 .orElseThrow(() -> new IllegalArgumentException("게시글을 찾을 수 없습니다. postIdx="+postIdx));
+    }
+
+    public List<PostResponseDto> findMyPost(String email) throws ResponeException {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(()->new IllegalArgumentException("회원정보를 찾을 수 없습니다."));
+        List<Post> entity = user.getPosts();
+        List<PostResponseDto> postResDtos = new ArrayList<>();
+        for (int i = 0; i < entity.size(); i++){
+            PostResponseDto postResponseDto = new PostResponseDto(entity.get(i));
+            postResDtos.add(postResponseDto);
+        }
+        return postResDtos;
+    }
+
+    public List<PostResponseDto> findMyLikes(String email) throws ResponeException {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(()->new IllegalArgumentException("회원정보를 찾을 수 없습니다."));
+        List<Likecnt> likes = user.getLikecnts();
+        List<Post> entity = new ArrayList<>();
+        for(int i = 0; i < likes.size(); i++){
+            entity.add(likes.get(i).getPost());
+        }
+        List<PostResponseDto> postResDtos = new ArrayList<>();
+        for (int i = 0; i < entity.size(); i++){
+            PostResponseDto postResponseDto = new PostResponseDto(entity.get(i));
+            postResDtos.add(postResponseDto);
+        }
+        return postResDtos;
     }
 }
