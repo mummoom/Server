@@ -22,13 +22,11 @@ public class SignUpRequest {
     @Pattern(regexp = "[a-zA-Z!@#$%^&*-_]{6,20}", message = "6~20 길이의 알파벳과 숫자, 특수문자만 사용할 수 있습니다.")
     private String password;
 
-    @NotBlank
-    private String imgUrl;
+
 
     @Builder
-    public SignUpRequest(String nickName, String email, String password, String imgUrl) {
+    public SignUpRequest(String nickName, String email, String password) {
         this.email = email;
-        this.imgUrl =  imgUrl;
         this.nickName = nickName;
         this.password = password;
 

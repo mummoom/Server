@@ -84,25 +84,27 @@ public class UserController {
      * 현재 아래 코드들은 기능상 중복되거나 유효하지 않아서 주석처리함
      */
 
-//    //프로필 자신 조회 // 권한 문제로 물려있음
-//    @GetMapping("/me")
-//    public ResponseEntity<UserProfileResponse> getUserProfile(@AuthenticationPrincipal UserDetailsImpl loginUser) {
-//        // 자신임을 확인할 수 있는 관환 관련 코드 필요할 듯
-//        UserProfileResponse.UserProfileResponseBuilder userProfileResponseBuilder = UserProfileResponse.builder()
-//                .userIdx(loginUser.getUserIdx())
-//                .nickName(loginUser.getUsername())
-//                .email(loginUser.getEmail());
-//        // .authorities(loginUser.getAuthorities().stream().map(GrantedAuthority::getAuthority).map(s -> AuthorityType.valueOf(s)).collect(Collectors.toList()));
-//        return ResponseEntity.ok(userProfileResponseBuilder.build());
-//    }
-//
-//    // 프로필 수정 사항 반영
-//    @PutMapping("/me")
-//    public void updateProfile(@RequestBody @Valid UpdateProfileRequest updateProfileRequest, BindingResult bindingResult, @AuthenticationPrincipal UserDetailsImpl loginUser) {
-//        if (bindingResult.hasErrors())
-//            throw new ValidationException("프로필 업데이트 유효성 검사 실패", bindingResult.getFieldErrors());
-//        userService.updateProfile(loginUser.getUsername(), updateProfileRequest);
-//    }
+    //프로필 자신 조회 // 권한 문제로 물려있음
+    @ApiOperation(value = "내정보 조회 API", notes = "회원 가입시 이메일, 비밀번호로 입력을 합니다. \n"+
+            "성공 시 response 헤더에 X-AUTH-TOKEN 이라는 이름으로 토큰 정보가 반환됩니다.")
+    @GetMapping("/me")
+    public ResponseEntity<UserProfileResponse> getUserProfile(@AuthenticationPrincipal UserDetailsImpl loginUser) {
+        // 자신임을 확인할 수 있는 관환 관련 코드 필요할 듯
+        UserProfileResponse.UserProfileResponseBuilder userProfileResponseBuilder = UserProfileResponse.builder()
+                .userIdx(loginUser.getUserIdx())
+                .nickName(loginUser.getUsername())
+                .email(loginUser.getEmail());
+        // .authorities(loginUser.getAuthorities().stream().map(GrantedAuthority::getAuthority).map(s -> AuthorityType.valueOf(s)).collect(Collectors.toList()));
+        return ResponseEntity.ok(userProfileResponseBuilder.build());
+    }
+
+    // 프로필 수정 사항 반영
+    @PutMapping("/me")
+    public void updateProfile(@RequestBody @Valid UpdateProfileRequest updateProfileRequest, BindingResult bindingResult, @AuthenticationPrincipal UserDetailsImpl loginUser) {
+        if (bindingResult.hasErrors())
+            throw new ValidationException("프로필 업데이트 유효성 검사 실패", bindingResult.getFieldErrors());
+        userService.updateProfile(loginUser.getUsername(), updateProfileRequest);
+    }
 
 
 //     //회원 탈퇴ㅣ?
