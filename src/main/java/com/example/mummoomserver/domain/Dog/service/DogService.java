@@ -49,7 +49,8 @@ public class DogService {
     public DogDto getByIdx(Long dogIdx, String email) throws ResponeException{
         Dog dog = dogRepository.findById(dogIdx).orElseThrow(() -> new ResponeException(INVALID_DOG_INDEX));
 
-        if(email.compareTo(dog.getUser().getEmail())!=0) throw new ResponeException(INVALID_DOG_USER);
+        if(dog.getStatus() != "active") throw new ResponeException(INVALID_DOG_INDEX);
+        if(email.compareTo(dog.getUser().getEmail())!=0 ) throw new ResponeException(INVALID_DOG_USER);
 
         try{
             return new DogDto(dog.getDogName(), dog.getDogBirth(), dog.getDogType(), dog.getDogSex(),dog.getSurgery());
