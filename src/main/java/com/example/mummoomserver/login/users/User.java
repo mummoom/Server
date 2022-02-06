@@ -27,16 +27,16 @@ public class User extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userIdx;
 
+    @Column(nullable = false, unique = true,length = 20)
+    private String nickName;
+
     @Column(nullable = false, unique = true)
     private String email;
 
     @Column(nullable = false) //소셜로그인인 경우에는 사용하지 않는 다는 것에 대한 설정 필요
     private String password;
 
-    @Column(nullable = false, length = 20)
-    private String nickName;
-
-    @Column(nullable = false)
+    @Column
     private String imgUrl;
 
     @Enumerated(value = EnumType.STRING)  // 일반 로그인인지 소셜 로그인인지 확인하는 컬럼
