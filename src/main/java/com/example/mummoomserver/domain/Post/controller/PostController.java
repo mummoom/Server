@@ -25,7 +25,7 @@ public class PostController {
     private final PostService postService;
     private final UserService userService;
 
-    @ApiOperation(value="게시글 등록", notes="게시글을 등록합니다. JWT 토큰 입력 필수!")
+    @ApiOperation(value="게시글 등록", notes="게시글을 등록합니다. JWT 토큰 입력 필수! 반환값(data) : postIdx")
     @PostMapping("/post")
     public ResponseTemplate<Long> save(@RequestBody PostSaveRequestDto requestDto) {
         try{
