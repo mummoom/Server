@@ -77,6 +77,7 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
                 .userService(oAuth2Service);
 //                .and()
 //                .successHandler(OAuth2AuthenticationSuccessHandler);
+
         //로그인 인증을 진행하는 필터 이전에 jwtAuthenticationFilter 가 실행되도록 설정
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
     }

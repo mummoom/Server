@@ -56,8 +56,8 @@ public class UserServiceImpl implements UserService {
             throw new ResponeException(DATABASE_ERROR);
         }
     }
-
     public void updateProfile(String email, UpdateProfileRequest updateProfileRequest) throws ResponeException{
+
 
         User user = userRepository.findByEmail(email).get();
         // 이미지가 변경되었는지 체크

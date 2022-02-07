@@ -3,6 +3,7 @@ package com.example.mummoomserver.login.users;
 
 import com.example.mummoomserver.config.BaseTimeEntity;
 import com.example.mummoomserver.domain.Comment.Comment;
+import com.example.mummoomserver.domain.Dog.entity.Dog;
 import com.example.mummoomserver.domain.Likecnt.entity.Likecnt;
 import com.example.mummoomserver.domain.Post.Post;
 import lombok.*;
@@ -47,6 +48,9 @@ public class User extends BaseTimeEntity {
     private Role role;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Dog> dogs = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Post> posts = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
@@ -76,6 +80,7 @@ public class User extends BaseTimeEntity {
     public void updateImgUrl(String imgUrl) {
         this.imgUrl = imgUrl;
     }
+
 
 
     public User update(String nickName, String email, String imgUrl) {  //update email, update imgurl, update nickname

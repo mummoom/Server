@@ -14,6 +14,7 @@ public interface UserService {
 
     String getAuthUserNickname() throws ResponeException;
 
+
     String getAuthUserEmail() ;
 
     UserDto getUserProfile(String email) throws ResponeException;
