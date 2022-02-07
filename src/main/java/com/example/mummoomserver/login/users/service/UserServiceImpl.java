@@ -30,7 +30,6 @@ public class UserServiceImpl implements UserService {
      */
 
     private final UserRepository userRepository;
-//    private final OAuth2AccountRepository oAuth2AccountRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Override
@@ -57,8 +56,8 @@ public class UserServiceImpl implements UserService {
             throw new ResponeException(DATABASE_ERROR);
         }
     }
+    public void updateProfile(String email, UpdateProfileRequest updateProfileRequest) throws ResponeException{
 
-    public void updateProfile(String email, UpdateProfileRequest updateProfileRequest) throws ResponeException {
 
         User user = userRepository.findByEmail(email).get();
         // 이미지가 변경되었는지 체크
@@ -111,6 +110,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+
     public String getAuthUserEmail() {
         UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (userDetails instanceof UserDetails) { //인증된 유저여야함

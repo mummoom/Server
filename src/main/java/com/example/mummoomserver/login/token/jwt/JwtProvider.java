@@ -1,6 +1,7 @@
 package com.example.mummoomserver.login.token.jwt;
 
 
+import com.example.mummoomserver.config.resTemplate.ResponeException;
 import com.example.mummoomserver.login.users.Role;
 import com.example.mummoomserver.login.util.DateConvertor;
 import io.jsonwebtoken.Claims;
@@ -14,6 +15,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
@@ -22,6 +25,8 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.function.Function;
+
+import static com.example.mummoomserver.config.resTemplate.ResponseTemplateStatus.*;
 
 // 토큰의 유효성을 검증하는 클래스
 
@@ -89,5 +94,26 @@ public class JwtProvider {
         } catch (Exception e) {
             return false;
         }
+    }
+
+    public String getUserName() throws ResponeException {
+        String token =
+                ((ServletRequestAttributes)
+                        RequestContextHolder.currentRequestAttributes()).getRequest().getHeader("X-AUTH-TOKEN");
+
+        if(token == null || token.length() == 0){
+            throw new ResponeException(EMPTY_JWT);
+        }
+
+        Jws<Claims> claims;
+        try{
+            claims = Jwts.parser()
+                    .setSigningKey(secretKey)
+                    .parseClaimsJws(token);
+        } catch (Exception ignored) {
+            throw new ResponeException(INVALID_JWT);
+        }
+
+        return claims.getBody().get("sub",String.class);
     }
 }
