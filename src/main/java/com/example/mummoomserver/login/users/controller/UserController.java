@@ -75,7 +75,7 @@ public class UserController {
         String token = jwtProvider.createToken(member.getEmail(), member.getRole());
 
         jwtProvider.writeTokenResponse(httpServletResponse, token);
-        return new ResponseTemplate("로그인 성공");
+        return new ResponseTemplate<>(token);
     }
 
     /**
@@ -84,7 +84,7 @@ public class UserController {
      */
 
     //프로필 자신 조회
-    @ApiOperation(value = "내정보 조회 API", notes = "이메일, 비밀번호,닉네임, 프로필 이미지를 조회할 수 있습니다.")
+    @ApiOperation(value = "내정보 조회 API", notes = "이메일, 비밀번호,닉네임, 프로필 이미지를 조회할 수 있습니다. jwt 토큰을 입력해주어야 합니다.")
     @GetMapping("/me")
     public ResponseTemplate<UserDto> getMyProfile() {
         try{
@@ -99,9 +99,9 @@ public class UserController {
     }
 
     // 프로필 수정 사항 반영
-    @ApiOperation(value = "내정보 수정 API", notes = "이메일, 비밀번호,닉네임 변경이 가능하고 프로필 이미지를 여기에서 등록할 수 있습니다.")
+    @ApiOperation(value = "내정보 수정 API", notes = "이메일, 비밀번호,닉네임 변경이 가능하고 프로필 이미지를 여기에서 등록할 수 있습니다. jwt토큰을 입력해주어야 합니다.")
     @PutMapping("/me")
-    public ResponseTemplate<String> updateProfile(@RequestBody  UpdateProfileRequest updateProfileRequest) {
+    public ResponseTemplate<String> updateProfile(@RequestBody @Valid  UpdateProfileRequest updateProfileRequest) {
         //입력해준 값이 없을 때의 예외 처리
 //        if (UserDto.getNickName() == null) return new ResponseTemplate<>(ResponseTemplateStatus.EMPTY_NICKNAME);
 //        if (UserDto.getPassword() == null) return new ResponseTemplate<>(ResponseTemplateStatus.EMPTY_PASSWORD);
