@@ -10,11 +10,8 @@ import com.example.mummoomserver.login.service.UserDetailsImpl;
 import com.example.mummoomserver.login.users.User;
 import com.example.mummoomserver.login.users.UserRepository;
 import com.example.mummoomserver.login.users.dto.UserDto;
-import com.example.mummoomserver.login.users.requestResponse.SignUpRequest;
-import com.example.mummoomserver.login.users.requestResponse.UpdateProfileRequest;
-import com.example.mummoomserver.login.users.requestResponse.UserProfileResponse;
+import com.example.mummoomserver.login.users.requestResponse.*;
 import com.example.mummoomserver.login.users.service.UserService;
-import com.example.mummoomserver.login.users.requestResponse.LoginRequest;
 import com.example.mummoomserver.login.users.service.UserServiceImpl;
 import com.example.mummoomserver.login.validation.ValidationException;
 import io.swagger.annotations.*;
@@ -100,7 +97,7 @@ public class UserController {
 
     // 프로필 수정 사항 반영
     @ApiOperation(value = "내정보 수정 API", notes = "이메일, 비밀번호,닉네임 변경이 가능하고 프로필 이미지를 여기에서 등록할 수 있습니다. jwt토큰을 입력해주어야 합니다.")
-    @PutMapping("/me")
+    @PatchMapping("/me")
     public ResponseTemplate<String> updateProfile(@RequestBody @Valid  UpdateProfileRequest updateProfileRequest) {
         //입력해준 값이 없을 때의 예외 처리
 //        if (UserDto.getNickName() == null) return new ResponseTemplate<>(ResponseTemplateStatus.EMPTY_NICKNAME);
@@ -110,6 +107,27 @@ public class UserController {
             userServiceImpl.updateProfile(email, updateProfileRequest);
 
             String result = "회원 정보 수정에 성공했습니다.";
+            return new ResponseTemplate<>("result");
+
+        } catch(ResponeException e){
+            return new ResponseTemplate<>(e.getStatus());
+        }
+    }
+
+    // 비밀번호 수정
+    @ApiOperation(value = "비밀번호 수정 API", notes = "비밀번호를 확인한 후에 변경이 가능합니다. jwt토큰을 입력해주어야 합니다.")
+    @PutMapping("/pwd")
+    public ResponseTemplate<String> updatePwd(@RequestBody @Valid UpdatePwdRequest updatePwdRequest) {
+        //입력해준 값이 없을 때의 예외 처리
+//        if (UserDto.getNickName() == null) return new ResponseTemplate<>(ResponseTemplateStatus.EMPTY_NICKNAME);
+//        if (UserDto.getPassword() == null) return new ResponseTemplate<>(ResponseTemplateStatus.EMPTY_PASSWORD);
+        try {
+            String email = userService.getAuthUserEmail();
+             // 해당하는 유저의 정보를 가져왔음
+
+            userServiceImpl.updateUserPwd(email, updatePwdRequest); // 동일하다는 내용을 확인 됐다면 업데이트 진행
+            String result = "회원 비밀번호 수정에 성공했습니다.";
+
             return new ResponseTemplate<>("result");
 
         } catch(ResponeException e){

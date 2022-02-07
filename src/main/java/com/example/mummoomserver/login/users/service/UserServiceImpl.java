@@ -6,11 +6,13 @@ import com.example.mummoomserver.login.users.*;
 import com.example.mummoomserver.login.users.dto.UserDto;
 import com.example.mummoomserver.login.users.requestResponse.SignUpRequest;
 import com.example.mummoomserver.login.users.requestResponse.UpdateProfileRequest;
+import com.example.mummoomserver.login.users.requestResponse.UpdatePwdRequest;
 import com.example.mummoomserver.login.validation.SimpleFieldError;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -51,11 +53,12 @@ public class UserServiceImpl implements UserService {
         //이메일을 입력받으면 정보를 내어주는 로직을 짜야함
         User user = userRepository.findByEmail(email).get();
         try {
-            return new UserDto(user.getEmail(), user.getNickName(), user.getImgUrl(), user.getPassword());
+            return new UserDto(user.getEmail(), user.getImgUrl(), user.getNickName());
         } catch (Exception e) {
             throw new ResponeException(DATABASE_ERROR);
         }
     }
+
     public void updateProfile(String email, UpdateProfileRequest updateProfileRequest) throws ResponeException {
 
         User user = userRepository.findByEmail(email).get();
@@ -67,6 +70,29 @@ public class UserServiceImpl implements UserService {
         if (!user.getNickName().equals(updateProfileRequest.getNickName()))
             checkDuplicateNickname(updateProfileRequest.getNickName());
             user.updateName(updateProfileRequest.getNickName());
+        userRepository.save(user);
+
+    }
+
+
+    public void updateUserPwd(String email, UpdatePwdRequest updatePwdRequest) throws ResponeException {
+
+        User user = userRepository.findByEmail(email).get();
+
+        System.out.println(updatePwdRequest.getLastPassword());
+        System.out.println(user.getPassword());
+        // 1. 기존 비밀번호와 현재 입력한 비밀번호가 동일한지 확인
+        if (!passwordEncoder.matches(updatePwdRequest.getLastPassword(),user.getPassword()))
+            throw new ResponeException(INVALID_DOG_INDEX); //여기 에러처리 필요
+
+        try {
+            // 2. 변경될 비밀번호와 기존 비밀번호가 동일한 지 확인
+            if (!user.getPassword().equals(updatePwdRequest.getPassword()))
+                user.updatePwd(passwordEncoder.encode(updatePwdRequest.getPassword()));
+
+        } catch (Exception e) {
+            throw new ResponeException(DATABASE_ERROR); // 비밀번호가 동일하다는 에러처리
+        }
         userRepository.save(user);
 
     }
