@@ -56,8 +56,7 @@ public class UserServiceImpl implements UserService {
             throw new ResponeException(DATABASE_ERROR);
         }
     }
-    public void updateProfile(String email, UpdateProfileRequest updateProfileRequest) throws ResponeException{
-
+    public void updateProfile(String email, UpdateProfileRequest updateProfileRequest) throws ResponeException {
 
         User user = userRepository.findByEmail(email).get();
         // 이미지가 변경되었는지 체크
@@ -68,12 +67,6 @@ public class UserServiceImpl implements UserService {
         if (!user.getNickName().equals(updateProfileRequest.getNickName()))
             checkDuplicateNickname(updateProfileRequest.getNickName());
             user.updateName(updateProfileRequest.getNickName());
-
-        //이메일이 변경되었는지 체크.. 질문 : 이메일 업데이트 해주면 토큰도 새로 업데이트가 필요한가?
-        if (!user.getEmail().equals(updateProfileRequest.getEmail())) {
-            checkDuplicateEmail(updateProfileRequest.getEmail());
-            user.updateEmail(updateProfileRequest.getEmail());
-        }
         userRepository.save(user);
 
     }

@@ -26,7 +26,6 @@ public class ResponseTemplate<T> {
         this.message = SUCCESS.getMessage();
         this.code = SUCCESS.getCode();
         this.data = data;
-
     }
 
 
@@ -36,9 +35,6 @@ public class ResponseTemplate<T> {
         this.message = status.getMessage();
         this.code = status.getCode();
     }
-
-
-
 }
 
 
