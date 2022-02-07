@@ -1,6 +1,7 @@
 package com.example.mummoomserver.domain.Comment.service;
 
 import com.example.mummoomserver.config.resTemplate.ResponeException;
+import com.example.mummoomserver.config.resTemplate.ResponseTemplateStatus;
 import com.example.mummoomserver.domain.Comment.Comment;
 import com.example.mummoomserver.domain.Comment.CommentRepository;
 import com.example.mummoomserver.domain.Comment.dto.CommentSaveRequestDto;
@@ -13,6 +14,8 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 
+import static com.example.mummoomserver.config.resTemplate.ResponseTemplateStatus.*;
+
 @RequiredArgsConstructor
 @Transactional
 @Service
@@ -23,27 +26,30 @@ public class CommentService {
 
     public Long save(Long postIdx, String email, CommentSaveRequestDto requestDto) throws ResponeException {
         User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new IllegalArgumentException("회원정보를 찾을 수 없습니다."));
+                .orElseThrow(() -> new ResponeException(INVALID_USER));
         Post post = postRepository.findByPostIdx(postIdx)
-                .orElseThrow(() -> new IllegalArgumentException("없는 게시글입니다."));
+                .orElseThrow(() -> new ResponeException(INVALID_POST_IDX));
+        try {
+            Comment comment = Comment.builder()
+                    .content(requestDto.getContent())
+                    .user(user)
+                    .post(post)
+                    .build();
 
-        Comment comment = Comment.builder()
-                .content(requestDto.getContent())
-                .user(user)
-                .post(post)
-                .build();
-
-        return commentRepository.save(comment).getCommentIdx();
+            return commentRepository.save(comment).getCommentIdx();
+        } catch(Exception e){
+            throw new ResponeException(DATABASE_ERROR);
+        }
     }
 
     public void delete(String email, Long commentIdx) throws ResponeException {
         Comment comment = commentRepository.findByCommentIdx(commentIdx)
-                        .orElseThrow(() -> new IllegalArgumentException("없는 댓글입니다."));
+                        .orElseThrow(() -> new ResponeException(INVALID_COMMENT_IDX));
         User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new IllegalArgumentException("회원정보를 찾을 수 없습니다."));
+                .orElseThrow(() -> new ResponeException(INVALID_USER));
         if (comment.getUser().getUserIdx() != user.getUserIdx())
-            throw new IllegalArgumentException("댓글 작성자만 삭제할 수 있습니다.");
+            throw new ResponeException(PERMISSION_DENIED);
         commentRepository.deleteByCommentIdx(commentIdx)
-                .orElseThrow(() -> new IllegalArgumentException("없는 댓글입니다. commentIdx="+commentIdx));
+                .orElseThrow(() -> new ResponeException(INVALID_COMMENT_IDX));
     }
 }
