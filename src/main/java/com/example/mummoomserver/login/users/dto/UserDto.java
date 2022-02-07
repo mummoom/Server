@@ -11,10 +11,9 @@ import lombok.Setter;
 @Setter
 @RequiredArgsConstructor
 @AllArgsConstructor
-@ApiModel(value = "유저 정보", description = "이메일, 비밀번호,닉네임, 프로필 사진 확인 가능")
+@ApiModel(value = "유저 정보", description = "이메일, 닉네임, 프로필 사진 확인 가능")
 public class UserDto {
     private String email;
-    private String password;
     private String nickName;
     private String imgUrl;
 }

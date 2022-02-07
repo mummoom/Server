@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.util.Map;
+import java.util.Random;
 import java.util.UUID;
 
 @Getter
@@ -57,10 +58,11 @@ public class OAuthAttributes {
     }
 
     UUID garbagePassword =  UUID.randomUUID();
+    int ran = (int)( Math.random() * 100 );
 
     public User toEntity() {
         return User.builder()
-                .nickName(name)
+                .nickName(name+ran)
                 .email(email)
                 .password(garbagePassword.toString())
                 .imgUrl(picture)
