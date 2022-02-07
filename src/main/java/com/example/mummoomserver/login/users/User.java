@@ -3,6 +3,7 @@ package com.example.mummoomserver.login.users;
 
 import com.example.mummoomserver.config.BaseTimeEntity;
 import com.example.mummoomserver.domain.Comment.Comment;
+import com.example.mummoomserver.domain.Likecnt.entity.Likecnt;
 import com.example.mummoomserver.domain.Post.Post;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -26,14 +27,14 @@ public class User extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userIdx;
 
+    @Column(nullable = false, unique = true,length = 20)
+    private String nickName;
+
     @Column(nullable = false, unique = true)
     private String email;
 
     @Column(nullable = false)
     private String password;
-
-    @Column(nullable = false, length = 20)
-    private String nickName;
 
     @Column
     private String imgUrl;
@@ -50,6 +51,9 @@ public class User extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Comment> comments = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Likecnt> likecnts = new ArrayList<>();
 
     @Builder
     public User(String nickName, String email, String password, String imgUrl, UserType type, Role role) {

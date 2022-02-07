@@ -18,4 +18,5 @@ public interface UserService {
 
     UserDto getUserProfile(String email) throws ResponeException;
 
+
 }

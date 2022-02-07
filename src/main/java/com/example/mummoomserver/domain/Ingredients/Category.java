@@ -11,11 +11,11 @@ public enum Category {
 
     VEGETABLE("채소",0),
     FISH("생선",1),
-    MEAT("고기",2),
+    MEAT("육류",2),
     DAIRY("유제품",3),
     SHELLFISH("어패류",4),
     CEREAL("곡류",5),
-    FRUIT("과일",6),
+    FRUIT("과일류",6),
     OTHER("기타",7);
 
 

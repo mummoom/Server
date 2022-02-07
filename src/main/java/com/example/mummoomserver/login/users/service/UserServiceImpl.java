@@ -110,7 +110,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String getAuthUserEmail(){
+
+    public String getAuthUserEmail() {
         UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (userDetails instanceof UserDetails) { //인증된 유저여야함
             return userDetails.getEmail();

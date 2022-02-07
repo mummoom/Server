@@ -2,6 +2,7 @@ package com.example.mummoomserver.domain.Component.entity;
 
 import com.example.mummoomserver.config.BaseTimeEntity;
 import com.example.mummoomserver.domain.Ingredients.entity.Ingredients;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Builder;
@@ -22,7 +23,7 @@ public class Component extends BaseTimeEntity {
     private Long componentIdx;
 
     @OneToMany(mappedBy = "component")
-    @JsonManagedReference
+    @JsonBackReference
     List<Ingredients> ingredients = new ArrayList<>();
 
     @Column(nullable = false)
