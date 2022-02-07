@@ -16,6 +16,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -31,6 +32,7 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
      */
 //    private final UserDetailsServiceImpl userDetailsService;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private AuthenticationSuccessHandler OAuth2AuthenticationSuccessHandler;
 
     @Bean
     public BCryptPasswordEncoder encodePwd() {
@@ -72,7 +74,9 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
                 .and()
                 .oauth2Login()
                 .userInfoEndpoint()
-                .userService(oAuth2Service);
+                .userService(oAuth2Service)
+                .and()
+                .successHandler(OAuth2AuthenticationSuccessHandler);
         //로그인 인증을 진행하는 필터 이전에 jwtAuthenticationFilter 가 실행되도록 설정
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
     }

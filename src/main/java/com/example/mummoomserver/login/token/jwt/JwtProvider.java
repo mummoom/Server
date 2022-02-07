@@ -64,11 +64,10 @@ public class JwtProvider {
 
 
     public void writeTokenResponse(HttpServletResponse response, String token) throws IOException {
+        response.setContentType("text/html;charset=UTF-8");
         response.addHeader("X-AUTH-TOKEN",token);
         response.setContentType("application/json;charset=UTF-8");
-        var writer = response.getWriter();
-        writer.println(token);
-        writer.flush();
+
     }
 
     // JWT 토큰에서 인증 정보 조회

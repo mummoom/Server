@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Builder
+@Table(name = "User")
 public class User extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,13 +33,13 @@ public class User extends BaseTimeEntity {
     @Column(nullable = false, unique = true)
     private String email;
 
-    @Column(nullable = false) //소셜로그인인 경우에는 사용하지 않는 다는 것에 대한 설정 필요
+    @Column(nullable = false)
     private String password;
 
     @Column
     private String imgUrl;
 
-    @Enumerated(value = EnumType.STRING)  // 일반 로그인인지 소셜 로그인인지 확인하는 컬럼
+    @Enumerated(value = EnumType.STRING) // 일반 로그인인지 소셜 로그인인지 확인하는 컬럼
     private UserType type;
 
     @Enumerated(EnumType.STRING)
@@ -57,10 +57,10 @@ public class User extends BaseTimeEntity {
 
     @Builder
     public User(String nickName, String email, String password, String imgUrl, UserType type, Role role) {
-        this.nickName = nickName;
         this.email = email;
-        this.password = password;
         this.imgUrl = imgUrl;
+        this.nickName = nickName;
+        this.password = password;
         this.role = role;
         this.type = type;
     }
@@ -72,6 +72,11 @@ public class User extends BaseTimeEntity {
     public void updateEmail(String email) {
         this.email = email;
     }
+
+    public void updateImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
+    }
+
 
     public User update(String nickName, String email, String imgUrl) {  //update email, update eimgurl, update nickname
         this.nickName = nickName;
