@@ -108,8 +108,9 @@ public class UserController {
         try {
             String email = userService.getAuthUserEmail();
             userServiceImpl.updateProfile(email, updateProfileRequest);
+            String result = "회원 정보 수정에 성공했습니다.";
+            return new ResponseTemplate<>("result");
 
-            return new ResponseTemplate<>("회원 정보 수정에 성공했습니다.");
         } catch(ResponeException e){
             return new ResponseTemplate<>(e.getStatus());
         }
