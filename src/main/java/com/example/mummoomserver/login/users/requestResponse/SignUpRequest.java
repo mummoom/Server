@@ -29,6 +29,5 @@ public class SignUpRequest {
         this.email = email;
         this.nickName = nickName;
         this.password = password;
-
     }
 }
