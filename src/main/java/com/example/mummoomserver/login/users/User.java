@@ -36,7 +36,7 @@ public class User extends BaseTimeEntity {
     @Column(nullable = false)
     private String password;
 
-    @Column
+    @Column(nullable = true)
     private String imgUrl;
 
     @Enumerated(value = EnumType.STRING) // 일반 로그인인지 소셜 로그인인지 확인하는 컬럼
@@ -78,7 +78,7 @@ public class User extends BaseTimeEntity {
     }
 
 
-    public User update(String nickName, String email, String imgUrl) {  //update email, update eimgurl, update nickname
+    public User update(String nickName, String email, String imgUrl) {  //update email, update imgurl, update nickname
         this.nickName = nickName;
         //일반 계정이라면 이메일도 함께 변경해준다.
         if (type.equals(UserType.DEFAULT))
