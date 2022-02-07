@@ -32,7 +32,7 @@ public class SwaggerConfig {
             List<Parameter> aParameters = new ArrayList<>();
             aParameters.add(aParameterBuilder.build());
             return new Docket(DocumentationType.SWAGGER_2)
-                .apiInfo(apiInfo()).globalOperationParameters(aParameters)
+                .apiInfo(apiInfo()).globalOperationParameters(aParameters).useDefaultResponseMessages(false)
                 .select()
                 .apis(RequestHandlerSelectors.basePackage("com.example.mummoomserver"))
                 .paths(PathSelectors.any())
