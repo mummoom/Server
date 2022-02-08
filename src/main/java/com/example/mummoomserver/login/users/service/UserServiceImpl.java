@@ -53,7 +53,7 @@ public class UserServiceImpl implements UserService {
         //이메일을 입력받으면 정보를 내어주는 로직을 짜야함
         User user = userRepository.findByEmail(email).get();
         try {
-            return new UserDto(user.getEmail(), user.getImgUrl(), user.getNickName());
+            return new UserDto(user.getEmail(), user.getNickName(), user.getImgUrl());
         } catch (Exception e) {
             throw new ResponeException(DATABASE_ERROR);
         }
