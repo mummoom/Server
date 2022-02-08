@@ -69,13 +69,11 @@ public class User extends BaseTimeEntity {
         this.type = type;
     }
 
-    public void updateName(String nickName) {
+    public void updateNickName(String nickName) {
         this.nickName = nickName;
     }
 
-    public void updateImgUrl(String imgUrl) {
-        this.imgUrl = imgUrl;
-    }
+    public void updateImgUrl(String imgUrl) {  this.imgUrl = imgUrl; }
 
     public void updatePwd(String password) { this.password = password; }
 

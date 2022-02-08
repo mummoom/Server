@@ -62,14 +62,18 @@ public class UserServiceImpl implements UserService {
     public void updateProfile(String email, UpdateProfileRequest updateProfileRequest) throws ResponeException {
 
         User user = userRepository.findByEmail(email).get();
+
         // 이미지가 변경되었는지 체크
+        if (user.getImgUrl() == null)
+            user.updateImgUrl(updateProfileRequest.getImgUrl());
+
         if (!user.getImgUrl().equals(updateProfileRequest.getImgUrl()))
             user.updateImgUrl(updateProfileRequest.getImgUrl());
 
         //이름이 변경되었는지 체크
         if (!user.getNickName().equals(updateProfileRequest.getNickName()))
             checkDuplicateNickname(updateProfileRequest.getNickName());
-            user.updateName(updateProfileRequest.getNickName());
+            user.updateNickName(updateProfileRequest.getNickName());
         userRepository.save(user);
 
     }
@@ -78,15 +82,14 @@ public class UserServiceImpl implements UserService {
     public void updateUserPwd(String email, UpdatePwdRequest updatePwdRequest) throws ResponeException {
 
         User user = userRepository.findByEmail(email).get();
-
-        System.out.println(updatePwdRequest.getLastPassword());
-        System.out.println(user.getPassword());
+        if (user.getType().equals(UserType.OAUTH))
+            throw new ResponeException(INVALID_DOG_INDEX); //여기 에러처리 필요
         // 1. 기존 비밀번호와 현재 입력한 비밀번호가 동일한지 확인
         if (!passwordEncoder.matches(updatePwdRequest.getLastPassword(),user.getPassword()))
             throw new ResponeException(INVALID_DOG_INDEX); //여기 에러처리 필요
 
         try {
-            // 2. 변경될 비밀번호와 기존 비밀번호가 동일한 지 확인
+            // 2. 변경될 비밀번호와 기존 비밀번호가 동일한 지 확인, 업데이트 시 새 비밀번호를 인코딩해서 다시 저장
             if (!user.getPassword().equals(updatePwdRequest.getPassword()))
                 user.updatePwd(passwordEncoder.encode(updatePwdRequest.getPassword()));
 
@@ -94,6 +97,14 @@ public class UserServiceImpl implements UserService {
             throw new ResponeException(DATABASE_ERROR); // 비밀번호가 동일하다는 에러처리
         }
         userRepository.save(user);
+
+    }
+
+    public void deleteUser(String email) throws ResponeException {
+
+        User user = userRepository.findByEmail(email).get();
+
+        userRepository.delete(user);
 
     }
 
@@ -129,7 +140,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-
     public String getAuthUserEmail() {
         UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (userDetails instanceof UserDetails) { //인증된 유저여야함

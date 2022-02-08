@@ -21,8 +21,9 @@ public class UpdateProfileRequest {
     private String imgUrl;
 
     @Builder
-    public UpdateProfileRequest(String nickName, String imgUrl) {
-        this.nickName = nickName;
+    public UpdateProfileRequest(String imgUrl, String nickName) {
         this.imgUrl = imgUrl;
+        this.nickName = nickName;
+
     }
 }
