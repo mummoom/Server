@@ -59,7 +59,7 @@ public class UserController {
      * 로그인할때는 이메일과 비밀번호로 로그인하는걸로 수정
      */
     @ApiOperation(value = "로그인 API", notes = "이메일, 비밀번호로 입력을 합니다. \n"+
-                                                "(현재상태는) 성공 시 response 헤더에 X-AUTH-TOKEN 이라는 이름으로 토큰 정보가 반환됩니다.")
+                                                "성공 시 response 바디에 X-AUTH-TOKEN 이라는 이름으로 토큰 정보가 반환됩니다.")
     @PostMapping("/login")
     public ResponseTemplate<String> login(@RequestBody @Valid LoginRequest loginRequest, HttpServletResponse httpServletResponse) throws IOException {
         //실패시
@@ -74,6 +74,16 @@ public class UserController {
         jwtProvider.writeTokenResponse(httpServletResponse, token);
         return new ResponseTemplate<>(token);
     }
+
+
+
+//    @ApiOperation(value = "로그아웃 API")
+//    @PostMapping("/logout")
+//    public ResponseTemplate<String> logout(HttpServletResponse httpServletResponse) throws IOException {
+//        // 토큰 삭제..?
+//        return httpServletResponse.sendRedirect("");
+//    }
+
 
     /**
      * - 현석
@@ -128,23 +138,27 @@ public class UserController {
             userServiceImpl.updateUserPwd(email, updatePwdRequest); // 동일하다는 내용을 확인 됐다면 업데이트 진행
             String result = "회원 비밀번호 수정에 성공했습니다.";
 
-            return new ResponseTemplate<>("result");
+            return new ResponseTemplate<>(result);
 
         } catch(ResponeException e){
             return new ResponseTemplate<>(e.getStatus());
         }
     }
 
-//     //회원 탈퇴ㅣ?
-//    @DeleteMapping("/withdraw")
-//    public void withdrawUser(@AuthenticationPrincipal UserDetailsImpl loginUser, HttpServletRequest request, HttpServletResponse response) {
-//        Optional<OAuth2AccountDTO> optionalOAuth2AccountDTO = userService.withdrawUser(loginUser.getUsername());
-//        //연동된 소셜계정 정보가 있다면 연동해제 요청
-//        if(optionalOAuth2AccountDTO.isPresent()) {
-//            OAuth2AccountDTO oAuth2AccountDTO = optionalOAuth2AccountDTO.get();
-//            ClientRegistration clientRegistration = clientRegistrationRepository.findByRegistrationId(oAuth2AccountDTO.getProvider());
-//            OAuth2Service oAuth2Service = OAuth2ServiceFactory.getOAuth2Service(restTemplate, oAuth2AccountDTO.getProvider());
-//            oAuth2Service.unlink(clientRegistration, oAuth2AccountDTO.getOAuth2Token());
-//        }
-// }
+     //회원 탈퇴ㅣ?
+    @DeleteMapping("/withdraw")
+    public ResponseTemplate<String> withdrawUser() {
+        try {
+            String email = userService.getAuthUserEmail();
+            // 해당하는 유저의 정보를 가져왔음
+
+            userServiceImpl.deleteUser(email); // 동일하다는 내용을 확인 됐다면 업데이트 진행
+            String result = "회원 정보가 삭제되었습니다.";
+
+            return new ResponseTemplate<>(result);
+
+        } catch(ResponeException e){
+            return new ResponseTemplate<>(e.getStatus());
+        }
+    }
 }
