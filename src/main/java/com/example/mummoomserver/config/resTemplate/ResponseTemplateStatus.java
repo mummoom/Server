@@ -55,8 +55,13 @@ public enum ResponseTemplateStatus {
     /**
      * 7000 : 유저 정보 요청 관련 오류
      */
-//    EMPTY_PASSWORD(false, "비밀번호를 조건에 맞춰 정확히 입력해주세요", 7000),
-//    EMPTY_NICKNAME(false, "중복된 닉네임입니다. ", 7001),
+
+    EMPTY_UPDATE_PASSWORD(false, "변경할 비밀번호를 입력해주세요", 7001),
+    EMPTY_UPDATE(false, "변경할 닉네임이나 이미지를 입력해주세요", 7002),
+    EMPTY_EMAIL(false, "등록할 이메일을 입력해주세요", 7003),
+    EMPTY_PASSWORD(false, "등록할 비밀번호를 입력해주세요", 7004),
+    EMPTY_NICKNAME(false, "등록할 닉네임을 입력해주세요", 7005),
+
 
 
     /**
