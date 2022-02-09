@@ -30,7 +30,7 @@ public class DogService {
 
     //강아지 정보 추가
     public DogSaveResponseDto save(DogDto dogRequest, String email) throws ResponeException {
-        User user = userRepository.findByEmail(email).orElseThrow(() -> new IllegalArgumentException("회원정보를 찾을 수 없습니다."));
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new ResponeException(NOT_EXIST_USER));
 
         try {
             Dog dog = Dog.builder()
@@ -65,7 +65,7 @@ public class DogService {
 
     //유저 별 강아지 정보 조회
     public List<DogListResponseDto> getListByUserIdx(String email) throws ResponeException{
-        User user = userRepository.findByEmail(email).orElseThrow(() -> new IllegalArgumentException("회원정보를 찾을 수 없습니다."));
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new ResponeException(NOT_EXIST_USER));
 
         try {
             List<Dog> dogs = dogRepository.findDogsByUser_userIdxAndStatus(user.getUserIdx(), "active");
