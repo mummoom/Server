@@ -9,4 +9,5 @@ import java.util.List;
 @Repository
 public interface DogRepository extends JpaRepository<Dog, Long> {
     List<Dog> findDogsByUser_userIdxAndStatus(Long userIdx, String status);
+    boolean existsByUser_userIdx(long userIdx);
 }
