@@ -11,7 +11,7 @@ import lombok.Setter;
 @Setter
 @RequiredArgsConstructor
 @AllArgsConstructor
-@ApiModel(value = "강아지 정보", description = "강아지 index, 이름, 생년월일, 종, 성별, 중성화 여부")
+@ApiModel(value = "강아지 정보들", description = "강아지 index, 이름, 생년월일, 종, 성별, 중성화 여부")
 public class DogListResponseDto {
     private Long dogIdx;
     private String dogName;
