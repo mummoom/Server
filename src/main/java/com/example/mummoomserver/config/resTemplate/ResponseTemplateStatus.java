@@ -58,9 +58,10 @@ public enum ResponseTemplateStatus {
 
     EMPTY_UPDATE_PASSWORD(false, "변경할 비밀번호를 입력해주세요", 7001),
     EMPTY_UPDATE(false, "변경할 닉네임이나 이미지를 입력해주세요", 7002),
-    EMPTY_EMAIL(false, "등록할 이메일을 입력해주세요", 7003),
-    EMPTY_PASSWORD(false, "등록할 비밀번호를 입력해주세요", 7004),
-    EMPTY_NICKNAME(false, "등록할 닉네임을 입력해주세요", 7005),
+    EMPTY_EMAIL(false, "이메일을 입력해주세요", 7003),
+    EMPTY_PASSWORD(false, "비밀번호를 입력해주세요", 7004),
+    EMPTY_NICKNAME(false, "닉네임을 입력해주세요", 7005),
+
 
 
 
