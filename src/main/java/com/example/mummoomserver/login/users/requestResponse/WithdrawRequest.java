@@ -15,7 +15,7 @@ public class WithdrawRequest {
     @ApiModelProperty(example = "기존 비밀번호")
     private String withdrawPwd;
 
-    @ApiModelProperty(example = "탈퇴사유 비밀번호")
+    @ApiModelProperty(example = "탈퇴사유")
     private String withdrawReason;
 
     @Builder

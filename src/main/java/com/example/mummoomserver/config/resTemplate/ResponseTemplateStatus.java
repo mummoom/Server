@@ -61,6 +61,8 @@ public enum ResponseTemplateStatus {
     EMPTY_EMAIL(false, "이메일을 입력해주세요", 7003),
     EMPTY_PASSWORD(false, "비밀번호를 입력해주세요", 7004),
     EMPTY_NICKNAME(false, "닉네임을 입력해주세요", 7005),
+    INVALID_EMAIL(false, "이메일이 올바르지 않습니다.", 7006),
+    INVALID_PASSWORD(false, "비밀번호가 올바르지 않습니다.", 7007),
 
 
 

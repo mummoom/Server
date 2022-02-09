@@ -36,6 +36,9 @@ import javax.validation.Valid;
 import java.io.IOException;
 import java.util.Date;
 
+import static com.example.mummoomserver.config.resTemplate.ResponseTemplateStatus.INVALID_EMAIL;
+import static com.example.mummoomserver.config.resTemplate.ResponseTemplateStatus.INVALID_PASSWORD;
+
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -88,16 +91,18 @@ public class UserController {
             @ApiResponse(code = 200, message = "요청 성공"),
             @ApiResponse(code = 3000, message = "데이터베이스 에러"),
             @ApiResponse(code = 7003, message = "이메일을 입력해주세요."),
-            @ApiResponse(code = 7004, message = "비밀번호를 입력해주세요.")})
+            @ApiResponse(code = 7004, message = "비밀번호를 입력해주세요."),
+            @ApiResponse(code = 7006, message = "이메일이 올바르지 않습니다."),
+            @ApiResponse(code = 7007, message = "비밀번호가 올바르지 않습니다.")})
     @PostMapping("/login")
-    public ResponseTemplate<LoginDto> login(@RequestBody @Valid LoginRequest loginRequest, HttpServletResponse httpServletResponse) throws IOException {
+    public ResponseTemplate<LoginDto> login(@RequestBody @Valid LoginRequest loginRequest, HttpServletResponse httpServletResponse) throws IOException, ResponeException {
         if(loginRequest.getEmail()==null) return new ResponseTemplate<>(ResponseTemplateStatus.EMPTY_EMAIL);
         if(loginRequest.getPassword()==null) return new ResponseTemplate<>(ResponseTemplateStatus.EMPTY_PASSWORD);
         //실패시
-        User member = userRepository.findByEmail(loginRequest.getEmail()).orElseThrow(() -> new IllegalArgumentException("가입되지 않은 E-MAIL 입니다."));
+        User member = userRepository.findByEmail(loginRequest.getEmail()).orElseThrow(() -> new ResponeException(INVALID_EMAIL));
         //비밀번호 틀릴 시
         if (!passwordEncoder.matches(loginRequest.getPassword(), member.getPassword())) {
-            throw new IllegalArgumentException("잘못된 비밀번호입니다.");
+            throw new ResponeException(INVALID_PASSWORD);
         }
         // 로그인 성공 시  // 유저 이메일을 삽입
         String token = jwtProvider.createToken(member.getEmail(), member.getRole());
@@ -156,7 +161,8 @@ public class UserController {
     @ApiResponses({
             @ApiResponse(code = 200, message = "요청 성공"),
             @ApiResponse(code = 3000, message = "데이터베이스에러"),
-            @ApiResponse(code = 7002, message = "변경할 닉네임이나 이미지를 입력해주세요")})
+            @ApiResponse(code = 7002, message = "변경할 닉네임이나 이미지를 입력해주세요"),
+            @ApiResponse(code = 7007, message = "비밀번호가 올바르지 않습니다.")})
     @PatchMapping("/me")
     public ResponseTemplate<String> updateProfile(@RequestBody @Valid  UpdateProfileRequest updateProfileRequest) {
         //입력해준 값이 없을 때의 예외 처리
@@ -179,7 +185,8 @@ public class UserController {
     @ApiResponses({
             @ApiResponse(code = 200, message = "요청 성공"),
             @ApiResponse(code = 3000, message = "데이터베이스에러"),
-            @ApiResponse(code = 7001, message = "변경할 비밀번호를 입력해주세요")})
+            @ApiResponse(code = 7001, message = "변경할 비밀번호를 입력해주세요"),
+    })
     @PutMapping("/pwd")
     public ResponseTemplate<String> updatePwd(@RequestBody @Valid UpdatePwdRequest updatePwdRequest) {
         //입력해준 값이 없을 때의 예외 처리
@@ -203,7 +210,8 @@ public class UserController {
     @ApiResponses({
             @ApiResponse(code = 200, message = "요청 성공"),
             @ApiResponse(code = 3000, message = "데이터베이스에러"),
-            @ApiResponse(code = 7004, message = "비밀번호를 입력해주세요")})
+            @ApiResponse(code = 7004, message = "비밀번호를 입력해주세요"),
+            @ApiResponse(code = 7007, message = "비밀번호가 올바르지 않습니다.")})
     public ResponseTemplate<String> withdrawUser(@RequestBody WithdrawRequest withdrawRequest) {
             // 해당하는 유저의 정보를 가져왔음
         try {

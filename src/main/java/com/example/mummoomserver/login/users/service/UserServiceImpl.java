@@ -104,7 +104,7 @@ public class UserServiceImpl implements UserService {
     }
 
     public void deleteUser(String email, WithdrawRequest withdrawRequest) throws ResponeException {
-        User user = userRepository.findByEmail(email).orElseThrow(() -> new ResponeException(INVALID_USER));
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new ResponeException(INVALID_PASSWORD));
         if (!passwordEncoder.matches(withdrawRequest.getWithdrawPwd(), user.getPassword()))
             throw new IllegalArgumentException("잘못된 비밀번호입니다.");
         userRepository.delete(user);
