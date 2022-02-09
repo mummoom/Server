@@ -133,9 +133,15 @@ public class UserController {
     @ApiImplicitParam(name = "accessToken", value = "구글 Access token")
     @ApiResponses({
             @ApiResponse(code = 200, message = "요청 성공"),
-         @ApiResponse(code = 3000, message = "데이터베이스 에러")})
+         @ApiResponse(code = 3000, message = "데이터베이스 에러"),
+        @ApiResponse(code= 7006, message = "토큰 유효성 검사 실패, 토큰이 없거나 유효하지 않음")
+    })
     public ResponseTemplate<LoginDto> googleLogin(@RequestParam(name="accessToken") String accessToken){
         boolean dog_exist;
+        if(accessToken == null){
+            return new ResponseTemplate<>(ResponseTemplateStatus.EMPTY_ACCESS_TOKEN);
+        }
+
         ResponseEntity<String> userInfoResponse = googleLoginService.createRequest(accessToken);
         GoogleUser googleUser = googleLoginService.getUserInfo(userInfoResponse);
 
@@ -144,7 +150,6 @@ public class UserController {
         Optional<User> member = userRepository.findByEmail(googleUser.getEmail());
 
         if(member.isPresent()){
-
             log.info("DB에 유저 정보 있음");
             dog_exist = dogRepository.existsByUser_userIdx(member.get().getUserIdx());
             String token = jwtProvider.createToken(member.get().getEmail(), Role.USER);

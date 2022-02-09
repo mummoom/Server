@@ -31,6 +31,7 @@ public class GoogleLoginService {
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity(headers);
 
 
+        log.info("Access token으로 구글 유저 정보 요청");
         return restTemplate.exchange(GoogleRquestURL, HttpMethod.GET,request,String.class);
 
 
