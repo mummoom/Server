@@ -2,6 +2,7 @@ package com.example.mummoomserver.domain.Post.controller;
 
 import com.example.mummoomserver.config.resTemplate.ResponeException;
 import com.example.mummoomserver.config.resTemplate.ResponseTemplate;
+import com.example.mummoomserver.config.resTemplate.ResponseTemplateStatus;
 import com.example.mummoomserver.domain.Post.Post;
 import com.example.mummoomserver.domain.Post.dto.PostIdxResponseDto;
 import com.example.mummoomserver.domain.Post.dto.PostResponseDto;
@@ -21,6 +22,8 @@ import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.List;
 
+import static com.example.mummoomserver.config.resTemplate.ResponseTemplateStatus.*;
+
 @Slf4j
 @RequiredArgsConstructor
 @RestController
@@ -33,8 +36,12 @@ public class PostController {
     @ApiResponses({
      @ApiResponse(code=3000, message="데이터베이스 요청 에러.")
             ,@ApiResponse(code=8001, message="회원정보를 찾을 수 없습니다.")
+            ,@ApiResponse(code=8005, message="제목을 입력해주세요.")
+            ,@ApiResponse(code=8006, message="내용을 입력해주세요.")
     })
     public ResponseTemplate<Long> save(@RequestBody PostSaveRequestDto requestDto) {
+        if(requestDto.getTitle()==null)return new ResponseTemplate<>(EMPTY_TITLE);
+        if(requestDto.getContent()==null)return new ResponseTemplate<>(EMPTY_CONTENT);
         try{
             String email = userService.getAuthUserEmail();
             Long result = postService.save(email, requestDto);
@@ -51,8 +58,12 @@ public class PostController {
             @ApiResponse(code=8000, message="존재하지 않는 게시글 입니다.")
             ,@ApiResponse(code=8001, message="회원정보를 찾을 수 없습니다.")
             ,@ApiResponse(code=8004, message="작성자만 사용할 수 있습니다.")
+            ,@ApiResponse(code=8005, message="제목을 입력해주세요.")
+            ,@ApiResponse(code=8006, message="내용을 입력해주세요.")
     })
     public ResponseTemplate<String> update(@PathVariable Long postIdx, @RequestBody PostUpdateRequestDto requestDto){
+        if(requestDto.getTitle()==null)return new ResponseTemplate<>(EMPTY_TITLE);
+        if(requestDto.getContent()==null)return new ResponseTemplate<>(EMPTY_CONTENT);
         try {
             String email = userService.getAuthUserEmail();
             String result = "게시글 수정에 성공했습니다.";

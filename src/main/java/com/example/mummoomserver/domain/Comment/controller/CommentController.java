@@ -14,6 +14,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import static com.example.mummoomserver.config.resTemplate.ResponseTemplateStatus.EMPTY_CONTENT;
+
 @Slf4j
 @RequiredArgsConstructor
 @RestController
@@ -27,8 +29,10 @@ public class CommentController {
             @ApiResponse(code=3000, message="데이터베이스 요청 에러.")
             ,@ApiResponse(code=8000, message="존재하지 않는 게시글 입니다.")
             ,@ApiResponse(code=8001, message="회원정보를 찾을 수 없습니다.")
+            ,@ApiResponse(code=8006, message="내용을 입력해주세요.")
     })
     public ResponseTemplate<Long> save(@PathVariable Long postIdx, @RequestBody CommentSaveRequestDto requestDto) {
+        if(requestDto.getContent()==null)return new ResponseTemplate<>(EMPTY_CONTENT);
         try {
             String email = userService.getAuthUserEmail();
             Long result = commentService.save(postIdx, email, requestDto);
