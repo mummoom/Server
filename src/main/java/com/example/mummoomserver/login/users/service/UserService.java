@@ -12,11 +12,14 @@ public interface UserService {
 
     void saveUser(SignUpRequest signUpRequest);
 
+    void saveOAuthUser(UserDto usserDto);
+
     String getAuthUserNickname() throws ResponeException;
 
     String getAuthUserEmail() ;
 
     UserDto getUserProfile(String email) throws ResponeException;
+
 
 
 }

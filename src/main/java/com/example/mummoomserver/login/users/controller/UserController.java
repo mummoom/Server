@@ -2,17 +2,16 @@ package com.example.mummoomserver.login.users.controller;
 
 import com.example.mummoomserver.config.resTemplate.ResponeException;
 import com.example.mummoomserver.config.resTemplate.ResponseTemplate;
-import com.example.mummoomserver.config.resTemplate.ResponseTemplateStatus;
 import com.example.mummoomserver.login.token.jwt.JwtProvider;
 
 
-import com.example.mummoomserver.login.service.UserDetailsImpl;
 import com.example.mummoomserver.login.users.User;
 import com.example.mummoomserver.login.users.UserRepository;
+import com.example.mummoomserver.login.users.dto.GoogleUser;
 import com.example.mummoomserver.login.users.dto.UserDto;
 import com.example.mummoomserver.login.users.requestResponse.SignUpRequest;
 import com.example.mummoomserver.login.users.requestResponse.UpdateProfileRequest;
-import com.example.mummoomserver.login.users.requestResponse.UserProfileResponse;
+import com.example.mummoomserver.login.users.service.GoogleLoginService;
 import com.example.mummoomserver.login.users.service.UserService;
 import com.example.mummoomserver.login.users.requestResponse.LoginRequest;
 import com.example.mummoomserver.login.users.service.UserServiceImpl;
@@ -20,6 +19,7 @@ import com.example.mummoomserver.login.validation.ValidationException;
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -40,6 +40,9 @@ public class UserController {
     private final UserServiceImpl userServiceImpl;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final GoogleLoginService googleLoginService;
+
+
 
     // 회원가입
     @ApiOperation(value = "회원가입 API", notes = "회원정보(이메일,닉네임,비밀번호)를 모두 필수로 받습니다.")
@@ -77,6 +80,36 @@ public class UserController {
         jwtProvider.writeTokenResponse(httpServletResponse, token);
         return new ResponseTemplate("로그인 성공");
     }
+
+
+    /**
+     * 구글 소셜 로그인
+     * @return 성공시 jwt 토큰반환
+     */
+    @GetMapping("/google/login")
+    @ApiOperation(value = "구글 로그인 API", notes = "구글 Access token을 전달하여 멈뭄에 로그인합니다")
+    @ApiImplicitParam(name = "accessToken", value = "구글 Access token")
+    public ResponseTemplate<String> googleLogin(@RequestParam(name="accessToken") String accessToken){
+
+        ResponseEntity<String> userInfoResponse = googleLoginService.createRequest(accessToken);
+        GoogleUser googleUser = googleLoginService.getUserInfo(userInfoResponse);
+        log.info("로그인한 구글 유저 정보 \n {} ",googleUser);
+
+
+        UserDto  user = googleUser.toUserDto(googleUser.getEmail(),
+                googleUser.getName(),
+                googleUser.getPicture());
+
+        //DB에 정보가 없다면 DB에 유저정보 저장
+        if(userRepository.findByEmail(user.getEmail()) ==null){
+            userService.saveOAuthUser(user);
+        }
+
+
+
+    }
+
+
 
     /**
      * - 현석
