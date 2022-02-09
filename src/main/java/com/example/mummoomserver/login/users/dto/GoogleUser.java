@@ -21,7 +21,7 @@ public class GoogleUser {
 
 
     public UserDto toUserDto(String email, String name,String imgUrl){
-        return new UserDto(email,null,name,imgUrl);
+        return new UserDto(email,name,imgUrl);
     }
 
 }

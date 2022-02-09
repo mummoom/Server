@@ -125,15 +125,20 @@ public class UserController {
 
     /**
      * 구글 소셜 로그인
-     * @return 성공시 jwt 토큰반환
+     * 테스트필요
+     * @return 성공시 jwt 토큰과 강아지 정보 여부 반환
      */
-    @GetMapping("/google/login")
+    @GetMapping("/login/google")
     @ApiOperation(value = "구글 로그인 API", notes = "구글 Access token을 전달하여 멈뭄에 로그인합니다")
     @ApiImplicitParam(name = "accessToken", value = "구글 Access token")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "요청 성공"),
+         @ApiResponse(code = 3000, message = "데이터베이스 에러")})
     public ResponseTemplate<LoginDto> googleLogin(@RequestParam(name="accessToken") String accessToken){
         boolean dog_exist;
         ResponseEntity<String> userInfoResponse = googleLoginService.createRequest(accessToken);
         GoogleUser googleUser = googleLoginService.getUserInfo(userInfoResponse);
+
         log.info("로그인한 구글 유저 정보 \n {} ",googleUser);
         LoginDto loginDto = null;
         Optional<User> member = userRepository.findByEmail(googleUser.getEmail());
@@ -163,6 +168,19 @@ public class UserController {
 
 
     }
+
+
+    /**
+     * 카카오 소셜 로그인
+     * @return 성공시 jwt 토큰과 강아지 정보 여부 반환
+     */
+//
+//    @GetMapping("/login/kakao")
+//    public ResponseTemplate<LoginDto> kakaoLogin(@RequestParam(name="accessToken") String accessToken){
+//        boolean dog_exist;
+//
+//    }
+
 
 
 
