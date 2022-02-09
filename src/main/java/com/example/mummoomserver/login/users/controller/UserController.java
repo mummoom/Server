@@ -17,11 +17,14 @@ import com.example.mummoomserver.login.validation.ValidationException;
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
@@ -45,6 +48,11 @@ public class UserController {
     @ApiImplicitParam(name = "nickName", value = "1~20자를 입력받으며 중복이 되지 않습니다."),
     @ApiImplicitParam(name = "paassword", value = "6~20 길이의 알파벳과 숫자, 특수문자만 사용할 수 있습니다.")})
     public ResponseTemplate<?> signUpNewUser(@RequestBody @Valid SignUpRequest signUpRequest, BindingResult bindingResult) {
+        if(signUpRequest.getEmail()==null) return new ResponseTemplate<>(ResponseTemplateStatus.EMPTY_EMAIL);
+        if(signUpRequest.getPassword()==null) return new ResponseTemplate<>(ResponseTemplateStatus.EMPTY_PASSWORD);
+        if(signUpRequest.getNickName()==null) return new ResponseTemplate<>(ResponseTemplateStatus.EMPTY_NICKNAME);
+
+
         //유효성 검사
         if (bindingResult.hasErrors()) throw new ValidationException("회원가입 유효성 검사 실패.", bindingResult.getFieldErrors());
         //성공 시
@@ -62,6 +70,8 @@ public class UserController {
                                                 "성공 시 response 바디에 X-AUTH-TOKEN 이라는 이름으로 토큰 정보가 반환됩니다.")
     @PostMapping("/login")
     public ResponseTemplate<String> login(@RequestBody @Valid LoginRequest loginRequest, HttpServletResponse httpServletResponse) throws IOException {
+        if(loginRequest.getEmail()==null) return new ResponseTemplate<>(ResponseTemplateStatus.EMPTY_EMAIL);
+        if(loginRequest.getPassword()==null) return new ResponseTemplate<>(ResponseTemplateStatus.EMPTY_PASSWORD);
         //실패시
         User member = userRepository.findByEmail(loginRequest.getEmail()).orElseThrow(() -> new IllegalArgumentException("가입되지 않은 E-MAIL 입니다."));
         //비밀번호 틀릴 시
@@ -78,17 +88,12 @@ public class UserController {
 
 
 //    @ApiOperation(value = "로그아웃 API")
-//    @PostMapping("/logout")
-//    public ResponseTemplate<String> logout(HttpServletResponse httpServletResponse) throws IOException {
-//        // 토큰 삭제..?
-//        return httpServletResponse.sendRedirect("");
+//    @GetMapping("/user/logout")
+//    public String logout(HttpServletRequest request, HttpServletResponse response) {
+//        new SecurityContextLogoutHandler().logout(request, response, SecurityContextHolder.getContext().getAuthentication());
+//        ResponseTemplate<>("로그아웃이 완료되었습니다");
+//        return "redirect:/";
 //    }
-
-
-    /**
-     * - 현석
-     * 현재 아래 코드들은 기능상 중복되거나 유효하지 않아서 주석처리함
-     */
 
     //프로필 자신 조회
     @ApiOperation(value = "내정보 조회 API", notes = "이메일, 비밀번호,닉네임, 프로필 이미지를 조회할 수 있습니다. jwt 토큰을 입력해주어야 합니다.")
@@ -106,12 +111,12 @@ public class UserController {
     }
 
     // 프로필 수정 사항 반영
-    @ApiOperation(value = "내정보 수정 API", notes = "이메일, 비밀번호,닉네임 변경이 가능하고 프로필 이미지를 여기에서 등록할 수 있습니다. jwt토큰을 입력해주어야 합니다.")
+    @ApiOperation(value = "내정보 수정 API", notes = "비밀번호,닉네임 변경이 가능하고 프로필 이미지를 여기에서 등록할 수 있습니다. jwt토큰을 입력해주어야 합니다.")
     @PatchMapping("/me")
     public ResponseTemplate<String> updateProfile(@RequestBody @Valid  UpdateProfileRequest updateProfileRequest) {
         //입력해준 값이 없을 때의 예외 처리
-//        if (UserDto.getNickName() == null) return new ResponseTemplate<>(ResponseTemplateStatus.EMPTY_NICKNAME);
-//        if (UserDto.getPassword() == null) return new ResponseTemplate<>(ResponseTemplateStatus.EMPTY_PASSWORD);
+        if ((updateProfileRequest.getNickName() == null) & (updateProfileRequest.getImgUrl() == null))
+            return new ResponseTemplate<>(ResponseTemplateStatus.EMPTY_UPDATE);
         try {
             String email = userService.getAuthUserEmail();
             userServiceImpl.updateProfile(email, updateProfileRequest);
@@ -129,8 +134,7 @@ public class UserController {
     @PutMapping("/pwd")
     public ResponseTemplate<String> updatePwd(@RequestBody @Valid UpdatePwdRequest updatePwdRequest) {
         //입력해준 값이 없을 때의 예외 처리
-//        if (UserDto.getNickName() == null) return new ResponseTemplate<>(ResponseTemplateStatus.EMPTY_NICKNAME);
-//        if (UserDto.getPassword() == null) return new ResponseTemplate<>(ResponseTemplateStatus.EMPTY_PASSWORD);
+        if (updatePwdRequest.getPassword() == null) return new ResponseTemplate<>(ResponseTemplateStatus.EMPTY_UPDATE_PASSWORD);
         try {
             String email = userService.getAuthUserEmail();
              // 해당하는 유저의 정보를 가져왔음

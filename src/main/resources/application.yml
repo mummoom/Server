@@ -61,7 +61,7 @@ spring:
                         user-info-uri: https://kapi.kakao.com/v2/user/me
                         user_name_attribute: id
 jwt:
-    secretKey: " sakdjfokwktgjroiygjmdflkgbgjjiflergjlzkng"
+    secretKey: "q09ew8edjikadgffldfghkjnawehog"
     signatureAlgorithm: HS256
     tokenExpired: 604800 #(sec) 7 days
 

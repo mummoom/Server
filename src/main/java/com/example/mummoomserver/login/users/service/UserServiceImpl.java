@@ -37,6 +37,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void saveUser(SignUpRequest signUpRequest){
         checkDuplicateEmail(signUpRequest.getEmail());
+//        if(signUpRequest.getPassword()) throw new ResponeException(INVALID_PASSWORD);
         User user = User.builder()
                 .nickName(signUpRequest.getNickName())
                 .email(signUpRequest.getEmail())
@@ -51,7 +52,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto getUserProfile(String email) throws ResponeException {
         //이메일을 입력받으면 정보를 내어주는 로직을 짜야함
-        User user = userRepository.findByEmail(email).get();
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new ResponeException(INVALID_USER));
         try {
             return new UserDto(user.getEmail(), user.getNickName(), user.getImgUrl());
         } catch (Exception e) {
@@ -61,7 +62,7 @@ public class UserServiceImpl implements UserService {
 
     public void updateProfile(String email, UpdateProfileRequest updateProfileRequest) throws ResponeException {
 
-        User user = userRepository.findByEmail(email).get();
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new ResponeException(INVALID_USER));
 
         // 이미지가 변경되었는지 체크
         if (user.getImgUrl() == null)
@@ -74,6 +75,7 @@ public class UserServiceImpl implements UserService {
         if (!user.getNickName().equals(updateProfileRequest.getNickName()))
             checkDuplicateNickname(updateProfileRequest.getNickName());
             user.updateNickName(updateProfileRequest.getNickName());
+
         userRepository.save(user);
 
     }
@@ -81,7 +83,7 @@ public class UserServiceImpl implements UserService {
 
     public void updateUserPwd(String email, UpdatePwdRequest updatePwdRequest) throws ResponeException {
 
-        User user = userRepository.findByEmail(email).get();
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new ResponeException(INVALID_USER));
         if (user.getType().equals(UserType.OAUTH))
             throw new ResponeException(INVALID_DOG_INDEX); //여기 에러처리 필요
         // 1. 기존 비밀번호와 현재 입력한 비밀번호가 동일한지 확인
@@ -102,7 +104,7 @@ public class UserServiceImpl implements UserService {
 
     public void deleteUser(String email) throws ResponeException {
 
-        User user = userRepository.findByEmail(email).get();
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new ResponeException(INVALID_USER));
 
         userRepository.delete(user);
 
