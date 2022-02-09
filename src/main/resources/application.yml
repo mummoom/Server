@@ -29,7 +29,7 @@ spring:
     profiles:
         include: real-db
 
-    # 여기서부터 로그인 부분
+# 여기서부터 로그인 부분
     servlet:
         encoding:
             charset: UTF-8 #utf-8 encoding
@@ -60,11 +60,6 @@ spring:
                         token_uri: https://kauth.kakao.com/oauth/token
                         user-info-uri: https://kapi.kakao.com/v2/user/me
                         user_name_attribute: id
-jwt:
-    secretKey: "q09ew8edjikadgffldfghkjnawehog"
-    signatureAlgorithm: HS256
-    tokenExpired: 604800 #(sec) 7 days
-
 
 # 여기까지 로그인 끝
 

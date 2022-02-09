@@ -43,10 +43,17 @@ public class UserController {
 
     // 회원가입
     @ApiOperation(value = "회원가입 API", notes = "회원정보(이메일,닉네임,비밀번호)를 모두 필수로 받습니다.")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "요청 성공"),
+            @ApiResponse(code = 3000, message = "데이터베이스 에러"),
+            @ApiResponse(code = 7003, message = "이메일을 입력해주세요."),
+            @ApiResponse(code = 7004, message = "비밀번호를 입력해주세요."),
+            @ApiResponse(code = 7005, message = "닉네임을 입력해주세요")})
     @PostMapping("/signup")
     @ApiImplicitParams({
     @ApiImplicitParam(name = "nickName", value = "1~20자를 입력받으며 중복이 되지 않습니다."),
     @ApiImplicitParam(name = "paassword", value = "6~20 길이의 알파벳과 숫자, 특수문자만 사용할 수 있습니다.")})
+
     public ResponseTemplate<?> signUpNewUser(@RequestBody @Valid SignUpRequest signUpRequest, BindingResult bindingResult) {
         if(signUpRequest.getEmail()==null) return new ResponseTemplate<>(ResponseTemplateStatus.EMPTY_EMAIL);
         if(signUpRequest.getPassword()==null) return new ResponseTemplate<>(ResponseTemplateStatus.EMPTY_PASSWORD);
@@ -68,6 +75,11 @@ public class UserController {
      */
     @ApiOperation(value = "로그인 API", notes = "이메일, 비밀번호로 입력을 합니다. \n"+
                                                 "성공 시 response 바디에 X-AUTH-TOKEN 이라는 이름으로 토큰 정보가 반환됩니다.")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "요청 성공"),
+            @ApiResponse(code = 3000, message = "데이터베이스 에러"),
+            @ApiResponse(code = 7003, message = "이메일을 입력해주세요."),
+            @ApiResponse(code = 7004, message = "비밀번호를 입력해주세요.")})
     @PostMapping("/login")
     public ResponseTemplate<String> login(@RequestBody @Valid LoginRequest loginRequest, HttpServletResponse httpServletResponse) throws IOException {
         if(loginRequest.getEmail()==null) return new ResponseTemplate<>(ResponseTemplateStatus.EMPTY_EMAIL);
@@ -97,6 +109,9 @@ public class UserController {
 
     //프로필 자신 조회
     @ApiOperation(value = "내정보 조회 API", notes = "이메일, 비밀번호,닉네임, 프로필 이미지를 조회할 수 있습니다. jwt 토큰을 입력해주어야 합니다.")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "요청 성공"),
+            @ApiResponse(code = 3000, message = "데이터베이스에러")})
     @GetMapping("/me")
     public ResponseTemplate<UserDto> getMyProfile() {
         try{
@@ -112,6 +127,10 @@ public class UserController {
 
     // 프로필 수정 사항 반영
     @ApiOperation(value = "내정보 수정 API", notes = "비밀번호,닉네임 변경이 가능하고 프로필 이미지를 여기에서 등록할 수 있습니다. jwt토큰을 입력해주어야 합니다.")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "요청 성공"),
+            @ApiResponse(code = 3000, message = "데이터베이스에러"),
+            @ApiResponse(code = 7002, message = "변경할 닉네임이나 이미지를 입력해주세요")})
     @PatchMapping("/me")
     public ResponseTemplate<String> updateProfile(@RequestBody @Valid  UpdateProfileRequest updateProfileRequest) {
         //입력해준 값이 없을 때의 예외 처리
@@ -131,6 +150,10 @@ public class UserController {
 
     // 비밀번호 수정
     @ApiOperation(value = "비밀번호 수정 API", notes = "비밀번호를 확인한 후에 변경이 가능합니다. jwt토큰을 입력해주어야 합니다.")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "요청 성공"),
+            @ApiResponse(code = 3000, message = "데이터베이스에러"),
+            @ApiResponse(code = 7001, message = "변경할 비밀번호를 입력해주세요")})
     @PutMapping("/pwd")
     public ResponseTemplate<String> updatePwd(@RequestBody @Valid UpdatePwdRequest updatePwdRequest) {
         //입력해준 값이 없을 때의 예외 처리
@@ -151,6 +174,9 @@ public class UserController {
 
      //회원 탈퇴ㅣ?
     @DeleteMapping("/withdraw")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "요청 성공"),
+            @ApiResponse(code = 3000, message = "데이터베이스에러")})
     public ResponseTemplate<String> withdrawUser() {
         try {
             String email = userService.getAuthUserEmail();
