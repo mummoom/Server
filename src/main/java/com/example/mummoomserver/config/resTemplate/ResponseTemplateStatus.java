@@ -51,6 +51,7 @@ public enum ResponseTemplateStatus {
     INVALID_DOG_INDEX(false, "존재하지 않는 강아지 Index입니다.", 6005),
 
     INVALID_DOG_USER(false, "유효하지 않은 유저입니다.", 6006),
+    NOT_EXIST_USER(false, "회원 정보를 찾을 수 없습니다.", 6007),
 
     /**
      * 7000 : 유저 정보 요청 관련 오류
