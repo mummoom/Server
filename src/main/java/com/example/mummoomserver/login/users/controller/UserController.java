@@ -3,12 +3,15 @@ package com.example.mummoomserver.login.users.controller;
 import com.example.mummoomserver.config.resTemplate.ResponeException;
 import com.example.mummoomserver.config.resTemplate.ResponseTemplate;
 import com.example.mummoomserver.config.resTemplate.ResponseTemplateStatus;
+import com.example.mummoomserver.domain.Dog.entity.Dog;
+import com.example.mummoomserver.domain.Dog.repository.DogRepository;
 import com.example.mummoomserver.login.token.jwt.JwtProvider;
 
 
 import com.example.mummoomserver.login.service.UserDetailsImpl;
 import com.example.mummoomserver.login.users.User;
 import com.example.mummoomserver.login.users.UserRepository;
+import com.example.mummoomserver.login.users.dto.LoginDto;
 import com.example.mummoomserver.login.users.dto.UserDto;
 import com.example.mummoomserver.login.users.requestResponse.*;
 import com.example.mummoomserver.login.users.service.UserService;
@@ -40,6 +43,7 @@ public class UserController {
     private final UserServiceImpl userServiceImpl;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final DogRepository dogRepository;
 
     // 회원가입
     @ApiOperation(value = "회원가입 API", notes = "회원정보(이메일,닉네임,비밀번호)를 모두 필수로 받습니다.")
@@ -74,14 +78,15 @@ public class UserController {
      * 로그인할때는 이메일과 비밀번호로 로그인하는걸로 수정
      */
     @ApiOperation(value = "로그인 API", notes = "이메일, 비밀번호로 입력을 합니다. \n"+
-                                                "성공 시 response 바디에 X-AUTH-TOKEN 이라는 이름으로 토큰 정보가 반환됩니다.")
+                                                "성공 시 response 바디에 X-AUTH-TOKEN 이라는 이름으로 토큰 정보가 반환되고,\n"+
+                                                "등록한 강아지가 존재할 경우 true, 존재하지 않을 경우 false")
     @ApiResponses({
             @ApiResponse(code = 200, message = "요청 성공"),
             @ApiResponse(code = 3000, message = "데이터베이스 에러"),
             @ApiResponse(code = 7003, message = "이메일을 입력해주세요."),
             @ApiResponse(code = 7004, message = "비밀번호를 입력해주세요.")})
     @PostMapping("/login")
-    public ResponseTemplate<String> login(@RequestBody @Valid LoginRequest loginRequest, HttpServletResponse httpServletResponse) throws IOException {
+    public ResponseTemplate<LoginDto> login(@RequestBody @Valid LoginRequest loginRequest, HttpServletResponse httpServletResponse) throws IOException {
         if(loginRequest.getEmail()==null) return new ResponseTemplate<>(ResponseTemplateStatus.EMPTY_EMAIL);
         if(loginRequest.getPassword()==null) return new ResponseTemplate<>(ResponseTemplateStatus.EMPTY_PASSWORD);
         //실패시
@@ -92,9 +97,14 @@ public class UserController {
         }
         // 로그인 성공 시  // 유저 이메일을 삽입
         String token = jwtProvider.createToken(member.getEmail(), member.getRole());
-
         jwtProvider.writeTokenResponse(httpServletResponse, token);
-        return new ResponseTemplate<>(token);
+
+
+        //유저인덱스와 연결된 강아지 정보가 있다면 return true, 아니면 false
+        boolean dog_exist = dogRepository.existsByUser_userIdx(member.getUserIdx());
+        LoginDto loginDto = new LoginDto(token, dog_exist);
+
+        return new ResponseTemplate<>(loginDto);
     }
 
 
@@ -191,4 +201,6 @@ public class UserController {
             return new ResponseTemplate<>(e.getStatus());
         }
     }
+
+
 }
