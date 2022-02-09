@@ -33,6 +33,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
@@ -134,42 +135,41 @@ public class UserController {
     @ApiResponses({
             @ApiResponse(code = 200, message = "요청 성공"),
          @ApiResponse(code = 3000, message = "데이터베이스 에러"),
-        @ApiResponse(code= 7006, message = "토큰 유효성 검사 실패, 토큰이 없거나 유효하지 않음")
+        @ApiResponse(code= 7006, message = "토큰이 유효하지 않음")
     })
     public ResponseTemplate<LoginDto> googleLogin(@RequestParam(name="accessToken") String accessToken){
         boolean dog_exist;
-        if(accessToken == null){
-            return new ResponseTemplate<>(ResponseTemplateStatus.EMPTY_ACCESS_TOKEN);
+        try {
+            ResponseEntity<String> userInfoResponse = googleLoginService.createRequest(accessToken);
+            GoogleUser googleUser = googleLoginService.getUserInfo(userInfoResponse);
+            log.info("로그인한 구글 유저 정보 \n {} ", googleUser);
+            LoginDto loginDto = null;
+            Optional<User> member = userRepository.findByEmail(googleUser.getEmail());
+
+            if (member.isPresent()) {
+                log.info("DB에 유저 정보 있음");
+                dog_exist = dogRepository.existsByUser_userIdx(member.get().getUserIdx());
+                String token = jwtProvider.createToken(member.get().getEmail(), Role.USER);
+                loginDto = new LoginDto(token, dog_exist); //토큰과 강아지 정보 여부 반환
+
+            } else {
+                //DB에 정보가 없다면 DB에 유저정보 저장
+                log.info("DB에 유저 정보 없음");
+                UserDto user = googleUser.toUserDto(googleUser.getEmail(),
+                        googleUser.getName(),
+                        googleUser.getPicture());
+                userService.saveOAuthUser(user);
+                dog_exist = false;
+                String token = jwtProvider.createToken(user.getEmail(), Role.USER);
+                loginDto = new LoginDto(token, dog_exist); //토큰과 강아지 정보 여부 반환
+
+            }
+
+            return new ResponseTemplate<>(loginDto);
+            //유저인덱스와 연결된 강아지 정보가 있다면 return true, 아니면 false
+        }catch (Exception e){
+            return new ResponseTemplate<>(ResponseTemplateStatus.INVALID_OAUTH_ACCESS_TOKEN);
         }
-
-        ResponseEntity<String> userInfoResponse = googleLoginService.createRequest(accessToken);
-        GoogleUser googleUser = googleLoginService.getUserInfo(userInfoResponse);
-
-        log.info("로그인한 구글 유저 정보 \n {} ",googleUser);
-        LoginDto loginDto = null;
-        Optional<User> member = userRepository.findByEmail(googleUser.getEmail());
-
-        if(member.isPresent()){
-            log.info("DB에 유저 정보 있음");
-            dog_exist = dogRepository.existsByUser_userIdx(member.get().getUserIdx());
-            String token = jwtProvider.createToken(member.get().getEmail(), Role.USER);
-            loginDto = new LoginDto(token, dog_exist); //토큰과 강아지 정보 여부 반환
-
-        }else{
-            //DB에 정보가 없다면 DB에 유저정보 저장
-            log.info("DB에 유저 정보 없음");
-            UserDto user = googleUser.toUserDto(googleUser.getEmail(),
-                    googleUser.getName(),
-                    googleUser.getPicture());
-            userService.saveOAuthUser(user);
-            dog_exist =false;
-            String token = jwtProvider.createToken(user.getEmail(), Role.USER);
-            loginDto = new LoginDto(token, dog_exist); //토큰과 강아지 정보 여부 반환
-
-        }
-
-        return new ResponseTemplate<>(loginDto);
-        //유저인덱스와 연결된 강아지 정보가 있다면 return true, 아니면 false
 
 
     }
