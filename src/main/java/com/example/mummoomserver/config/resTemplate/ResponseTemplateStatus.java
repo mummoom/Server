@@ -63,8 +63,6 @@ public enum ResponseTemplateStatus {
     EMPTY_NICKNAME(false, "닉네임을 입력해주세요", 7005),
 
 
-
-
     /**
      * 8000 : 커뮤니티 요청 관련 오류
      */
@@ -72,7 +70,9 @@ public enum ResponseTemplateStatus {
     INVALID_USER(false, "회원정보를 찾을 수 없습니다.", 8001),
     INVALID_COMMENT_IDX(false, "존재하지 않는 댓글 입니다.", 8002),
     INVALID_NESTED_IDX(false, "존재하지 않는 대댓글 입니다.", 8003),
-    PERMISSION_DENIED(false, "작성자만 사용할 수 있습니다.", 8004);
+    PERMISSION_DENIED(false, "작성자만 사용할 수 있습니다.", 8004),
+    EMPTY_TITLE(false, "제목을 입력해주세요.", 8005),
+    EMPTY_CONTENT(false, "내용을 입력해주세요.", 8006);
 
 
 
