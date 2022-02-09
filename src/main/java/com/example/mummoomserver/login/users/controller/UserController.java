@@ -8,19 +8,28 @@ import com.example.mummoomserver.domain.Dog.repository.DogRepository;
 import com.example.mummoomserver.login.token.jwt.JwtProvider;
 
 
-import com.example.mummoomserver.login.service.UserDetailsImpl;
+import com.example.mummoomserver.login.users.Role;
 import com.example.mummoomserver.login.users.User;
 import com.example.mummoomserver.login.users.UserRepository;
-import com.example.mummoomserver.login.users.dto.LoginDto;
+import com.example.mummoomserver.login.users.dto.GoogleUser;
 import com.example.mummoomserver.login.users.dto.UserDto;
+import com.example.mummoomserver.login.users.requestResponse.SignUpRequest;
+import com.example.mummoomserver.login.users.requestResponse.UpdateProfileRequest;
+import com.example.mummoomserver.login.users.service.GoogleLoginService;
+import com.example.mummoomserver.login.users.dto.LoginDto;
+
 import com.example.mummoomserver.login.users.requestResponse.*;
+
 import com.example.mummoomserver.login.users.service.UserService;
 import com.example.mummoomserver.login.users.service.UserServiceImpl;
 import com.example.mummoomserver.login.validation.ValidationException;
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
+
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.context.SecurityContextHolder;
+
+import org.springframework.http.ResponseEntity;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.validation.BindingResult;
@@ -31,6 +40,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
+import java.lang.reflect.Member;
+import java.util.Optional;
 
 @Slf4j
 @RestController
@@ -43,7 +54,10 @@ public class UserController {
     private final UserServiceImpl userServiceImpl;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final GoogleLoginService googleLoginService;
+
     private final DogRepository dogRepository;
+
 
     // 회원가입
     @ApiOperation(value = "회원가입 API", notes = "회원정보(이메일,닉네임,비밀번호)를 모두 필수로 받습니다.")
@@ -109,6 +123,73 @@ public class UserController {
 
 
 
+    /**
+     * 구글 소셜 로그인
+     * 테스트필요
+     * @return 성공시 jwt 토큰과 강아지 정보 여부 반환
+     */
+    @GetMapping("/login/google")
+    @ApiOperation(value = "구글 로그인 API", notes = "구글 Access token을 전달하여 멈뭄에 로그인합니다")
+    @ApiImplicitParam(name = "accessToken", value = "구글 Access token")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "요청 성공"),
+         @ApiResponse(code = 3000, message = "데이터베이스 에러")})
+    public ResponseTemplate<LoginDto> googleLogin(@RequestParam(name="accessToken") String accessToken){
+        boolean dog_exist;
+        ResponseEntity<String> userInfoResponse = googleLoginService.createRequest(accessToken);
+        GoogleUser googleUser = googleLoginService.getUserInfo(userInfoResponse);
+
+        log.info("로그인한 구글 유저 정보 \n {} ",googleUser);
+        LoginDto loginDto = null;
+        Optional<User> member = userRepository.findByEmail(googleUser.getEmail());
+
+        if(member.isPresent()){
+
+            log.info("DB에 유저 정보 있음");
+            dog_exist = dogRepository.existsByUser_userIdx(member.get().getUserIdx());
+            String token = jwtProvider.createToken(member.get().getEmail(), Role.USER);
+            loginDto = new LoginDto(token, dog_exist); //토큰과 강아지 정보 여부 반환
+
+        }else{
+            //DB에 정보가 없다면 DB에 유저정보 저장
+            log.info("DB에 유저 정보 없음");
+            UserDto user = googleUser.toUserDto(googleUser.getEmail(),
+                    googleUser.getName(),
+                    googleUser.getPicture());
+            userService.saveOAuthUser(user);
+            dog_exist =false;
+            String token = jwtProvider.createToken(user.getEmail(), Role.USER);
+            loginDto = new LoginDto(token, dog_exist); //토큰과 강아지 정보 여부 반환
+
+        }
+
+        return new ResponseTemplate<>(loginDto);
+        //유저인덱스와 연결된 강아지 정보가 있다면 return true, 아니면 false
+
+
+    }
+
+
+    /**
+     * 카카오 소셜 로그인
+     * @return 성공시 jwt 토큰과 강아지 정보 여부 반환
+     */
+//
+//    @GetMapping("/login/kakao")
+//    public ResponseTemplate<LoginDto> kakaoLogin(@RequestParam(name="accessToken") String accessToken){
+//        boolean dog_exist;
+//
+//    }
+
+
+
+
+    /**
+     * - 현석
+     * 현재 아래 코드들은 기능상 중복되거나 유효하지 않아서 주석처리함
+     */
+
+
 //    @ApiOperation(value = "로그아웃 API")
 //    @GetMapping("/user/logout")
 //    public String logout(HttpServletRequest request, HttpServletResponse response) {
@@ -116,6 +197,7 @@ public class UserController {
 //        ResponseTemplate<>("로그아웃이 완료되었습니다");
 //        return "redirect:/";
 //    }
+
 
     //프로필 자신 조회
     @ApiOperation(value = "내정보 조회 API", notes = "이메일, 비밀번호,닉네임, 프로필 이미지를 조회할 수 있습니다. jwt 토큰을 입력해주어야 합니다.")
