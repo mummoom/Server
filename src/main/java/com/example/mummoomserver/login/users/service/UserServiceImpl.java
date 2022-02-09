@@ -7,6 +7,7 @@ import com.example.mummoomserver.login.users.dto.UserDto;
 import com.example.mummoomserver.login.users.requestResponse.SignUpRequest;
 import com.example.mummoomserver.login.users.requestResponse.UpdateProfileRequest;
 import com.example.mummoomserver.login.users.requestResponse.UpdatePwdRequest;
+import com.example.mummoomserver.login.users.requestResponse.WithdrawRequest;
 import com.example.mummoomserver.login.validation.SimpleFieldError;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -117,12 +118,11 @@ public class UserServiceImpl implements UserService {
 
     }
 
-    public void deleteUser(String email) throws ResponeException {
-
+    public void deleteUser(String email, WithdrawRequest withdrawRequest) throws ResponeException {
         User user = userRepository.findByEmail(email).orElseThrow(() -> new ResponeException(INVALID_USER));
-
+        if (!passwordEncoder.matches(withdrawRequest.getWithdrawPwd(), user.getPassword()))
+            throw new IllegalArgumentException("잘못된 비밀번호입니다.");
         userRepository.delete(user);
-
     }
 
     private void checkDuplicateEmail(String email) {

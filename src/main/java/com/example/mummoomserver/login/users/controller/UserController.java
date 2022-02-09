@@ -23,6 +23,9 @@ import com.example.mummoomserver.login.users.requestResponse.*;
 import com.example.mummoomserver.login.users.service.UserService;
 import com.example.mummoomserver.login.users.service.UserServiceImpl;
 import com.example.mummoomserver.login.validation.ValidationException;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
+import io.jsonwebtoken.Jwts;
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
 
@@ -40,6 +43,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
+import java.util.Date;
 import java.lang.reflect.Member;
 import java.util.Optional;
 
@@ -113,7 +117,6 @@ public class UserController {
         String token = jwtProvider.createToken(member.getEmail(), member.getRole());
         jwtProvider.writeTokenResponse(httpServletResponse, token);
 
-
         //유저인덱스와 연결된 강아지 정보가 있다면 return true, 아니면 false
         boolean dog_exist = dogRepository.existsByUser_userIdx(member.getUserIdx());
         LoginDto loginDto = new LoginDto(token, dog_exist);
@@ -121,7 +124,17 @@ public class UserController {
         return new ResponseTemplate<>(loginDto);
     }
 
-
+    //토큰 유효성 검사
+    @ApiOperation(value = "토큰 유효성 검사 API", notes = "토큰의 유효성을 확인합니다. 유효하다면 true, 유효하지 않다면 false")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "요청 성공"),
+            @ApiResponse(code = 3000, message = "데이터베이스 에러")})
+    @GetMapping("/validtoken")
+    public ResponseTemplate<?> checkValid(HttpServletRequest request) {
+        String token = jwtProvider.resolveToken((HttpServletRequest) request);
+        boolean result = jwtProvider.validateToken(token);
+        return new ResponseTemplate<>(result);
+    }
 
     /**
      * 구글 소셜 로그인
@@ -165,7 +178,6 @@ public class UserController {
 
         return new ResponseTemplate<>(loginDto);
         //유저인덱스와 연결된 강아지 정보가 있다면 return true, 아니면 false
-
 
     }
 
@@ -268,13 +280,13 @@ public class UserController {
     @DeleteMapping("/withdraw")
     @ApiResponses({
             @ApiResponse(code = 200, message = "요청 성공"),
-            @ApiResponse(code = 3000, message = "데이터베이스에러")})
-    public ResponseTemplate<String> withdrawUser() {
+            @ApiResponse(code = 3000, message = "데이터베이스에러"),
+            @ApiResponse(code = 7004, message = "비밀번호를 입력해주세요")})
+    public ResponseTemplate<String> withdrawUser(@RequestBody WithdrawRequest withdrawRequest) {
+            // 해당하는 유저의 정보를 가져왔음
         try {
             String email = userService.getAuthUserEmail();
-            // 해당하는 유저의 정보를 가져왔음
-
-            userServiceImpl.deleteUser(email); // 동일하다는 내용을 확인 됐다면 업데이트 진행
+            userServiceImpl.deleteUser(email, withdrawRequest); // 동일하다는 내용을 확인 됐다면 업데이트 진행
             String result = "회원 정보가 삭제되었습니다.";
 
             return new ResponseTemplate<>(result);
@@ -283,6 +295,5 @@ public class UserController {
             return new ResponseTemplate<>(e.getStatus());
         }
     }
-
 
 }
