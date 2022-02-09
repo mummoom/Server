@@ -5,16 +5,15 @@ spring:
 #        username: sa
 #        password:
 
-
     mvc:
         pathmatch:
             matching-strategy: ant_path_matcher
     jpa:
         # generate-ddl : false로 바꾸기
-        generate-ddl : false
+        generate-ddl : true
         hibernate:
             # ddl-auto: none으로 바꾸기
-            ddl-auto: none
+            ddl-auto: update
             naming:
                 implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl
                 physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
@@ -30,7 +29,7 @@ spring:
     profiles:
         include: real-db
 
-    # 여기서부터 로그인 부분
+# 여기서부터 로그인 부분
     servlet:
         encoding:
             charset: UTF-8 #utf-8 encoding
@@ -61,11 +60,6 @@ spring:
                         token_uri: https://kauth.kakao.com/oauth/token
                         user-info-uri: https://kapi.kakao.com/v2/user/me
                         user_name_attribute: id
-jwt:
-    secretKey: " sakdjfokwktgjroiygjmdflkgbgjjiflergjlzkng"
-    signatureAlgorithm: HS256
-    tokenExpired: 604800 #(sec) 7 days
-
 
 # 여기까지 로그인 끝
 

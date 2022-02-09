@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 
+import static com.example.mummoomserver.config.resTemplate.ResponseTemplateStatus.*;
+
 @RequiredArgsConstructor
 @Transactional
 @Service
@@ -23,15 +25,18 @@ public class ReportService {
 
     public Long save(String email, Long postIdx, ReportSaveRequestDto requestDto) throws ResponeException {
         User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new IllegalArgumentException("회원정보를 찾을 수 없습니다."));
+                .orElseThrow(() -> new ResponeException(INVALID_USER));
         Post post = postRepository.findByPostIdx(postIdx)
-                .orElseThrow(() -> new IllegalArgumentException("없는 게시글입니다."));
-
-        Report report = Report.builder()
-                .reason(requestDto.getReason())
-                .user(user)
-                .post(post)
-                .build();
-        return reportRepository.save(report).getReportIdx();
+                .orElseThrow(() -> new ResponeException(INVALID_POST_IDX));
+        try {
+            Report report = Report.builder()
+                    .reason(requestDto.getReason())
+                    .user(user)
+                    .post(post)
+                    .build();
+            return reportRepository.save(report).getReportIdx();
+        } catch (Exception e){
+            throw new ResponeException(DATABASE_ERROR);
+        }
     }
 }

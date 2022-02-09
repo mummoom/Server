@@ -3,6 +3,7 @@ package com.example.mummoomserver.login.users;
 
 import com.example.mummoomserver.config.BaseTimeEntity;
 import com.example.mummoomserver.domain.Comment.Comment;
+import com.example.mummoomserver.domain.Dog.entity.Dog;
 import com.example.mummoomserver.domain.Likecnt.entity.Likecnt;
 import com.example.mummoomserver.domain.Post.Post;
 import lombok.*;
@@ -36,7 +37,7 @@ public class User extends BaseTimeEntity {
     @Column(nullable = false)
     private String password;
 
-    @Column
+    @Column(nullable = true)
     private String imgUrl;
 
     @Enumerated(value = EnumType.STRING) // 일반 로그인인지 소셜 로그인인지 확인하는 컬럼
@@ -45,6 +46,9 @@ public class User extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Role role;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Dog> dogs = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Post> posts = new ArrayList<>();
@@ -65,20 +69,15 @@ public class User extends BaseTimeEntity {
         this.type = type;
     }
 
-    public void updateName(String nickName) {
+    public void updateNickName(String nickName) {
         this.nickName = nickName;
     }
 
-    public void updateEmail(String email) {
-        this.email = email;
-    }
+    public void updateImgUrl(String imgUrl) {  this.imgUrl = imgUrl; }
 
-    public void updateImgUrl(String imgUrl) {
-        this.imgUrl = imgUrl;
-    }
+    public void updatePwd(String password) { this.password = password; }
 
-
-    public User update(String nickName, String email, String imgUrl) {  //update email, update eimgurl, update nickname
+    public User update(String nickName, String email, String imgUrl) {  //update email, update imgurl, update nickname
         this.nickName = nickName;
         //일반 계정이라면 이메일도 함께 변경해준다.
         if (type.equals(UserType.DEFAULT))

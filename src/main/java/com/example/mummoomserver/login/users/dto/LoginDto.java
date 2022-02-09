@@ -11,11 +11,8 @@ import lombok.Setter;
 @Setter
 @RequiredArgsConstructor
 @AllArgsConstructor
-@ApiModel(value = "유저 정보", description = "이메일, 닉네임, 프로필 사진 확인 가능")
-public class UserDto {
-    private String email;
-    private String nickName;
-    private String imgUrl;
+@ApiModel(value = "로그인 정보", description = "토큰, 강아지 정보 등록 되어있는지 확인 가능")
+public class LoginDto {
+    private String token;
+    private boolean dog_exist;
 }
-
-

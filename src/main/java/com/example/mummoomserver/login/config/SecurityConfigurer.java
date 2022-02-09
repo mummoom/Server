@@ -66,17 +66,21 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
                         "/v2/api-docs",
                         "/swagger-resources/**",
                         "/webjars/**" ,
+
                         /*Probably not needed*/ "/swagger.json").permitAll()
                 .anyRequest().authenticated() // 그 이외에는 인증된 사용자만 접근 가능하다
                 .and()
                 .logout()
-                .logoutSuccessUrl("/")
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/login")
+                .invalidateHttpSession(true)
                 .and()
                 .oauth2Login()
                 .userInfoEndpoint()
-                .userService(oAuth2Service)
-                .and()
-                .successHandler(OAuth2AuthenticationSuccessHandler);
+                .userService(oAuth2Service);
+//                .and()
+//                .successHandler(OAuth2AuthenticationSuccessHandler);
+
         //로그인 인증을 진행하는 필터 이전에 jwtAuthenticationFilter 가 실행되도록 설정
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
     }

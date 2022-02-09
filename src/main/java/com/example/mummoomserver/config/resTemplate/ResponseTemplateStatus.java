@@ -50,13 +50,29 @@ public enum ResponseTemplateStatus {
     EMPTY_DOG_SURGERY(false, "강아지 중성화 수술 정보를 입력해주세요.", 6004),
     INVALID_DOG_INDEX(false, "존재하지 않는 강아지 Index입니다.", 6005),
 
-    INVALID_DOG_USER(false, "유효하지 않은 유저입니다.", 6006);
+    INVALID_DOG_USER(false, "유효하지 않은 유저입니다.", 6006),
 
     /**
      * 7000 : 유저 정보 요청 관련 오류
      */
-//    EMPTY_PASSWORD(false, "비밀번호를 조건에 맞춰 정확히 입력해주세요", 7000),
-//    EMPTY_NICKNAME(false, "중복된 닉네임입니다. ", 7001);
+
+    EMPTY_UPDATE_PASSWORD(false, "변경할 비밀번호를 입력해주세요", 7001),
+    EMPTY_UPDATE(false, "변경할 닉네임이나 이미지를 입력해주세요", 7002),
+    EMPTY_EMAIL(false, "이메일을 입력해주세요", 7003),
+    EMPTY_PASSWORD(false, "비밀번호를 입력해주세요", 7004),
+    EMPTY_NICKNAME(false, "닉네임을 입력해주세요", 7005),
+
+
+
+
+    /**
+     * 8000 : 커뮤니티 요청 관련 오류
+     */
+    INVALID_POST_IDX(false, "존재하지 않는 게시글 입니다.", 8000),
+    INVALID_USER(false, "회원정보를 찾을 수 없습니다.", 8001),
+    INVALID_COMMENT_IDX(false, "존재하지 않는 댓글 입니다.", 8002),
+    INVALID_NESTED_IDX(false, "존재하지 않는 대댓글 입니다.", 8003),
+    PERMISSION_DENIED(false, "작성자만 사용할 수 있습니다.", 8004);
 
 
 
