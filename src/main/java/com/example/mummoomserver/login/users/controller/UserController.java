@@ -3,12 +3,8 @@ package com.example.mummoomserver.login.users.controller;
 import com.example.mummoomserver.config.resTemplate.ResponeException;
 import com.example.mummoomserver.config.resTemplate.ResponseTemplate;
 import com.example.mummoomserver.config.resTemplate.ResponseTemplateStatus;
-import com.example.mummoomserver.domain.Dog.entity.Dog;
 import com.example.mummoomserver.domain.Dog.repository.DogRepository;
 import com.example.mummoomserver.login.token.jwt.JwtProvider;
-
-
-import com.example.mummoomserver.login.service.UserDetailsImpl;
 import com.example.mummoomserver.login.users.User;
 import com.example.mummoomserver.login.users.UserRepository;
 import com.example.mummoomserver.login.users.dto.LoginDto;
@@ -17,25 +13,17 @@ import com.example.mummoomserver.login.users.requestResponse.*;
 import com.example.mummoomserver.login.users.service.UserService;
 import com.example.mummoomserver.login.users.service.UserServiceImpl;
 import com.example.mummoomserver.login.validation.ValidationException;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
-import io.jsonwebtoken.Jwts;
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
-import java.util.Date;
-
 import static com.example.mummoomserver.config.resTemplate.ResponseTemplateStatus.INVALID_EMAIL;
 import static com.example.mummoomserver.config.resTemplate.ResponseTemplateStatus.INVALID_PASSWORD;
 
@@ -69,7 +57,6 @@ public class UserController {
         if(signUpRequest.getEmail()==null) return new ResponseTemplate<>(ResponseTemplateStatus.EMPTY_EMAIL);
         if(signUpRequest.getPassword()==null) return new ResponseTemplate<>(ResponseTemplateStatus.EMPTY_PASSWORD);
         if(signUpRequest.getNickName()==null) return new ResponseTemplate<>(ResponseTemplateStatus.EMPTY_NICKNAME);
-
 
         //유효성 검사
         if (bindingResult.hasErrors()) throw new ValidationException("회원가입 유효성 검사 실패.", bindingResult.getFieldErrors());
