@@ -44,11 +44,26 @@ public class UserServiceImpl implements UserService {
                 .email(signUpRequest.getEmail())
                 .password(passwordEncoder.encode(signUpRequest.getPassword()))
                 .type(UserType.DEFAULT)
-                .role(Role.GUEST)
+                .role(Role.USER)
                 .build();
 
         userRepository.save(user);
     }
+
+    @Override
+    public void saveOAuthUser(UserDto userDto){
+        User user = User.builder()
+                .nickName(userDto.getNickName())
+                .email(userDto.getEmail())
+                .password(null)
+                .type(UserType.OAUTH)
+                .role(Role.USER)
+                .build();
+
+        userRepository.save(user);
+
+    }
+
 
     @Override
     public UserDto getUserProfile(String email) throws ResponeException {
