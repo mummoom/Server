@@ -20,24 +20,22 @@ public class GoogleLoginService {
 
     private final RestTemplate restTemplate;
     private final ObjectMapper objectMapper;
-    private final String GoogleRquestURL ="https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=";//youraccess_token
-
+    private final String GoogleRquestURL ="https://oauth2.googleapis.com/tokeninfo?id_token=";//youraccess_token
 
 
     public ResponseEntity<String> createRequest(String accessToken){
 
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Authorization", "Bearer " + accessToken);
+        String url = GoogleRquestURL + accessToken;
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity(headers);
 
-
         log.info("Access token으로 구글 유저 정보 요청");
-        return restTemplate.exchange(GoogleRquestURL, HttpMethod.GET,request,String.class);
+        log.info("URL = {}",url);
+        return restTemplate.exchange(url, HttpMethod.GET,request,String.class);
 
 
 
     }
-
 
     public GoogleUser getUserInfo(ResponseEntity<String> userInfoResponse){
 

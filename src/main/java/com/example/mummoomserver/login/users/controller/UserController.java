@@ -142,6 +142,7 @@ public class UserController {
         try {
             ResponseEntity<String> userInfoResponse = googleLoginService.createRequest(accessToken);
             GoogleUser googleUser = googleLoginService.getUserInfo(userInfoResponse);
+
             log.info("로그인한 구글 유저 정보 \n {} ", googleUser);
             LoginDto loginDto = null;
             Optional<User> member = userRepository.findByEmail(googleUser.getEmail());

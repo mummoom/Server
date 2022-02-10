@@ -13,7 +13,7 @@ public interface UserService {
 
     void saveUser(SignUpRequest signUpRequest);
 
-    void saveOAuthUser(UserDto usserDto);
+    void saveOAuthUser(UserDto userDto);
 
     String getAuthUserNickname() throws ResponeException;
 

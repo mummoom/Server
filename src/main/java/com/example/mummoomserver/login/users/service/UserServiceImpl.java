@@ -17,6 +17,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.UUID;
+
 import static com.example.mummoomserver.config.resTemplate.ResponseTemplateStatus.*;
 
 @Service
@@ -33,6 +35,7 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    UUID garbagePassword =  UUID.randomUUID();
 
     @Override
     public void saveUser(SignUpRequest signUpRequest){
@@ -51,10 +54,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void saveOAuthUser(UserDto userDto){
+        int ran = (int)( Math.random() * 100 );
         User user = User.builder()
                 .nickName(userDto.getNickName())
                 .email(userDto.getEmail())
-                .password(null)
+                .password(passwordEncoder.encode(garbagePassword.toString()))
                 .type(UserType.OAUTH)
                 .role(Role.USER)
                 .build();
