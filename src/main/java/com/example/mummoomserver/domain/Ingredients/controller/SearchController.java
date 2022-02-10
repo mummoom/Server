@@ -38,6 +38,7 @@ public class SearchController {
     public ResponseTemplate<List<IngredientSearchResultDto>> searchResult(@RequestBody SearchReqDto searchReqDto){
         try {
             String IngredientName = searchReqDto.getIngredientName();
+
             List<IngredientSearchResultDto> result = searchService.getSearchResult(IngredientName);
             return new ResponseTemplate<>(result);
 

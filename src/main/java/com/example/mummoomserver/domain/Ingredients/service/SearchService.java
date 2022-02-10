@@ -27,6 +27,7 @@ public class SearchService {
 
         try{
             List<Ingredients> ret = ingredientRepository.findIngredientsByNameContains(name);
+            log.info("뽑아온 값 {}",ret);
             if(!ret.isEmpty()){
                  List<IngredientSearchResultDto> convertedRet = ret.stream()
                          .map(e -> new IngredientSearchResultDto(e))
