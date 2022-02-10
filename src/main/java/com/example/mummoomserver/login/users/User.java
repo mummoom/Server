@@ -6,6 +6,7 @@ import com.example.mummoomserver.domain.Comment.Comment;
 import com.example.mummoomserver.domain.Dog.entity.Dog;
 import com.example.mummoomserver.domain.Likecnt.entity.Likecnt;
 import com.example.mummoomserver.domain.Post.Post;
+import com.example.mummoomserver.domain.Report.Report;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -58,6 +59,9 @@ public class User extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Likecnt> likecnts = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Report> reports = new ArrayList<>();
 
     @Builder
     public User(String nickName, String email, String password, String imgUrl, UserType type, Role role) {
