@@ -95,11 +95,10 @@ public class UserController {
         //성공 시 이메일 및 닉네임 중복 체크
         String email = signUpRequest.getEmail();
         String nickName = signUpRequest.getNickName();
-        if(userRepository.findByEmail(email) != null ) {
-
+        if(userRepository.findByEmail(email).isPresent()) {
             return new ResponseTemplate<>(ResponseTemplateStatus.EMAIL_DUPLICATED);
         }
-        else if( userRepository.findByNickName(nickName) != null){
+        else if(userRepository.findByNickName(nickName).isPresent()){
 
             return new ResponseTemplate<>(ResponseTemplateStatus.NICKNAME_DUPLICATED);
         }
