@@ -69,6 +69,7 @@ public enum ResponseTemplateStatus {
     INVALID_SIGNUP(false, "회원가입 양식을 다시한 번 확인해주세요", 7010),
 
 
+
     /**
      * 8000 : 커뮤니티 요청 관련 오류
      */

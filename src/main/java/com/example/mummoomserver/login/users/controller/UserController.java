@@ -197,6 +197,18 @@ public class UserController {
 //    }
 
 
+    /**
+     * 카카오 소셜 로그인
+     * @return 성공시 jwt 토큰과 강아지 정보 여부 반환
+     */
+//
+//    @GetMapping("/login/kakao")
+//    public ResponseTemplate<LoginDto> kakaoLogin(@RequestParam(name="accessToken") String accessToken){
+//        boolean dog_exist;
+//
+//    }
+
+
 
 
     /**
