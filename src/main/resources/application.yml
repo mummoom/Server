@@ -10,7 +10,7 @@ spring:
             matching-strategy: ant_path_matcher
     jpa:
         # generate-ddl : false로 바꾸기
-        generate-ddl : true
+        generate-ddl : false
         hibernate:
             # ddl-auto: none으로 바꾸기
             ddl-auto: none

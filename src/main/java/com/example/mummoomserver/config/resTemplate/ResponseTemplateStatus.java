@@ -51,6 +51,7 @@ public enum ResponseTemplateStatus {
     INVALID_DOG_INDEX(false, "존재하지 않는 강아지 Index입니다.", 6005),
 
     INVALID_DOG_USER(false, "유효하지 않은 유저입니다.", 6006),
+    NOT_EXIST_USER(false, "회원 정보를 찾을 수 없습니다.", 6007),
 
     /**
      * 7000 : 유저 정보 요청 관련 오류
@@ -61,7 +62,14 @@ public enum ResponseTemplateStatus {
     EMPTY_EMAIL(false, "이메일을 입력해주세요", 7003),
     EMPTY_PASSWORD(false, "비밀번호를 입력해주세요", 7004),
     EMPTY_NICKNAME(false, "닉네임을 입력해주세요", 7005),
+  
     INVALID_OAUTH_ACCESS_TOKEN(false,"OAuth Accesstoken이 유효하지 않습니다.",7006),
+    INVALID_EMAIL(false, "이메일이 올바르지 않습니다.", 7006),
+    INVALID_PASSWORD(false, "비밀번호가 올바르지 않습니다.", 7007),
+    NO_OAUTH_USER(false, "소셜로그인 유저는 비밀번호 변경이 불가능합니다.", 7008),
+    INCORRECT_PASSWORD(false, "비밀번호 형식을 다시 한번 확인해주세요.", 7009),
+    INVALID_SIGNUP(false, "회원가입 양식을 다시한 번 확인해주세요", 7010),
+
 
 
 
@@ -72,7 +80,9 @@ public enum ResponseTemplateStatus {
     INVALID_USER(false, "회원정보를 찾을 수 없습니다.", 8001),
     INVALID_COMMENT_IDX(false, "존재하지 않는 댓글 입니다.", 8002),
     INVALID_NESTED_IDX(false, "존재하지 않는 대댓글 입니다.", 8003),
-    PERMISSION_DENIED(false, "작성자만 사용할 수 있습니다.", 8004);
+    PERMISSION_DENIED(false, "작성자만 사용할 수 있습니다.", 8004),
+    EMPTY_TITLE(false, "제목을 입력해주세요.", 8005),
+    EMPTY_CONTENT(false, "내용을 입력해주세요.", 8006);
 
 
 

@@ -37,6 +37,7 @@ public class DogController {
             @ApiResponse(code = 6002, message = "강아지 종을 입력해주세요."),
             @ApiResponse(code = 6003, message = "강아지 성별을 입력해주세요."),
             @ApiResponse(code = 6004, message = "강아지 중성화 수술 정보를 입력해주세요."),
+            @ApiResponse(code = 6007, message = "회원 정보를 찾을 수 없습니다."),
             @ApiResponse(code = 3000, message = "데이터베이스 요청 에러.")
     })
     @ResponseBody
@@ -87,6 +88,7 @@ public class DogController {
     @ApiOperation(value = "유저 별 강아지 정보 조회", notes = "JWT 토큰을 넣어서 요청하면 유저의 강아지들 정보(강아지index, 이름, 종, 생년월일, 성별, 중성화 수술 여부) 리스트가 응답으로 반환됩니다. \n JWT 토큰 입력해야합니다.")
     @ApiResponses({
             @ApiResponse(code = 200, message = "요청 성공"),
+            @ApiResponse(code = 6007, message = "회원 정보를 찾을 수 없습니다."),
             @ApiResponse(code = 3000, message = "데이터베이스 요청 에러.")
     })
     @ResponseBody

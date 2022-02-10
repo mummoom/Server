@@ -16,12 +16,12 @@ public class UpdatePwdRequest {
 
     @ApiModelProperty(example = "변경할 비밀번호")
     @Pattern(regexp = "[a-zA-Z!@#$%^&*-_]{6,20}", message = "6~20 길이의 알파벳과 숫자, 특수문자만 사용할 수 있습니다.")
-    private String password;
+    private String newPassword;
 
     @Builder
-    public UpdatePwdRequest(String lastPassword, String password) {
+    public UpdatePwdRequest(String lastPassword, String newPassword) {
         this.lastPassword = lastPassword;
-        this.password = password;
+        this.newPassword = newPassword;
 
     }
 
