@@ -69,7 +69,8 @@ public enum ResponseTemplateStatus {
     NO_OAUTH_USER(false, "소셜로그인 유저는 비밀번호 변경이 불가능합니다.", 7008),
     INCORRECT_PASSWORD(false, "비밀번호 형식을 다시 한번 확인해주세요.", 7009),
     INVALID_SIGNUP(false, "회원가입 양식을 다시한 번 확인해주세요", 7010),
-
+    NICKNAME_DUPLICATED(false,"이미 존재하는 닉네임입니다",7011),
+    EMAIL_DUPLICATED(false,"이미 존재하는 이메일입니다",7012),
 
 
 

@@ -74,7 +74,12 @@ public class UserController {
             @ApiResponse(code = 7004, message = "비밀번호를 입력해주세요."),
             @ApiResponse(code = 7005, message = "닉네임을 입력해주세요"),
             @ApiResponse(code = 7007, message = "닉네임을 입력해주세요"),
-            @ApiResponse(code=7010, message ="회원가입 양식을 다시한 번 확인해주세요")})
+            @ApiResponse(code=7010, message ="회원가입 양식을 다시한 번 확인해주세요"),
+            @ApiResponse(code=7011, message ="이미 존재하는 닉네임입니다"),
+            @ApiResponse(code=7012, message ="이미 존재하는 이메일입니다")
+
+    })
+
     @PostMapping("/signup")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "nickName", value = "1~20자를 입력받으며 중복이 되지 않습니다."),
@@ -87,9 +92,22 @@ public class UserController {
 
         //유효성 검사
         if (bindingResult.hasErrors()) return new ResponseTemplate<>(ResponseTemplateStatus.INVALID_SIGNUP);
-        //성공 시
-        userService.saveUser(signUpRequest);
-        return new ResponseTemplate("회원가입 성공");
+        //성공 시 이메일 및 닉네임 중복 체크
+        String email = signUpRequest.getEmail();
+        String nickName = signUpRequest.getNickName();
+        if(userRepository.findByEmail(email).isPresent()) {
+            return new ResponseTemplate<>(ResponseTemplateStatus.EMAIL_DUPLICATED);
+        }
+        else if(userRepository.findByNickName(nickName).isPresent()){
+
+            return new ResponseTemplate<>(ResponseTemplateStatus.NICKNAME_DUPLICATED);
+        }
+        else{
+            userService.saveUser(signUpRequest);
+            return new ResponseTemplate("회원가입 성공");
+
+        }
+
     }
 
     // 로그인
