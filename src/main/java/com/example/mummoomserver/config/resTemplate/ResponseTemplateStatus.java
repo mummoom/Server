@@ -62,11 +62,14 @@ public enum ResponseTemplateStatus {
     EMPTY_EMAIL(false, "이메일을 입력해주세요", 7003),
     EMPTY_PASSWORD(false, "비밀번호를 입력해주세요", 7004),
     EMPTY_NICKNAME(false, "닉네임을 입력해주세요", 7005),
+  
+    INVALID_OAUTH_ACCESS_TOKEN(false,"OAuth Accesstoken이 유효하지 않습니다.",7006),
     INVALID_EMAIL(false, "이메일이 올바르지 않습니다.", 7006),
     INVALID_PASSWORD(false, "비밀번호가 올바르지 않습니다.", 7007),
     NO_OAUTH_USER(false, "소셜로그인 유저는 비밀번호 변경이 불가능합니다.", 7008),
     INCORRECT_PASSWORD(false, "비밀번호 형식을 다시 한번 확인해주세요.", 7009),
     INVALID_SIGNUP(false, "회원가입 양식을 다시한 번 확인해주세요", 7010),
+
 
 
 
