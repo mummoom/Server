@@ -13,14 +13,14 @@ import javax.validation.constraints.Pattern;
 public class WithdrawRequest {
 
     @ApiModelProperty(example = "기존 비밀번호")
-    private String withdrawPwd;
+    private String withdrawPassword;
 
     @ApiModelProperty(example = "탈퇴사유")
     private String withdrawReason;
 
     @Builder
-    public WithdrawRequest(String withdrawPwd, String withdrawReason) {
-        this.withdrawPwd = withdrawPwd;
+    public WithdrawRequest(String withdrawPassword, String withdrawReason) {
+        this.withdrawPassword = withdrawPassword;
         this.withdrawReason = withdrawReason;
 
     }

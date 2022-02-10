@@ -1,13 +1,14 @@
 package com.example.mummoomserver.login.users.service;
 
 import com.example.mummoomserver.config.resTemplate.ResponeException;
+import com.example.mummoomserver.config.resTemplate.ResponseTemplate;
+import com.example.mummoomserver.config.resTemplate.ResponseTemplateStatus;
 import com.example.mummoomserver.login.service.UserDetailsImpl;
+import com.example.mummoomserver.login.token.jwt.JwtProvider;
 import com.example.mummoomserver.login.users.*;
+import com.example.mummoomserver.login.users.dto.LoginDto;
 import com.example.mummoomserver.login.users.dto.UserDto;
-import com.example.mummoomserver.login.users.requestResponse.SignUpRequest;
-import com.example.mummoomserver.login.users.requestResponse.UpdateProfileRequest;
-import com.example.mummoomserver.login.users.requestResponse.UpdatePwdRequest;
-import com.example.mummoomserver.login.users.requestResponse.WithdrawRequest;
+import com.example.mummoomserver.login.users.requestResponse.*;
 import com.example.mummoomserver.login.validation.SimpleFieldError;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,6 +18,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.servlet.http.HttpServletResponse;
 
 import static com.example.mummoomserver.config.resTemplate.ResponseTemplateStatus.*;
 
@@ -44,10 +47,24 @@ public class UserServiceImpl implements UserService {
                 .email(signUpRequest.getEmail())
                 .password(passwordEncoder.encode(signUpRequest.getPassword()))
                 .type(UserType.DEFAULT)
-                .role(Role.GUEST)
+                .role(Role.USER)
                 .build();
 
         userRepository.save(user);
+    }
+
+    @Override
+    public void saveOAuthUser(UserDto userDto){
+        User user = User.builder()
+                .nickName(userDto.getNickName())
+                .email(userDto.getEmail())
+                .password(null)
+                .type(UserType.OAUTH)
+                .role(Role.USER)
+                .build();
+
+        userRepository.save(user);
+
     }
 
     @Override
@@ -86,15 +103,15 @@ public class UserServiceImpl implements UserService {
 
         User user = userRepository.findByEmail(email).orElseThrow(() -> new ResponeException(INVALID_USER));
         if (user.getType().equals(UserType.OAUTH))
-            throw new ResponeException(INVALID_DOG_INDEX); //여기 에러처리 필요
+            throw new ResponeException(NO_OAUTH_USER);
         // 1. 기존 비밀번호와 현재 입력한 비밀번호가 동일한지 확인
         if (!passwordEncoder.matches(updatePwdRequest.getLastPassword(),user.getPassword()))
-            throw new ResponeException(INVALID_DOG_INDEX); //여기 에러처리 필요
+            throw new ResponeException(INVALID_PASSWORD); //여기 에러처리 필요
 
         try {
             // 2. 변경될 비밀번호와 기존 비밀번호가 동일한 지 확인, 업데이트 시 새 비밀번호를 인코딩해서 다시 저장
-            if (!user.getPassword().equals(updatePwdRequest.getPassword()))
-                user.updatePwd(passwordEncoder.encode(updatePwdRequest.getPassword()));
+            if (!user.getPassword().equals(updatePwdRequest.getNewPassword()))
+                user.updatePwd(passwordEncoder.encode(updatePwdRequest.getNewPassword()));
 
         } catch (Exception e) {
             throw new ResponeException(DATABASE_ERROR); // 비밀번호가 동일하다는 에러처리
@@ -105,8 +122,8 @@ public class UserServiceImpl implements UserService {
 
     public void deleteUser(String email, WithdrawRequest withdrawRequest) throws ResponeException {
         User user = userRepository.findByEmail(email).orElseThrow(() -> new ResponeException(INVALID_PASSWORD));
-        if (!passwordEncoder.matches(withdrawRequest.getWithdrawPwd(), user.getPassword()))
-            throw new IllegalArgumentException("잘못된 비밀번호입니다.");
+        if (!passwordEncoder.matches(withdrawRequest.getWithdrawPassword(), user.getPassword()))
+            throw new ResponeException(INVALID_PASSWORD);
         userRepository.delete(user);
     }
 

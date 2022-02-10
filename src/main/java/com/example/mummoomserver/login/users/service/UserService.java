@@ -13,6 +13,8 @@ public interface UserService {
 
     void saveUser(SignUpRequest signUpRequest);
 
+    void saveOAuthUser(UserDto usserDto);
+
     String getAuthUserNickname() throws ResponeException;
 
     void updateUserPwd(String email, UpdatePwdRequest updatePwdRequest) throws ResponeException;
@@ -20,6 +22,7 @@ public interface UserService {
     String getAuthUserEmail() ;
 
     UserDto getUserProfile(String email) throws ResponeException;
+
 
 
 }
