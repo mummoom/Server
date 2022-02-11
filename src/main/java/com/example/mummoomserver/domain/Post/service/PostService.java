@@ -64,7 +64,9 @@ public class PostService {
         return postIdx;
     }
 
-    public PostIdxResponseDto findByPostIdx(Long postIdx) throws ResponeException {
+    public PostIdxResponseDto findByPostIdx(String email, Long postIdx) throws ResponeException {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new ResponeException(INVALID_USER));
         Post post = postRepository.findByPostIdx(postIdx)
                 .orElseThrow(() -> new ResponeException(INVALID_POST_IDX));
         List<Comment> comments = commentRepository.findAllByPost_postIdx(post.getPostIdx());
@@ -72,6 +74,8 @@ public class PostService {
         List<CommentResponseDto> commentResponseDtos = new ArrayList<>();
         int likecnt = likecntRepository.countByPost_postIdx(postIdx);
         postResIdxDto.setLikecnt(Integer.toString(likecnt));
+        boolean isLike = likecntRepository.existsByUser_userIdxAndPost_postIdx(user.getUserIdx(), post.getPostIdx());
+        postResIdxDto.setLike(isLike);
 
         for (int i = 0; i<comments.size(); i++){
             CommentResponseDto comment = new CommentResponseDto(comments.get(i));
@@ -94,6 +98,8 @@ public class PostService {
         List<PostResponseDto> postResDtos = new ArrayList<>();
         for (int i = 0; i < entity.size(); i++){
             PostResponseDto postResponseDto = new PostResponseDto(entity.get(i));
+            int likecnt = likecntRepository.countByPost_postIdx(entity.get(i).getPostIdx());
+            postResponseDto.setLikecnt(Integer.toString(likecnt));
             postResDtos.add(postResponseDto);
         }
         try {
