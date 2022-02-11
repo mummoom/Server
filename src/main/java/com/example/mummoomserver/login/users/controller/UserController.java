@@ -265,6 +265,7 @@ public class UserController {
         if (updateImgRequest.getImgUrl() == null) //변경하는 이미지가 없는 경우
             return new ResponseTemplate<>(ResponseTemplateStatus.EMPTY_UPDATE);
         user.updateImgUrl(updateImgRequest.getImgUrl());
+        userRepository.save(user);
         String result = "프로필 이미지 수정에 성공했습니다.";
         return new ResponseTemplate<>(result);
     }
@@ -292,6 +293,7 @@ public class UserController {
         if (bindingResult.hasErrors()) return new ResponseTemplate<>(ResponseTemplateStatus.INCORRECT_NICKNAME);
 
         user.updateNickName(updateNickNameRequest.getNickName());
+        userRepository.save(user);
         String result = "닉네임 수정에 성공했습니다.";
         return new ResponseTemplate<>(result);
     }
