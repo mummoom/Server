@@ -314,9 +314,9 @@ public class UserController {
         if (updatePwdRequest.getNewPassword() == null) return new ResponseTemplate<>(ResponseTemplateStatus.EMPTY_UPDATE_PASSWORD);
         try {
             String email = userService.getAuthUserEmail();
-            User member = userRepository.findByEmail(email).get();
+            User user = userRepository.findByEmail(email).get();
             // 해당하는 유저의 정보를 가져왔음
-            if(passwordEncoder.matches(updatePwdRequest.getLastPassword(), member.getPassword())==false)
+            if(passwordEncoder.matches(updatePwdRequest.getLastPassword(), user.getPassword())==false)
                 return new ResponseTemplate<>(ResponseTemplateStatus.INVALID_PASSWORD);
             //유효성 검사
             if (bindingResult.hasErrors()) return new ResponseTemplate<>(ResponseTemplateStatus.INCORRECT_PASSWORD);
