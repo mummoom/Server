@@ -76,7 +76,7 @@ public class UserController {
             @ApiResponse(code=7010, message ="회원가입 양식을 다시한 번 확인해주세요"),
             @ApiResponse(code=7011, message ="이미 존재하는 닉네임입니다"),
             @ApiResponse(code=7012, message ="이미 존재하는 이메일입니다")    })
-    })
+
     @PostMapping("/signup")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "nickName", value = "1~20자를 입력받으며 중복이 되지 않습니다."),
@@ -100,6 +100,7 @@ public class UserController {
         else{
             userService.saveUser(signUpRequest);
             return new ResponseTemplate("회원가입 성공");
+
         }
 
     }
@@ -296,7 +297,7 @@ public class UserController {
     }
 
     // 비밀번호 수정
-    @ApiOperation(value = "비밀번호 수정 API", notes = "비밀번호를 확인한 후에 변경이 가능합니다. 비밀번호 = 기존 ")
+    @ApiOperation(value = "비밀번호 수정 API", notes = "비밀번호를 확인한 후에 변경이 가능합니다. jwt토큰을 입력해주어야 합니다.")
     @ApiResponses({
             @ApiResponse(code = 200, message = "요청 성공"),
             @ApiResponse(code = 3000, message = "데이터베이스에러"),
