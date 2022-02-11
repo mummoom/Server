@@ -1,9 +1,9 @@
 spring:
-#    datasource:
-#        driver-class-name: org.h2.Driver
-#        url: jdbc:h2:file:~/data/h2/mummoomH2;DB_CLOSE_ON_EXIT=FALSE
-#        username: sa
-#        password:
+    datasource:
+        driver-class-name: org.h2.Driver
+        url: jdbc:h2:file:~/data/h2/mummoomH2;DB_CLOSE_ON_EXIT=FALSE
+        username: sa
+        password:
 
 
 #    datasource:
@@ -17,10 +17,10 @@ spring:
             matching-strategy: ant_path_matcher
     jpa:
         # generate-ddl : false로 바꾸기
-        generate-ddl : false
+        generate-ddl : true
         hibernate:
             # ddl-auto: none으로 바꾸기
-            ddl-auto: none
+            ddl-auto: create
             naming:
                 implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl
                 physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl

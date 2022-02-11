@@ -76,7 +76,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto getUserProfile(String email) throws ResponeException {
         //이메일을 입력받으면 정보를 내어주는 로직을 짜야함
-        User user = userRepository.findByEmail(email).orElseThrow(() -> new ResponeException(INVALID_USER));
+        if(userRepository.existsByEmail(email)==false)
+            throw new ResponeException(INVALID_USER);
+        User user = userRepository.findByEmail(email).get();
         try {
             return new UserDto(user.getEmail(), user.getNickName(), user.getImgUrl());
         } catch (Exception e) {
@@ -84,41 +86,44 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    public void updateProfile(String email, UpdateProfileRequest updateProfileRequest) throws ResponeException {
-
-        User user = userRepository.findByEmail(email).orElseThrow(() -> new ResponeException(INVALID_USER));
-
-        // 이미지가 변경되었는지 체크
-        if (user.getImgUrl() == null)
-            user.updateImgUrl(updateProfileRequest.getImgUrl());
-
-        if (!user.getImgUrl().equals(updateProfileRequest.getImgUrl()))
-            user.updateImgUrl(updateProfileRequest.getImgUrl());
-
-        //이름이 변경되었는지 체크
-        if (!user.getNickName().equals(updateProfileRequest.getNickName()))
-            checkDuplicateNickname(updateProfileRequest.getNickName());
-            user.updateNickName(updateProfileRequest.getNickName());
-
-        userRepository.save(user);
-
-    }
+//    public void updateProfile(String email, UpdateProfileRequest updateProfileRequest) throws ResponeException {
+//        //이메일을 입력받으면 정보를 내어주는 로직
+//        if(userRepository.existsByEmail(email)==false)
+//            throw new ResponeException(INVALID_USER);
+//
+//        // 이미지가 변경되었는지 체크
+//        if (user.getImgUrl() == null) //이미지가 아예 없었던 경우
+//            user.updateImgUrl(updateProfileRequest.getImgUrl());
+//        if (!user.getImgUrl().equals(updateProfileRequest.getImgUrl())) //이미 등록한 이미지를 변경한 경우
+//            user.updateImgUrl(updateProfileRequest.getImgUrl());
+//
+//        //닉네임 중복 검사
+//        if(userRepository.existsByNickName(updateProfileRequest.getNickName())==true){
+//            throw new ResponeException(NICKNAME_DUPLICATED);
+//            }
+//        user.updateNickName(updateProfileRequest.getNickName());
+//
+//        userRepository.save(user);
+//
+//    }
 
 
     public void updateUserPwd(String email, UpdatePwdRequest updatePwdRequest) throws ResponeException {
 
-        User user = userRepository.findByEmail(email).orElseThrow(() -> new ResponeException(INVALID_USER));
+        if(userRepository.existsByEmail(email)==false)
+            throw new ResponeException(INVALID_USER);
+        User user = userRepository.findByEmail(email).get();
         if (user.getType().equals(UserType.OAUTH))
             throw new ResponeException(NO_OAUTH_USER);
         // 1. 기존 비밀번호와 현재 입력한 비밀번호가 동일한지 확인
         if (!passwordEncoder.matches(updatePwdRequest.getLastPassword(),user.getPassword()))
-            throw new ResponeException(INVALID_PASSWORD); //여기 에러처리 필요
+            throw new ResponeException(INVALID_PASSWORD);
 
         try {
             // 2. 변경될 비밀번호와 기존 비밀번호가 동일한 지 확인, 업데이트 시 새 비밀번호를 인코딩해서 다시 저장
             if (!user.getPassword().equals(updatePwdRequest.getNewPassword()))
                 user.updatePwd(passwordEncoder.encode(updatePwdRequest.getNewPassword()));
-
+            else throw new ResponeException(PASSWORD_DUPLICATE);
         } catch (Exception e) {
             throw new ResponeException(DATABASE_ERROR); // 비밀번호가 동일하다는 에러처리
         }
@@ -127,7 +132,9 @@ public class UserServiceImpl implements UserService {
     }
 
     public void deleteUser(String email, WithdrawRequest withdrawRequest) throws ResponeException {
-        User user = userRepository.findByEmail(email).orElseThrow(() -> new ResponeException(INVALID_PASSWORD));
+        if(userRepository.existsByEmail(email)==false)
+            throw new ResponeException(INVALID_USER);
+        User user = userRepository.findByEmail(email).get();
         if (!passwordEncoder.matches(withdrawRequest.getWithdrawPassword(), user.getPassword()))
             throw new ResponeException(INVALID_PASSWORD);
         userRepository.delete(user);
@@ -138,9 +145,9 @@ public class UserServiceImpl implements UserService {
             throw new DuplicateUserException("사용중인 이메일 입니다.", new SimpleFieldError("email", "사용중인 이메일 입니다."));
     }
 
-    private void checkDuplicateNickname(String nickName) {
+    private void checkDuplicateNickname(String nickName) throws ResponeException {
         if(userRepository.existsByEmail(nickName))
-            throw new DuplicateUserException("사용중인 닉네임 입니다.", new SimpleFieldError("nickname", "사용중인 닉네임 입니다."));
+            throw new ResponeException(NICKNAME_DUPLICATED);
     }
 
 //    private User checkRegisteredUser(String nickName) {

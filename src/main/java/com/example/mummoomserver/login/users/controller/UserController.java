@@ -14,7 +14,6 @@ import com.example.mummoomserver.login.users.UserRepository;
 import com.example.mummoomserver.login.users.dto.GoogleUser;
 import com.example.mummoomserver.login.users.dto.UserDto;
 import com.example.mummoomserver.login.users.requestResponse.SignUpRequest;
-import com.example.mummoomserver.login.users.requestResponse.UpdateProfileRequest;
 import com.example.mummoomserver.login.users.service.GoogleLoginService;
 import com.example.mummoomserver.login.users.dto.LoginDto;
 
@@ -73,13 +72,11 @@ public class UserController {
             @ApiResponse(code = 7003, message = "이메일을 입력해주세요."),
             @ApiResponse(code = 7004, message = "비밀번호를 입력해주세요."),
             @ApiResponse(code = 7005, message = "닉네임을 입력해주세요"),
-            @ApiResponse(code = 7007, message = "닉네임을 입력해주세요"),
+            @ApiResponse(code = 7007, message = "비밀번호가 올바르지 않습니다."),
             @ApiResponse(code=7010, message ="회원가입 양식을 다시한 번 확인해주세요"),
             @ApiResponse(code=7011, message ="이미 존재하는 닉네임입니다"),
-            @ApiResponse(code=7012, message ="이미 존재하는 이메일입니다")
-
+            @ApiResponse(code=7012, message ="이미 존재하는 이메일입니다")    })
     })
-
     @PostMapping("/signup")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "nickName", value = "1~20자를 입력받으며 중복이 되지 않습니다."),
@@ -87,25 +84,22 @@ public class UserController {
 
     public ResponseTemplate<?> signUpNewUser(@RequestBody @Valid SignUpRequest signUpRequest, BindingResult bindingResult) {
         if(signUpRequest.getEmail()==null) return new ResponseTemplate<>(ResponseTemplateStatus.EMPTY_EMAIL);
-        if(signUpRequest.getPassword()==null) return new ResponseTemplate<>(ResponseTemplateStatus.EMPTY_PASSWORD);
         if(signUpRequest.getNickName()==null) return new ResponseTemplate<>(ResponseTemplateStatus.EMPTY_NICKNAME);
-
+        if(signUpRequest.getPassword()==null) return new ResponseTemplate<>(ResponseTemplateStatus.EMPTY_PASSWORD);
         //유효성 검사
         if (bindingResult.hasErrors()) return new ResponseTemplate<>(ResponseTemplateStatus.INVALID_SIGNUP);
         //성공 시 이메일 및 닉네임 중복 체크
         String email = signUpRequest.getEmail();
         String nickName = signUpRequest.getNickName();
-        if(userRepository.findByEmail(email).isPresent()) {
+        if(userRepository.existsByEmail(email)==true) {
             return new ResponseTemplate<>(ResponseTemplateStatus.EMAIL_DUPLICATED);
         }
-        else if(userRepository.findByNickName(nickName).isPresent()){
-
+        else if(userRepository.existsByNickName(nickName)==true){
             return new ResponseTemplate<>(ResponseTemplateStatus.NICKNAME_DUPLICATED);
         }
         else{
             userService.saveUser(signUpRequest);
             return new ResponseTemplate("회원가입 성공");
-
         }
 
     }
@@ -123,7 +117,9 @@ public class UserController {
             @ApiResponse(code = 200, message = "요청 성공"),
             @ApiResponse(code = 3000, message = "데이터베이스 에러"),
             @ApiResponse(code = 7003, message = "이메일을 입력해주세요."),
-            @ApiResponse(code = 7004, message = "비밀번호를 입력해주세요.")})
+            @ApiResponse(code = 7004, message = "비밀번호를 입력해주세요."),
+            @ApiResponse(code = 7006, message = "이메일이 올바르지 않습니다."),
+            @ApiResponse(code = 7007, message = "비밀번호가 올바르지 않습니다.")})
     @PostMapping("/login")
     public ResponseTemplate<?> login(@RequestBody @Valid LoginRequest loginRequest, HttpServletResponse httpServletResponse) throws IOException {
         if(loginRequest.getEmail()==null) return new ResponseTemplate<>(ResponseTemplateStatus.EMPTY_EMAIL);
@@ -167,9 +163,9 @@ public class UserController {
     @ApiOperation(value = "구글 로그인 API", notes = "구글 Access token을 전달하여 멈뭄에 로그인합니다")
     @ApiImplicitParam(name = "accessToken", value = "구글 Access token")
     @ApiResponses({
-           @ApiResponse(code = 200, message = "요청 성공"),
-         @ApiResponse(code = 3000, message = "데이터베이스 에러"),
-        @ApiResponse(code= 7006, message = "토큰이 유효하지 않음")
+            @ApiResponse(code = 200, message = "요청 성공"),
+            @ApiResponse(code = 3000, message = "데이터베이스 에러"),
+            @ApiResponse(code= 7006, message = "토큰이 유효하지 않음")
     })
 
     public ResponseTemplate<LoginDto> googleLogin(@RequestParam(name="accessToken") String accessToken){
@@ -221,21 +217,6 @@ public class UserController {
 //
 //    }
 
-
-    /**
-     * 카카오 소셜 로그인
-     * @return 성공시 jwt 토큰과 강아지 정보 여부 반환
-     */
-//
-//    @GetMapping("/login/kakao")
-//    public ResponseTemplate<LoginDto> kakaoLogin(@RequestParam(name="accessToken") String accessToken){
-//        boolean dog_exist;
-//
-//    }
-
-
-
-
     /**
      * - 현석
      * 현재 아래 코드들은 기능상 중복되거나 유효하지 않아서 주석처리함
@@ -252,7 +233,7 @@ public class UserController {
 
 
     //프로필 자신 조회
-    @ApiOperation(value = "내정보 조회 API", notes = "이메일, 비밀번호,닉네임, 프로필 이미지를 조회할 수 있습니다. jwt 토큰을 입력해주어야 합니다.")
+    @ApiOperation(value = "내정보 조회 API", notes = "이메일, 닉네임, 프로필 이미지를 조회할 수 있습니다. jwt 토큰을 입력해주어야 합니다.")
     @ApiResponses({
             @ApiResponse(code = 200, message = "요청 성공"),
             @ApiResponse(code = 3000, message = "데이터베이스에러")})
@@ -270,34 +251,57 @@ public class UserController {
     }
 
     // 프로필 수정 사항 반영
-    @ApiOperation(value = "내정보 수정 API", notes = "비밀번호,닉네임 변경이 가능하고 프로필 이미지를 여기에서 등록할 수 있습니다. jwt토큰을 입력해주어야 합니다.")
+    @ApiOperation(value = "내 프로필 수정 API", notes = "프로필 이미지를 수정할 수 있습니다. jwt토큰을 입력해주어야 합니다.")
     @ApiResponses({
             @ApiResponse(code = 200, message = "요청 성공"),
             @ApiResponse(code = 3000, message = "데이터베이스에러"),
-            @ApiResponse(code = 7002, message = "변경할 닉네임이나 이미지를 입력해주세요")})
-    @PatchMapping("/me")
-    public ResponseTemplate<String> updateProfile(@RequestBody @Valid  UpdateProfileRequest updateProfileRequest) {
+            @ApiResponse(code = 7002, message = "변경할 사항이 없습니다.")})
+    @PatchMapping("/myimg")
+    public ResponseTemplate<String> updateImgUrl(@RequestBody UpdateImgRequest updateImgRequest) {
         //입력해준 값이 없을 때의 예외 처리
-        if ((updateProfileRequest.getNickName() == null) & (updateProfileRequest.getImgUrl() == null))
+        String email = userService.getAuthUserEmail();
+        User user = userRepository.findByEmail(email).get();
+        if (updateImgRequest.getImgUrl() == null) //변경하는 이미지가 없는 경우
             return new ResponseTemplate<>(ResponseTemplateStatus.EMPTY_UPDATE);
-        try {
-            String email = userService.getAuthUserEmail();
-            userServiceImpl.updateProfile(email, updateProfileRequest);
+        user.updateImgUrl(updateImgRequest.getImgUrl());
+        String result = "프로필 이미지 수정에 성공했습니다.";
+        return new ResponseTemplate<>(result);
+    }
 
-            String result = "회원 정보 수정에 성공했습니다.";
-            return new ResponseTemplate<>(result);
+    // 프로필 수정 사항 반영
+    @ApiOperation(value = "내 닉네임 수정 API", notes = "닉네임 변경이 가능합니다. jwt토큰을 입력해주어야 합니다.")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "요청 성공"),
+            @ApiResponse(code = 3000, message = "데이터베이스에러"),
+            @ApiResponse(code = 7002, message = "변경할 사항이 없습니다"),
+            @ApiResponse(code = 7011, message = "이미 존재하는 닉네임입니다."),
+            @ApiResponse(code = 7016, message = "닉네임 형식을 다시한 번 확인해주세요")})
+    @PatchMapping("/mynickname")
+    public ResponseTemplate<String> updateNickName(@RequestBody @Valid  UpdateNickNameRequest updateNickNameRequest, BindingResult bindingResult) {
+        //입력해준 값이 없을 때의 예외 처리
+        String email = userService.getAuthUserEmail();
+        User user = userRepository.findByEmail(email).get();
+        if (updateNickNameRequest.getNickName() == null) //변경하는 닉네임이 없는 경우
+            return new ResponseTemplate<>(ResponseTemplateStatus.EMPTY_UPDATE);
+        if (user.getNickName() == updateNickNameRequest.getNickName()) // 변경하는 닉네임이 동일한 경우
+            return new ResponseTemplate<>(ResponseTemplateStatus.EMPTY_UPDATE);
+        if (userRepository.existsByNickName(updateNickNameRequest.getNickName())==true){
+            return new ResponseTemplate<>(ResponseTemplateStatus.NICKNAME_DUPLICATED);}
+        //유효성 검사
+        if (bindingResult.hasErrors()) return new ResponseTemplate<>(ResponseTemplateStatus.INCORRECT_NICKNAME);
 
-        } catch(ResponeException e){
-            return new ResponseTemplate<>(e.getStatus());
-        }
+        user.updateNickName(updateNickNameRequest.getNickName());
+        String result = "닉네임 수정에 성공했습니다.";
+        return new ResponseTemplate<>(result);
     }
 
     // 비밀번호 수정
-    @ApiOperation(value = "비밀번호 수정 API", notes = "비밀번호를 확인한 후에 변경이 가능합니다. jwt토큰을 입력해주어야 합니다.")
+    @ApiOperation(value = "비밀번호 수정 API", notes = "비밀번호를 확인한 후에 변경이 가능합니다. 비밀번호 = 기존 ")
     @ApiResponses({
             @ApiResponse(code = 200, message = "요청 성공"),
             @ApiResponse(code = 3000, message = "데이터베이스에러"),
             @ApiResponse(code = 7001, message = "변경할 비밀번호를 입력해주세요"),
+            @ApiResponse(code = 7004, message = "비밀번호를 입력해주세요."),
             @ApiResponse(code = 7007, message = "비밀번호가 올바르지 않습니다."),
             @ApiResponse(code = 7009, message = "비밀번호 형식을 다시 한번 확인해주세요.")})
     @PutMapping("/pwd")
@@ -330,9 +334,11 @@ public class UserController {
             @ApiResponse(code = 200, message = "요청 성공"),
             @ApiResponse(code = 3000, message = "데이터베이스에러"),
             @ApiResponse(code = 7004, message = "비밀번호를 입력해주세요"),
-            @ApiResponse(code = 7007, message = "비밀번호가 올바르지 않습니다.")})
+            @ApiResponse(code = 7007, message = "비밀번호가 올바르지 않습니다."),
+            @ApiResponse(code = 7014, message = "탈퇴 사유를 입력해주세요.")})
     public ResponseTemplate<String> withdrawUser(@RequestBody WithdrawRequest withdrawRequest) {
         if (withdrawRequest.getWithdrawPassword() == null) return new ResponseTemplate<>(ResponseTemplateStatus.EMPTY_PASSWORD);
+        if (withdrawRequest.getWithdrawReason() == null) return new ResponseTemplate<>(ResponseTemplateStatus.EMPTY_WITHDRAWREASON);
         // 해당하는 유저의 정보를 가져왔음
         try {
             String email = userService.getAuthUserEmail();
