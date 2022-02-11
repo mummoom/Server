@@ -45,6 +45,9 @@ public class PostIdxResponseDto {
     @ApiModelProperty(example = "글 작성 시간")
     private LocalDateTime createdAt;
 
+    @ApiModelProperty(example = "좋아요 여부")
+    private boolean isLike;
+
     @Builder
     public PostIdxResponseDto(Post entity){
         this.postIdx = entity.getPostIdx();
