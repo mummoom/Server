@@ -25,18 +25,14 @@ public class SearchService {
 
     public List<Ingredients> getSearchResult(String name) throws ResponeException {
 
-        try{
-            List<Ingredients> ret = ingredientRepository.findIngredientsByNameContains(name);
-            log.info("뽑아온 값 {}",ret);
-            if(!ret.isEmpty()){
-                return ret;
-            }
-            else throw new ResponeException(NO_SEARCH_RESULT);
-
-        }catch (Exception e){
-            log.info("Search Service log = {}",e.getMessage());
-            throw new ResponeException(DATABASE_ERROR);
+        List<Ingredients> ret = ingredientRepository.findIngredientsByNameContains(name);
+        log.info("뽑아온 값 {}",ret);
+        if(!ret.isEmpty()){
+            return ret;
         }
+        else throw new ResponeException(NO_SEARCH_RESULT);
+
+
 
     }
 }
