@@ -4,6 +4,7 @@ import com.example.mummoomserver.config.resTemplate.ResponeException;
 import com.example.mummoomserver.config.resTemplate.ResponseTemplate;
 import com.example.mummoomserver.domain.Ingredients.dto.IngredientSearchResultDto;
 import com.example.mummoomserver.domain.Ingredients.dto.SearchReqDto;
+import com.example.mummoomserver.domain.Ingredients.entity.Ingredients;
 import com.example.mummoomserver.domain.Ingredients.service.SearchService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -35,11 +36,11 @@ public class SearchController {
             @ApiResponse(code = 200, message = "카테고리 검색 성공 "),
             @ApiResponse(code = 4000, message = "검색 결과가 없습니다.")
     })
-    public ResponseTemplate<List<IngredientSearchResultDto>> searchResult(@RequestBody SearchReqDto searchReqDto){
+    public ResponseTemplate<List<Ingredients>> searchResult(@RequestBody SearchReqDto searchReqDto){
         try {
             String IngredientName = searchReqDto.getIngredientName();
 
-            List<IngredientSearchResultDto> result = searchService.getSearchResult(IngredientName);
+            List<Ingredients> result = searchService.getSearchResult(IngredientName);
             return new ResponseTemplate<>(result);
 
         }catch (ResponeException e){
