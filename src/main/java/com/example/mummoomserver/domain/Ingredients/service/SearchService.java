@@ -23,16 +23,13 @@ public class SearchService {
     private final IngredientRepository ingredientRepository;
 
 
-    public List<IngredientSearchResultDto> getSearchResult(String name) throws ResponeException {
+    public List<Ingredients> getSearchResult(String name) throws ResponeException {
 
         try{
             List<Ingredients> ret = ingredientRepository.findIngredientsByNameContains(name);
             log.info("뽑아온 값 {}",ret);
             if(!ret.isEmpty()){
-                 List<IngredientSearchResultDto> convertedRet = ret.stream()
-                         .map(e -> new IngredientSearchResultDto(e))
-                         .collect(Collectors.toList());
-                return convertedRet;
+                return ret;
             }
             else throw new ResponeException(NO_SEARCH_RESULT);
 
