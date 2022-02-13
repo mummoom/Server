@@ -47,6 +47,7 @@ import java.io.IOException;
 import java.util.Date;
 import java.lang.reflect.Member;
 import java.util.Optional;
+import java.util.Random;
 
 @Slf4j
 @RestController
@@ -188,8 +189,18 @@ public class UserController {
             } else {
                 //DB에 정보가 없다면 DB에 유저정보 저장
                 log.info("DB에 유저 정보 없음");
-                UserDto user = googleUser.toUserDto(googleUser.getEmail(),
-                        googleUser.getName(),
+                String googleEmail = googleUser.getEmail();
+                String googleNickName = googleUser.getName();
+                Random rnd = new Random();
+                String randomStr = String.valueOf((char) ((int) (rnd.nextInt(26)) + 65));
+                if(userRepository.existsByEmail(googleEmail)==false) {
+                    googleEmail = googleEmail + randomStr; // 어떤 랜덤한 값 부여해주기
+                }
+                if(userRepository.existsByNickName(googleNickName)==true) {
+                    googleNickName = googleNickName + randomStr; // 어떤 랜덤한 값 부여해줄 지 생각하기
+                }
+                UserDto user = googleUser.toUserDto(googleEmail,
+                        googleNickName,
                         googleUser.getPicture());
                 userService.saveOAuthUser(user);
                 dog_exist = false;
@@ -291,7 +302,6 @@ public class UserController {
             return new ResponseTemplate<>(ResponseTemplateStatus.NICKNAME_DUPLICATED);}
         //유효성 검사
         if (bindingResult.hasErrors()) return new ResponseTemplate<>(ResponseTemplateStatus.INCORRECT_NICKNAME);
-
         user.updateNickName(updateNickNameRequest.getNickName());
         userRepository.save(user);
         String result = "닉네임 수정에 성공했습니다.";
@@ -320,10 +330,8 @@ public class UserController {
                 return new ResponseTemplate<>(ResponseTemplateStatus.INVALID_PASSWORD);
             //유효성 검사
             if (bindingResult.hasErrors()) return new ResponseTemplate<>(ResponseTemplateStatus.INCORRECT_PASSWORD);
-
             userServiceImpl.updateUserPwd(email, updatePwdRequest); // 동일하다는 내용을 확인 됐다면 업데이트 진행
             String result = "회원 비밀번호 수정에 성공했습니다.";
-
             return new ResponseTemplate<>(result);
 
         } catch(ResponeException e){
