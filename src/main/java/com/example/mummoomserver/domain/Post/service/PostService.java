@@ -127,6 +127,8 @@ public class PostService {
         List<PostResponseDto> postResDtos = new ArrayList<>();
         for (int i = 0; i < entity.size(); i++){
             PostResponseDto postResponseDto = new PostResponseDto(entity.get(i));
+            int likecnt = likecntRepository.countByPost_postIdx(entity.get(i).getPostIdx());
+            postResponseDto.setLikecnt(Integer.toString(likecnt));
             postResDtos.add(postResponseDto);
         }
         try {
@@ -147,6 +149,8 @@ public class PostService {
         List<PostResponseDto> postResDtos = new ArrayList<>();
         for (int i = 0; i < entity.size(); i++){
             PostResponseDto postResponseDto = new PostResponseDto(entity.get(i));
+            int likecnt = likecntRepository.countByPost_postIdx(entity.get(i).getPostIdx());
+            postResponseDto.setLikecnt(Integer.toString(likecnt));
             postResDtos.add(postResponseDto);
         }
         try {
