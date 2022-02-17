@@ -18,6 +18,7 @@ import com.example.mummoomserver.domain.Post.dto.PostUpdateRequestDto;
 import com.example.mummoomserver.login.users.User;
 import com.example.mummoomserver.login.users.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -94,7 +95,7 @@ public class PostService {
     }
 
     public List<PostResponseDto> getPosts() throws ResponeException {
-        List<Post> entity = postRepository.findAll();
+        List<Post> entity = postRepository.findAll(Sort.by(Sort.Direction.DESC, "postIdx"));
         List<PostResponseDto> postResDtos = new ArrayList<>();
         for (int i = 0; i < entity.size(); i++){
             PostResponseDto postResponseDto = new PostResponseDto(entity.get(i));
