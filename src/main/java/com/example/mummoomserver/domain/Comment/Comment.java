@@ -3,6 +3,7 @@ import com.example.mummoomserver.config.BaseTimeEntity;
 import com.example.mummoomserver.domain.NestedComment.NestedComment;
 import com.example.mummoomserver.domain.Post.Post;
 
+import com.example.mummoomserver.domain.Report.Report;
 import com.example.mummoomserver.login.users.User;
 import lombok.Builder;
 import lombok.Getter;
@@ -42,6 +43,9 @@ public class Comment extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "comment", cascade = CascadeType.ALL)
     private List<NestedComment> nestedComments = new ArrayList<>();
+
+    @OneToMany(mappedBy = "comment", cascade = CascadeType.ALL)
+    private List<Report> reports = new ArrayList<>();
 
     @Builder
     public Comment(Post post, User user, String content, String status){

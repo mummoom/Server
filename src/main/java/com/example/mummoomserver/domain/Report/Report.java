@@ -1,5 +1,6 @@
 package com.example.mummoomserver.domain.Report;
 import com.example.mummoomserver.config.BaseTimeEntity;
+import com.example.mummoomserver.domain.Comment.Comment;
 import com.example.mummoomserver.domain.Post.Post;
 
 import com.example.mummoomserver.login.users.User;
@@ -26,6 +27,10 @@ public class Report extends BaseTimeEntity{
     private Post post;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="commentIdx")
+    private Comment comment;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="userIdx")
     private User user;
 
@@ -37,8 +42,9 @@ public class Report extends BaseTimeEntity{
     private String status;
 
     @Builder
-    public Report(Post post, User user, String reason, String status){
+    public Report(Post post, Comment comment, User user, String reason, String status){
         this.post = post;
+        this.comment = comment;
         this.user = user;
         this.reason = reason;
         this.status = status;

@@ -35,4 +35,20 @@ public class ReportController {
             return new ResponseTemplate<>(e.getStatus());
         }
     }
+
+    @ApiOperation(value="댓글 신고하기", notes="신고 내용을 디비에 저장합니다. JWT 토큰 입력 필수!")
+    @PostMapping("/report/comment/{commentIdx}")
+    @ApiResponses({
+            @ApiResponse(code=3000, message="데이터베이스 요청 에러.")
+            ,@ApiResponse(code=8001, message="회원정보를 찾을 수 없습니다.")
+            ,@ApiResponse(code=8002, message="존재하지 않는 댓글 입니다.")
+    })
+    public ResponseTemplate<Long> saveComment(@PathVariable Long commentIdx, @RequestBody ReportSaveRequestDto requestDto){
+        try{
+            String email = userService.getAuthUserEmail();
+            return new ResponseTemplate<>(reportService.saveComment(email, commentIdx, requestDto));
+        }catch(ResponeException e){
+            return new ResponseTemplate<>(e.getStatus());
+        }
+    }
 }
