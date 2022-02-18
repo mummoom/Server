@@ -217,33 +217,6 @@ public class UserController {
 
     }
 
-
-    /**
-     * 카카오 소셜 로그인
-     * @return 성공시 jwt 토큰과 강아지 정보 여부 반환
-     */
-//
-//    @GetMapping("/login/kakao")
-//    public ResponseTemplate<LoginDto> kakaoLogin(@RequestParam(name="accessToken") String accessToken){
-//        boolean dog_exist;
-//
-//    }
-
-    /**
-     * - 현석
-     * 현재 아래 코드들은 기능상 중복되거나 유효하지 않아서 주석처리함
-     */
-
-
-//    @ApiOperation(value = "로그아웃 API")
-//    @GetMapping("/user/logout")
-//    public String logout(HttpServletRequest request, HttpServletResponse response) {
-//        new SecurityContextLogoutHandler().logout(request, response, SecurityContextHolder.getContext().getAuthentication());
-//        ResponseTemplate<>("로그아웃이 완료되었습니다");
-//        return "redirect:/";
-//    }
-
-
     //프로필 자신 조회
     @ApiOperation(value = "내정보 조회 API", notes = "이메일, 닉네임, 프로필 이미지를 조회할 수 있습니다. jwt 토큰을 입력해주어야 합니다.")
     @ApiResponses({
@@ -355,12 +328,25 @@ public class UserController {
             String email = userService.getAuthUserEmail();
             userServiceImpl.deleteUser(email, withdrawRequest); // 동일하다는 내용을 확인 됐다면 업데이트 진행
             String result = "회원 정보가 삭제되었습니다.";
-
             return new ResponseTemplate<>(result);
 
         } catch(ResponeException e){
             return new ResponseTemplate<>(e.getStatus());
         }
+    }
+
+    //회원 탈퇴(소셜 로그인)
+    @DeleteMapping("/oauthwithdraw")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "요청 성공"),
+            @ApiResponse(code = 3000, message = "데이터베이스에러")})
+    public ResponseTemplate<String> withdrawOauthUser() {
+        // 해당하는 유저의 정보를 가져왔음
+        String email = userService.getAuthUserEmail();
+        User user = userRepository.findByEmail(email).get();
+        userRepository.delete(user);
+        String result = "회원 정보가 삭제되었습니다.";
+        return new ResponseTemplate<>(result);
     }
 
 }
