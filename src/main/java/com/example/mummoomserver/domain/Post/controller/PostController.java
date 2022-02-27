@@ -90,14 +90,16 @@ public class PostController {
         }
     }
 
-    @ApiOperation(value="게시글 전체 조회", notes="전체 게시글을 조회합니다.")
+    @ApiOperation(value="게시글 전체 조회", notes="전체 게시글을 조회합니다. JWT 토큰 입력 필수!")
     @GetMapping("/posts")
     @ApiResponses({
             @ApiResponse(code=3000, message="데이터베이스 요청 에러.")
+            ,@ApiResponse(code=8001, message="회원정보를 찾을 수 없습니다.")
     })
     public ResponseTemplate<List<PostResponseDto>> getPosts(){
         try{
-            return new ResponseTemplate<>(postService.getPosts());
+            String email = userService.getAuthUserEmail();
+            return new ResponseTemplate<>(postService.getPosts(email));
         } catch (ResponeException e){
             return new ResponseTemplate<>(e.getStatus());
         }
