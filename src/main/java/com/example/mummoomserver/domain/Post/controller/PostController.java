@@ -94,6 +94,7 @@ public class PostController {
     @GetMapping("/posts")
     @ApiResponses({
             @ApiResponse(code=3000, message="데이터베이스 요청 에러.")
+            ,@ApiResponse(code=8001, message="회원정보를 찾을 수 없습니다.")
     })
     public ResponseTemplate<List<PostResponseDto>> getPosts(){
         try{
