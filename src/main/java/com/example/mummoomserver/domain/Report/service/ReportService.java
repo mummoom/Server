@@ -59,4 +59,28 @@ public class ReportService {
             throw new ResponeException(DATABASE_ERROR);
         }
     }
+
+    public Long saveUser(String email, Long postIdx, ReportSaveRequestDto requestDto) throws ResponeException {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new ResponeException(INVALID_USER));
+        Post post = postRepository.findByPostIdx(postIdx)
+                .orElseThrow(() -> new ResponeException(INVALID_POST_IDX));
+        User reportedUser = userRepository.findByUserIdx(post.getUser().getUserIdx())
+                .orElseThrow(() -> new ResponeException(INVALID_USER));
+        try{
+            Report report = Report.builder()
+                    .reason(requestDto.getReason())
+                    .user(user)
+                    .reportedUser(reportedUser)
+                    .build();
+            return reportRepository.save(report).getReportIdx();
+        } catch(Exception e) {
+            throw new ResponeException(DATABASE_ERROR);
+        }
+    }
+
+    public void blockUser(Long reportIdx) throws ResponeException {
+        Report report = reportRepository.findByReportIdx(reportIdx);
+        report.setBlocked(true);
+    }
 }

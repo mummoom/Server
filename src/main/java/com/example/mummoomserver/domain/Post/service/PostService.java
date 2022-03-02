@@ -15,6 +15,7 @@ import com.example.mummoomserver.domain.Post.dto.PostIdxResponseDto;
 import com.example.mummoomserver.domain.Post.dto.PostResponseDto;
 import com.example.mummoomserver.domain.Post.dto.PostSaveRequestDto;
 import com.example.mummoomserver.domain.Post.dto.PostUpdateRequestDto;
+import com.example.mummoomserver.domain.Report.Report;
 import com.example.mummoomserver.domain.Report.ReportRepository;
 import com.example.mummoomserver.login.users.User;
 import com.example.mummoomserver.login.users.UserRepository;
@@ -106,6 +107,9 @@ public class PostService {
         for (int i = 0; i < entity.size(); i++){
             if(reportRepository.existsByUser_userIdxAndPost_postIdx(user.getUserIdx(), entity.get(i).getPostIdx()))
                 continue;
+            if(reportRepository.existsByUser_UserIdxAndReportedUser_UserIdxAndIsBlockedIsTrue(user.getUserIdx(), entity.get(i).getUser().getUserIdx())){
+                continue;
+            }
             PostResponseDto postResponseDto = new PostResponseDto(entity.get(i));
             int likecnt = likecntRepository.countByPost_postIdx(entity.get(i).getPostIdx());
             postResponseDto.setLikecnt(Integer.toString(likecnt));
